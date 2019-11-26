@@ -1,0 +1,15 @@
+version: '3.0'
+
+services:
+  token: 
+    container_name: vany-token
+    image: vany-token
+    build: 
+      context: vany-token
+    ports: 
+      - 7001:7001
+    networks:
+      - net 
+
+networks: 
+  web:
