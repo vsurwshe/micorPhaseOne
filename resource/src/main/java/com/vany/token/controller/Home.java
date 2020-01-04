@@ -10,12 +10,12 @@ public class Home{
 
     @GetMapping(value="/")
     public String getIndex() {
-        return "Welcome to First Spring Project Form Token - 1";
+        return "Welcome to Resource Applications";
     }
 
-    @GetMapping(value="/hello")
+    @GetMapping(value="/res")
     public String getHello() {
-        return "Hello Welcome World.......";
+        return "Hi This is Your Resource";
     }
     
 }
