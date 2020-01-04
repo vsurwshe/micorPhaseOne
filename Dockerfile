@@ -23,7 +23,7 @@ COPY --from=build /home/app1/target/token-0.0.1-SNAPSHOT.jar /opt/lib/auth.jar
 COPY --from=build /home/app2/target/token-0.0.1-SNAPSHOT.jar /opt/lib/resource.jar
 
 # Adding outside of conatiner run.sh file into conatiner 
-ADD run.sh /run.sh
+COPY ./projectConfig/EntryPoint.sh /EntryPoint.sh
 
 # Execuiting the run.sh file
-ENTRYPOINT ["/run.sh"]
+ENTRYPOINT ["/EntryPoint.sh"]

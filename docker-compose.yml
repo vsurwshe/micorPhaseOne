@@ -5,12 +5,11 @@ services:
     container_name: vany-token
     image: vany-token
     build: 
-      context: token/
+      context: .
       dockerfile: Dockerfile
     ports: 
       - 7001:7001
-    volumes: 
-      - "$PWD/token:/var/lib/token"
+      - 7002:7002
     networks:
       - servicenet 
 
