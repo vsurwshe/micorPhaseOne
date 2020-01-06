@@ -1,16 +1,15 @@
-package com.vany.token.controller;
+package com.vany.controller;
 
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
-@RestController
+@Controller
 public class Home{
 
     @GetMapping(value="/")
     public String getIndex() {
-        return "Welcome to Auth Project";
+        return "index.html";
     }
 
     @GetMapping(value="/auth")
