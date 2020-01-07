@@ -1,0 +1,78 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-3.8.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+    <changeSet author="developer-5 (generated)" id="1578379296179-1">
+     <preConditions onFail="MARK_RAN">
+        <not>
+            <tableExists tableName="address"/>
+        </not>
+    </preConditions>
+        <createTable tableName="address">
+            <column autoIncrement="true" name="add_id" type="INT">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="address1" type="VARCHAR(255)"/>
+            <column name="address2" type="VARCHAR(255)"/>
+            <column name="country" type="VARCHAR(255)"/>
+            <column name="district" type="VARCHAR(255)"/>
+            <column name="phone_no" type="VARCHAR(255)"/>
+            <column name="state" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="developer-5 (generated)" id="1578379296179-2">
+     <preConditions onFail="MARK_RAN">
+        <not>
+            <tableExists tableName="payments"/>
+        </not>
+    </preConditions>
+        <createTable tableName="payments">
+            <column autoIncrement="true" name="pay_id" type="INT">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="mode" type="INT"/>
+            <column name="amount" type="VARCHAR(255)"/>
+            <column name="tarns_date" type="VARCHAR(255)"/>
+            <column name="transctions_id" type="VARCHAR(255)"/>
+            <column name="verify" type="INT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="developer-5 (generated)" id="1578379296179-3">
+     <preConditions onFail="MARK_RAN">
+        <not>
+            <tableExists tableName="profile"/>
+        </not>
+    </preConditions>
+        <createTable tableName="profile">
+            <column autoIncrement="true" name="profile_id" type="INT">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="features" type="INT"/>
+            <column name="profile_name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="type" type="INT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="developer-5 (generated)" id="1578379296179-4">
+     <preConditions onFail="MARK_RAN">
+        <not>
+            <tableExists tableName="user"/>
+        </not>
+    </preConditions>
+        <createTable tableName="user">
+            <column autoIncrement="true" name="user_id" type="INT">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_email" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_password" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

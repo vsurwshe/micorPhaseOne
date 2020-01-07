@@ -72,7 +72,4 @@ public class User {
 		this.userPassword = userPassword;
 	}
 	
-	
-	
-
 }
