@@ -6,7 +6,7 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-3.8.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
 	<changeSet author="developer-5 (generated)"
-		id="1578381189273-1">
+		id="1578382410057-1">
 		<preConditions onFail="MARK_RAN">
 			<not>
 				<tableExists tableName="address" />
@@ -28,10 +28,13 @@
 			<column name="updated_at" type="datetime">
 				<constraints nullable="false" />
 			</column>
+			<column name="user_id" type="INT">
+				<constraints nullable="false" />
+			</column>
 		</createTable>
 	</changeSet>
 	<changeSet author="developer-5 (generated)"
-		id="1578381189273-2">
+		id="1578382410057-2">
 		<preConditions onFail="MARK_RAN">
 			<not>
 				<tableExists tableName="payments" />
@@ -52,10 +55,13 @@
 			<column name="updated_at" type="datetime">
 				<constraints nullable="false" />
 			</column>
+			<column name="user_id" type="INT">
+				<constraints nullable="false" />
+			</column>
 		</createTable>
 	</changeSet>
 	<changeSet author="developer-5 (generated)"
-		id="1578381189273-3">
+		id="1578382410057-3">
 		<preConditions onFail="MARK_RAN">
 			<not>
 				<tableExists tableName="profile" />
@@ -84,7 +90,7 @@
 		</createTable>
 	</changeSet>
 	<changeSet author="developer-5 (generated)"
-		id="1578381189273-4">
+		id="1578382410057-4">
 		<preConditions onFail="MARK_RAN">
 			<not>
 				<tableExists tableName="user" />
@@ -112,11 +118,11 @@
 		</createTable>
 	</changeSet>
 	<changeSet author="developer-5 (generated)"
-		id="1578381189273-5">
+		id="1578382410057-5">
 		<preConditions onFail="MARK_RAN">
 			<not>
 				<indexExists indexName="FKawh070wpue34wqvytjqr4hj5e"
-					tableName="profile" />
+					tableName="profile"></indexExists>
 			</not>
 		</preConditions>
 		<createIndex indexName="FKawh070wpue34wqvytjqr4hj5e"
@@ -125,18 +131,72 @@
 		</createIndex>
 	</changeSet>
 	<changeSet author="developer-5 (generated)"
-		id="1578381189273-6">
+		id="1578382410057-6">
+		<preConditions onFail="MARK_RAN">
+			<not>
+				<indexExists indexName="FKbriupykskd2lfsmgtyr3gkmtd"
+					tableName="payments"></indexExists>
+			</not>
+		</preConditions>
+		<createIndex indexName="FKbriupykskd2lfsmgtyr3gkmtd"
+			tableName="payments">
+			<column name="user_id" />
+		</createIndex>
+	</changeSet>
+	<changeSet author="developer-5 (generated)"
+		id="1578382410057-7">
+		<preConditions onFail="MARK_RAN">
+			<not>
+				<indexExists indexName="FKda8tuywtf0gb6sedwk7la1pgi"
+					tableName="address"></indexExists>
+			</not>
+		</preConditions>
+		<createIndex indexName="FKda8tuywtf0gb6sedwk7la1pgi"
+			tableName="address">
+			<column name="user_id" />
+		</createIndex>
+	</changeSet>
+	<changeSet author="developer-5 (generated)"
+		id="1578382410057-8">
 		<preConditions onFail="MARK_RAN">
 			<not>
 				<foreignKeyConstraintExists
 					foreignKeyName="FKawh070wpue34wqvytjqr4hj5e" />
 			</not>
-
-
 		</preConditions>
 		<addForeignKeyConstraint
 			baseColumnNames="user_id" baseTableName="profile"
 			constraintName="FKawh070wpue34wqvytjqr4hj5e" deferrable="false"
+			initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+			referencedColumnNames="user_id" referencedTableName="user"
+			validate="true" />
+	</changeSet>
+	<changeSet author="developer-5 (generated)"
+		id="1578382410057-9">
+		<preConditions onFail="MARK_RAN">
+			<not>
+				<foreignKeyConstraintExists
+					foreignKeyName="FKbriupykskd2lfsmgtyr3gkmtd" />
+			</not>
+		</preConditions>
+		<addForeignKeyConstraint
+			baseColumnNames="user_id" baseTableName="payments"
+			constraintName="FKbriupykskd2lfsmgtyr3gkmtd" deferrable="false"
+			initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+			referencedColumnNames="user_id" referencedTableName="user"
+			validate="true" />
+	</changeSet>
+	<changeSet author="developer-5 (generated)"
+		id="1578382410057-10">
+		<preConditions onFail="MARK_RAN">
+			<not>
+				<foreignKeyConstraintExists
+					foreignKeyName="FKda8tuywtf0gb6sedwk7la1pgi" />
+			</not>
+		</preConditions>
+		<addForeignKeyConstraint
+			baseColumnNames="user_id" baseTableName="address"
+			constraintName="FKda8tuywtf0gb6sedwk7la1pgi" deferrable="false"
 			initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
 			referencedColumnNames="user_id" referencedTableName="user"
 			validate="true" />
