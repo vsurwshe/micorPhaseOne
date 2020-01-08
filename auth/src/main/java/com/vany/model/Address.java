@@ -17,11 +17,11 @@ import javax.persistence.TemporalType;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "address")
-@JsonIgnoreProperties(value = { "createdAt", "updatedAt" }, allowGetters = true)
 public class Address {
 
 	@Id
@@ -52,16 +52,19 @@ public class Address {
 	// Many Address Have One User
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id", nullable = false)
+	@JsonIgnore
 	private User user;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "created_at", nullable = false, updatable = false)
 	@CreatedDate
+	@JsonIgnore
 	private Date createdAt;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "updated_at", nullable = false)
 	@LastModifiedDate
+	@JsonIgnore
 	private Date updatedAt;
 
 	public Integer getAddId() {

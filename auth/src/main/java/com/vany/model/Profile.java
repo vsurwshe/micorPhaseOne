@@ -19,6 +19,7 @@ import org.hibernate.annotations.ManyToAny;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.vany.model.enu.ProfileFeature;
 import com.vany.model.enu.ProfileType;
@@ -27,7 +28,6 @@ import com.vany.model.enu.ProfileType;
 
 @Entity
 @Table(name = "profile")
-@JsonIgnoreProperties(value = { "createdAt", "updatedAt" }, allowGetters = true)
 public class Profile {
 
 	@Id
@@ -49,6 +49,7 @@ public class Profile {
 	private Integer version;
 
 	// Many Profile Have One User
+	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id", nullable = false)
 	private User user;
@@ -56,11 +57,13 @@ public class Profile {
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "created_at", nullable = false, updatable = false)
 	@CreatedDate
+	@JsonIgnore
 	private Date createdAt;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "updated_at", nullable = false)
 	@LastModifiedDate
+	@JsonIgnore
 	private Date updatedAt;
 
 	public Integer getProfileId() {
