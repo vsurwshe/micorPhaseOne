@@ -26,45 +26,42 @@ import com.vany.model.enu.ProfileType;
 
 
 @Entity
-@Table(name="profile")
-@JsonIgnoreProperties(
-        value = {"createdAt", "updatedAt"},
-        allowGetters = true
-)
+@Table(name = "profile")
+@JsonIgnoreProperties(value = { "createdAt", "updatedAt" }, allowGetters = true)
 public class Profile {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer profileId;
-	
+
 	@NotNull
 	@Column
 	private String profileName;
-	
-	
+
 	@NotNull
 	@Column
 	private ProfileType type;
-	
+
 	@Column
 	private ProfileFeature features;
-	
-	//	Many Profile Have One User
+
+	@Column
+	private Integer version;
+
+	// Many Profile Have One User
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="user_id",nullable = false)
+	@JoinColumn(name = "user_id", nullable = false)
 	private User user;
-	
-	
+
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "created_at", nullable = false, updatable = false)
 	@CreatedDate
 	private Date createdAt;
-	
+
 	@Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "updated_at", nullable = false)
-    @LastModifiedDate
-    private Date updatedAt;
-	
+	@Column(name = "updated_at", nullable = false)
+	@LastModifiedDate
+	private Date updatedAt;
 
 	public Integer getProfileId() {
 		return profileId;
@@ -97,7 +94,15 @@ public class Profile {
 	public void setFeatures(ProfileFeature features) {
 		this.features = features;
 	}
-	
+
+	public Integer getVersion() {
+		return version;
+	}
+
+	public void setVersion(Integer version) {
+		this.version = version;
+	}
+
 	public User getUser() {
 		return user;
 	}
@@ -105,7 +110,6 @@ public class Profile {
 	public void setUser(User user) {
 		this.user = user;
 	}
-	
 
 	public Date getCreatedAt() {
 		return createdAt;
@@ -114,7 +118,7 @@ public class Profile {
 	public void setCreatedAt(Date createdAt) {
 		this.createdAt = createdAt;
 	}
-	
+
 	public Date getUpdatedAt() {
 		return updatedAt;
 	}

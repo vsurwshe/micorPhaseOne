@@ -45,6 +45,9 @@ public class Address {
 
 	@Column
 	private String phoneNo;
+	
+	@Column
+	private Integer version;
 
 	// Many Address Have One User
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -115,6 +118,14 @@ public class Address {
 
 	public void setPhoneNo(String phoneNo) {
 		this.phoneNo = phoneNo;
+	}
+	
+	public Integer getVersion() {
+		return version;
+	}
+
+	public void setVersion(Integer version) {
+		this.version = version;
 	}
 
 	public User getUser() {

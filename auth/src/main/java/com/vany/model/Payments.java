@@ -22,46 +22,46 @@ import com.vany.model.enu.PaymentMode;
 import com.vany.model.enu.PaymentVerified;
 
 @Entity
-@Table(name ="payments")
-@JsonIgnoreProperties(
-        value = {"createdAt", "updatedAt"},
-        allowGetters = true
-)
+@Table(name = "payments")
+@JsonIgnoreProperties(value = { "createdAt", "updatedAt" }, allowGetters = true)
 public class Payments {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer payId;
-	
+
 	@Column
 	private PaymentMode mode;
-	
+
 	@Column
 	private String transctionsId;
-	
+
 	@Column
 	private String amount;
-	
+
 	@Column
 	private String tarnsDate;
-	
+
 	@Column
 	private PaymentVerified verify;
-	
-	//	Many payments have one user
+
+	@Column
+	private Integer version;
+
+	// Many payments have one user
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="user_id",nullable = false)
+	@JoinColumn(name = "user_id", nullable = false)
 	private User user;
-	
+
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "created_at", nullable = false, updatable = false)
 	@CreatedDate
 	private Date createdAt;
-	
+
 	@Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "updated_at", nullable = false)
-    @LastModifiedDate
-    private Date updatedAt;
+	@Column(name = "updated_at", nullable = false)
+	@LastModifiedDate
+	private Date updatedAt;
 
 	public Integer getPayId() {
 		return payId;
@@ -110,7 +110,15 @@ public class Payments {
 	public void setVerify(PaymentVerified verify) {
 		this.verify = verify;
 	}
-	
+
+	public Integer getVersion() {
+		return version;
+	}
+
+	public void setVersion(Integer version) {
+		this.version = version;
+	}
+
 	public User getUser() {
 		return user;
 	}
@@ -134,7 +142,5 @@ public class Payments {
 	public void setUpdatedAt(Date updatedAt) {
 		this.updatedAt = updatedAt;
 	}
-	
-	
-	
+
 }
