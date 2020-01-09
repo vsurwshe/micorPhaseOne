@@ -21,11 +21,11 @@ import javax.validation.constraints.NotNull;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "user")
-@JsonIgnoreProperties(value = { "createdAt", "updatedAt" }, allowGetters = true)
 public class User {
 
 	@Id
@@ -47,24 +47,29 @@ public class User {
 
 	// One user have many Profile
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user")
+	@JsonIgnore
 	private Set<Profile> profile = new HashSet<Profile>();
 
 	// One user have many Profile
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user")
+	@JsonIgnore
 	private Set<Address> address = new HashSet<Address>();
 
 	// One User have Mulitpal Payments
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user")
+	@JsonIgnore
 	private Set<Payments> payments = new HashSet<Payments>();
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "created_at", nullable = false, updatable = false)
 	@CreatedDate
+	@JsonIgnore
 	private Date createdAt;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "updated_at", nullable = false)
 	@LastModifiedDate
+	@JsonIgnore
 	private Date updatedAt;
 
 	public Integer getUser_id() {
