@@ -3,6 +3,8 @@ package com.vany.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import com.vany.exception.UserServiceException;
+
 
 @Controller
 public class Home{
