@@ -20,30 +20,39 @@ import org.springframework.data.annotation.LastModifiedDate;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import io.swagger.annotations.ApiModelProperty;
+
 @Entity
 @Table(name = "address")
 public class Address {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@ApiModelProperty(notes = "Address Id is Automated Genrated")
 	private Integer addId;
 
 	@Column
+	@ApiModelProperty(notes = " Address1 String Value Optional ")
 	private String address1;
 
 	@Column
+	@ApiModelProperty(notes = " Address2 String Value Optional ")
 	private String address2;
 
 	@Column
+	@ApiModelProperty(notes = " District String Value Optional ")
 	private String district;
 
 	@Column
+	@ApiModelProperty(notes = " State String Value Optional ")
 	private String state;
 
 	@Column
+	@ApiModelProperty(notes = " Country String Value Optional ")
 	private String country;
 
 	@Column
+	@ApiModelProperty(notes = " Phone/Mobile Number String Value Optional ")
 	private String phoneNo;
 	
 	@Column
