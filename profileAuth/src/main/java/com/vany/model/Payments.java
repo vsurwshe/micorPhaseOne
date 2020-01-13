@@ -52,7 +52,7 @@ public class Payments {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id", nullable = false)
 	@JsonIgnore
-	private User user;
+	private UserDet user;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "created_at", nullable = false, updatable = false)
@@ -122,11 +122,11 @@ public class Payments {
 		this.version = version;
 	}
 
-	public User getUser() {
+	public UserDet getUser() {
 		return user;
 	}
 
-	public void setUser(User user) {
+	public void setUser(UserDet user) {
 		this.user = user;
 	}
 

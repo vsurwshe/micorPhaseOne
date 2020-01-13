@@ -52,7 +52,7 @@ public class Profile {
 	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id", nullable = false)
-	private User user;
+	private UserDet user;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "created_at", nullable = false, updatable = false)
@@ -106,11 +106,11 @@ public class Profile {
 		this.version = version;
 	}
 
-	public User getUser() {
+	public UserDet getUser() {
 		return user;
 	}
 
-	public void setUser(User user) {
+	public void setUser(UserDet user) {
 		this.user = user;
 	}
 
