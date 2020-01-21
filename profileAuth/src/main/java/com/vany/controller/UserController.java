@@ -12,12 +12,11 @@ import com.vany.repository.UserRepository;
 @RestController
 public class UserController {
 	
-	@Autowired
-	private UserRepository userRepo;
+
 	
 	@GetMapping(value = "/users")
-	public List<UserDet> getUsers() {
-		return userRepo.findAll();
+	public String getUsers() {
+		return "Hello User";
 	}
 
 }

@@ -50,9 +50,9 @@ public class Payments {
 
 	// Many payments have one user
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "user_id", nullable = false)
+	@JoinColumn(name = "profileId", nullable = false)
 	@JsonIgnore
-	private UserDet user;
+	private Profile profile;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "created_at", nullable = false, updatable = false)
@@ -122,12 +122,12 @@ public class Payments {
 		this.version = version;
 	}
 
-	public UserDet getUser() {
-		return user;
+	public Profile getProfile() {
+		return profile;
 	}
 
-	public void setUser(UserDet user) {
-		this.user = user;
+	public void setProfile(Profile profile) {
+		this.profile = profile;
 	}
 
 	public Date getCreatedAt() {

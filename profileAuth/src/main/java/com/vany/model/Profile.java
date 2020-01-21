@@ -1,30 +1,28 @@
 package com.vany.model;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 
-import org.hibernate.annotations.ManyToAny;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.vany.model.enu.ProfileFeature;
 import com.vany.model.enu.ProfileType;
-
-
 
 @Entity
 @Table(name = "profile")
@@ -48,11 +46,15 @@ public class Profile {
 	@Column
 	private Integer version;
 
-	// Many Profile Have One User
+	// One user have many Profile
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "profile")
 	@JsonIgnore
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "user_id", nullable = false)
-	private UserDet user;
+	private Set<Address> address = new HashSet<Address>();
+
+	// One User have Mulitpal Payments
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "profile")
+	@JsonIgnore
+	private Set<Payments> payments = new HashSet<Payments>();
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "created_at", nullable = false, updatable = false)
@@ -106,12 +108,21 @@ public class Profile {
 		this.version = version;
 	}
 
-	public UserDet getUser() {
-		return user;
+
+	public Set<Address> getAddress() {
+		return address;
 	}
 
-	public void setUser(UserDet user) {
-		this.user = user;
+	public void setAddress(Set<Address> address) {
+		this.address = address;
+	}
+
+	public Set<Payments> getPayments() {
+		return payments;
+	}
+
+	public void setPayments(Set<Payments> payments) {
+		this.payments = payments;
 	}
 
 	public Date getCreatedAt() {

@@ -24,7 +24,8 @@ import org.springframework.data.annotation.LastModifiedDate;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-
+@Entity
+@Table(name = "user")
 public class UserDet {
 
 	@Id
@@ -44,10 +45,6 @@ public class UserDet {
 	@Column
 	private String userPassword;
 
-	// One user have many Profile
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user")
-	@JsonIgnore
-	private Set<Profile> profile = new HashSet<Profile>();
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "created_at", nullable = false, updatable = false)
@@ -93,14 +90,7 @@ public class UserDet {
 		this.userPassword = userPassword;
 	}
 
-	public Set<Profile> getProfile() {
-		return profile;
-	}
-
-	public void setProfile(Set<Profile> profile) {
-		this.profile = profile;
-	}
-
+	
 	public Date getCreatedAt() {
 		return createdAt;
 	}
