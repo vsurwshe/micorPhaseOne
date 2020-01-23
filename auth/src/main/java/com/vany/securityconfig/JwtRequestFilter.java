@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.vany.exception.UserServiceException;
-import com.vany.service.ErrorMessage;
+import com.vany.service.ErrorMessageService;
 import com.vany.service.JwtUserDetailsService;
 
 import io.jsonwebtoken.ExpiredJwtException;
@@ -47,9 +47,9 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 			try {
 				username = jwtTokenUtil.getUsernameFromToken(jwtToken);
 			} catch (IllegalArgumentException e) {
-				throw new UserServiceException(ErrorMessage.NOT_PASS_CORRECT_TOKEN);
+				throw new UserServiceException(ErrorMessageService.NOT_PASS_CORRECT_TOKEN);
 			} catch (ExpiredJwtException e) {
-				throw new UserServiceException(ErrorMessage.TOKEN_EXPIRED);
+				throw new UserServiceException(ErrorMessageService.TOKEN_EXPIRED);
 			}
 		}
 

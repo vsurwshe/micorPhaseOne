@@ -78,7 +78,7 @@ public class JwtTokenUtil implements Serializable {
 		}
 		
 		//this method provide the refresh token
-	    public String refreshToken(UserDetails userDetails) {
+	    public String genrateRefreshToken(UserDetails userDetails) {
 	    	Map<String, Object> claims = new HashMap<>();
 	     	return Jwts
 	        		.builder()

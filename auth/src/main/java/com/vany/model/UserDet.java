@@ -1,17 +1,12 @@
 package com.vany.model;
 
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
+import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -20,12 +15,14 @@ import javax.validation.constraints.NotNull;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "user")
+@EntityListeners(AuditingEntityListener.class)
+@JsonIgnoreProperties(value = { "createdAt", "updatedAt" }, allowGetters = true)
 public class UserDet {
 
 	@Id
@@ -45,17 +42,14 @@ public class UserDet {
 	@Column
 	private String userPassword;
 
-
+	@Column(nullable = false, updatable = false)
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "created_at", nullable = false, updatable = false)
 	@CreatedDate
-	@JsonIgnore
 	private Date createdAt;
 
+	@Column(nullable = false)
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "updated_at", nullable = false)
 	@LastModifiedDate
-	@JsonIgnore
 	private Date updatedAt;
 
 	public Integer getUser_id() {
@@ -90,7 +84,6 @@ public class UserDet {
 		this.userPassword = userPassword;
 	}
 
-	
 	public Date getCreatedAt() {
 		return createdAt;
 	}
