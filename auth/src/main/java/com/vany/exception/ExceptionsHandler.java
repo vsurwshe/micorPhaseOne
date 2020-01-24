@@ -40,4 +40,5 @@ public class ExceptionsHandler extends ResponseEntityExceptionHandler {
 		
 		return new ResponseEntity<Object>(errorMessage, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
 	}
+	
 }

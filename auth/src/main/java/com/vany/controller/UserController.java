@@ -64,7 +64,7 @@ public class UserController {
 		userTokenResponse.setUserToken(userToken);
 		userTokenResponse.setUserRefreshToken(userRefreshToken);
 		// we returning above single bounded entity
-		return ResponseEntity.ok(userRefreshToken);
+		return ResponseEntity.ok(userTokenResponse);
 
 	}
 

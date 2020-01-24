@@ -17,7 +17,10 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
 @Entity
 @Table(name = "user")
@@ -35,21 +38,24 @@ public class UserDet {
 
 	@NotNull
 	@Email
-	@Column
+	@Column(unique = true)
 	private String userEmail;
 
 	@NotNull
 	@Column
+	@JsonProperty(access = Access.WRITE_ONLY)
 	private String userPassword;
 
 	@Column(nullable = false, updatable = false)
 	@Temporal(TemporalType.TIMESTAMP)
 	@CreatedDate
+	@JsonProperty(access = Access.WRITE_ONLY)
 	private Date createdAt;
 
 	@Column(nullable = false)
 	@Temporal(TemporalType.TIMESTAMP)
 	@LastModifiedDate
+	@JsonProperty(access = Access.WRITE_ONLY)
 	private Date updatedAt;
 
 	public Integer getUser_id() {
