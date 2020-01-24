@@ -1,5 +1,6 @@
 package com.vany.controller;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -82,6 +84,30 @@ public class UserController {
 		} catch (BadCredentialsException e) {
 			throw new Exception(ErrorMessageService.INVALID_CREDTIONAL + e.getMessage());
 		}
+	}
+
+	// this method take refresh token and provide to user fresh token with new
+	// refresh token
+	@RequestMapping(value = "/refreshToken", method = RequestMethod.POST)
+	public ResponseEntity<?> getUserRefreshToken(HttpServletRequest userReuest) {
+		// this line get refresh token form user request named as refresh
+		String refreshToken = userReuest.getHeader("refresh");
+		// this line get username from refresh token
+		String username = jwtTokenUtil.getUsernameFromToken(refreshToken);
+		// form username we find the user details
+		final UserDetails userDetails = jwtUserDetailsService.loadUserByUsername(username);
+		// after geting user details genrate the token using user informations
+		final String userToken = jwtTokenUtil.generateToken(userDetails);
+		// after geting user token, we try to genrate refresh token for geting new user token
+		final String userRefreshToken = jwtTokenUtil.genrateRefreshToken(userDetails);
+		Long tokenTime = System.currentTimeMillis() + (5 * 60 * 60 ) * 1000;
+		// output of this service
+		UserTokenResponse userTokenResponse = new UserTokenResponse();
+		userTokenResponse.setTokenExprieTime(tokenTime);
+		userTokenResponse.setUserToken(userToken);
+		userTokenResponse.setUserRefreshToken(userRefreshToken);
+		// we returning above single bounded entity
+		return ResponseEntity.ok(userTokenResponse);
 	}
 
 }
