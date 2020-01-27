@@ -3,6 +3,10 @@
 #
 FROM maven:3.6.0-jdk-11-slim AS build
 
+COPY eurekaServer/src /home/server/src
+COPY eurekaServer/pom.xml /home/server
+RUN mvn -f /home/server/pom.xml package
+
 # Copy first project and packageing
 COPY auth/src /home/app1/src
 COPY auth/pom.xml /home/app1
@@ -24,6 +28,7 @@ RUN mvn -f /home/app3/pom.xml package
 
 FROM anapsix/alpine-java
 # Builded jar files renamed and put into another library
+COPY --from=build /home/server/target/EurekaServer-0.0.1-SNAPSHOT.jar /opt/lib/server.jar
 COPY --from=build /home/app1/target/AuthAPI-0.0.1-SNAPSHOT.jar /opt/lib/auth.jar
 COPY --from=build /home/app2/target/ProfileAPI-0.0.1-SNAPSHOT.jar /opt/lib/profileAuth.jar
 COPY --from=build /home/app3/target/ResourceAPI-0.0.1-SNAPSHOT.jar /opt/lib/resource.jar

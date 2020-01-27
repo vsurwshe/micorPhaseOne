@@ -67,7 +67,7 @@
 			<groupId>org.liquibase</groupId>
 			<artifactId>liquibase-core</artifactId>
 		</dependency>
-		
+
 		<!-- Secutirty and JWT Related Libarys -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -77,6 +77,12 @@
 			<groupId>io.jsonwebtoken</groupId>
 			<artifactId>jjwt</artifactId>
 			<version>0.9.1</version>
+		</dependency>
+		<!-- Spring Eureka Client Discovery -->
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+			<version>2.2.1.RELEASE</version>
 		</dependency>
 
 		<!-- This Spring Boot Test Setting -->

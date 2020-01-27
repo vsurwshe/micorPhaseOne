@@ -2,15 +2,13 @@ package com.vany.model;
 
 import java.io.Serializable;
 
-import com.sun.istack.internal.NotNull;
+
 
 public class JwtRequest implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 
-	@NotNull
-	private String userEmail;
-	@NotNull
+    private String userEmail;
 	private String userPassword;
 	
 	
