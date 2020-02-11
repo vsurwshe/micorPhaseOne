@@ -1,0 +1,20 @@
+version: '3.0'
+
+services:
+  token: 
+    container_name: vany-token
+    image: vany-token
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 8761:8761 
+      - 7000:7000
+      - 7001:7001
+      - 7002:7002
+      - 7003:7003
+    networks:
+      - servicenet 
+
+networks: 
+  servicenet:
