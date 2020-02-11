@@ -1,7 +1,6 @@
 package com.vany.model;
 
 import java.util.Date;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -13,45 +12,33 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.vany.model.enu.PaymentMode;
-import com.vany.model.enu.PaymentVerified;
 
 @Entity
-@Table(name = "payments")
-public class Payments {
+@Table(name = "profile")
+public class Profile {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer payId;
+	private Integer profileId;
 
+	@NotNull
 	@Column
-	private PaymentMode mode;
-
-	@Column
-	private String transctionsId;
-
-	@Column
-	private String amount;
-
-	@Column
-	private String tarnsDate;
-
-	@Column
-	private PaymentVerified verify;
+	private String profileName;
 
 	@Column
 	private Integer version;
 
 	// Many payments have one user
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "profileId", nullable = false)
+	@JoinColumn(name = "user", nullable = false)
 	@JsonIgnore
-	private Profile profile;
+	private UserDet user;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "created_at", nullable = false, updatable = false)
@@ -65,52 +52,20 @@ public class Payments {
 	@JsonIgnore
 	private Date updatedAt;
 
-	public Integer getPayId() {
-		return payId;
+	public Integer getProfileId() {
+		return profileId;
 	}
 
-	public void setPayId(Integer payId) {
-		this.payId = payId;
+	public void setProfileId(Integer profileId) {
+		this.profileId = profileId;
 	}
 
-	public PaymentMode getMode() {
-		return mode;
+	public String getProfileName() {
+		return profileName;
 	}
 
-	public void setMode(PaymentMode mode) {
-		this.mode = mode;
-	}
-
-	public String getTransctionsId() {
-		return transctionsId;
-	}
-
-	public void setTransctionsId(String transctionsId) {
-		this.transctionsId = transctionsId;
-	}
-
-	public String getAmount() {
-		return amount;
-	}
-
-	public void setAmount(String amount) {
-		this.amount = amount;
-	}
-
-	public String getTarnsDate() {
-		return tarnsDate;
-	}
-
-	public void setTarnsDate(String tarnsDate) {
-		this.tarnsDate = tarnsDate;
-	}
-
-	public PaymentVerified getVerify() {
-		return verify;
-	}
-
-	public void setVerify(PaymentVerified verify) {
-		this.verify = verify;
+	public void setProfileName(String profileName) {
+		this.profileName = profileName;
 	}
 
 	public Integer getVersion() {
@@ -119,14 +74,6 @@ public class Payments {
 
 	public void setVersion(Integer version) {
 		this.version = version;
-	}
-
-	public Profile getProfile() {
-		return profile;
-	}
-
-	public void setProfile(Profile profile) {
-		this.profile = profile;
 	}
 
 	public Date getCreatedAt() {
@@ -144,5 +91,4 @@ public class Payments {
 	public void setUpdatedAt(Date updatedAt) {
 		this.updatedAt = updatedAt;
 	}
-
 }

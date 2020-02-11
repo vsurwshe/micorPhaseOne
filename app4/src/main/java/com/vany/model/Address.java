@@ -18,7 +18,6 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import io.swagger.annotations.ApiModelProperty;
 
@@ -54,7 +53,7 @@ public class Address {
 	@Column
 	@ApiModelProperty(notes = " Phone/Mobile Number String Value Optional ")
 	private String phoneNo;
-	
+
 	@Column
 	private Integer version;
 
@@ -131,7 +130,7 @@ public class Address {
 	public void setPhoneNo(String phoneNo) {
 		this.phoneNo = phoneNo;
 	}
-	
+
 	public Integer getVersion() {
 		return version;
 	}
@@ -140,7 +139,6 @@ public class Address {
 		this.version = version;
 	}
 
-	
 	public Profile getProfile() {
 		return profile;
 	}
@@ -164,4 +162,5 @@ public class Address {
 	public void setUpdatedAt(Date updatedAt) {
 		this.updatedAt = updatedAt;
 	}
+	
 }

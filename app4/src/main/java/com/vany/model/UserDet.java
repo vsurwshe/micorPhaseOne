@@ -7,6 +7,7 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -20,11 +21,17 @@ import javax.validation.constraints.NotNull;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
-
+@Entity
+@Table(name = "user")
+@EntityListeners(AuditingEntityListener.class)
+@JsonIgnoreProperties(value = { "createdAt", "updatedAt" }, allowGetters = true)
 public class UserDet {
 
 	@Id
@@ -37,29 +44,30 @@ public class UserDet {
 
 	@NotNull
 	@Email
-	@Column
+	@Column(unique = true)
 	private String userEmail;
 
 	@NotNull
 	@Column
+	@JsonProperty(access = Access.WRITE_ONLY)
 	private String userPassword;
 
-	// One user have many Profile
+	@Column(nullable = false, updatable = false)
+	@Temporal(TemporalType.TIMESTAMP)
+	@CreatedDate
+	@JsonProperty(access = Access.WRITE_ONLY)
+	private Date createdAt;
+
+	@Column(nullable = false)
+	@Temporal(TemporalType.TIMESTAMP)
+	@LastModifiedDate
+	@JsonProperty(access = Access.WRITE_ONLY)
+	private Date updatedAt;
+
+	// One User have Mulitpal Payments
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user")
 	@JsonIgnore
 	private Set<Profile> profile = new HashSet<Profile>();
-
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "created_at", nullable = false, updatable = false)
-	@CreatedDate
-	@JsonIgnore
-	private Date createdAt;
-
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "updated_at", nullable = false)
-	@LastModifiedDate
-	@JsonIgnore
-	private Date updatedAt;
 
 	public Integer getUser_id() {
 		return user_id;
@@ -93,14 +101,6 @@ public class UserDet {
 		this.userPassword = userPassword;
 	}
 
-	public Set<Profile> getProfile() {
-		return profile;
-	}
-
-	public void setProfile(Set<Profile> profile) {
-		this.profile = profile;
-	}
-
 	public Date getCreatedAt() {
 		return createdAt;
 	}
@@ -117,4 +117,12 @@ public class UserDet {
 		this.updatedAt = updatedAt;
 	}
 
+	public Set<Profile> getProfile() {
+		return profile;
+	}
+
+	public void setProfile(Set<Profile> profile) {
+		this.profile = profile;
+	}
+	
 }

@@ -11,6 +11,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -55,6 +57,12 @@ public class Profile {
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "profile")
 	@JsonIgnore
 	private Set<Payments> payments = new HashSet<Payments>();
+
+	// Many payments have one user
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "user", nullable = false)
+	@JsonIgnore
+	private UserDet user;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "created_at", nullable = false, updatable = false)
@@ -108,7 +116,6 @@ public class Profile {
 		this.version = version;
 	}
 
-
 	public Set<Address> getAddress() {
 		return address;
 	}
@@ -140,4 +147,13 @@ public class Profile {
 	public void setUpdatedAt(Date updatedAt) {
 		this.updatedAt = updatedAt;
 	}
+
+	public UserDet getUser() {
+		return user;
+	}
+
+	public void setUser(UserDet user) {
+		this.user = user;
+	}
+
 }

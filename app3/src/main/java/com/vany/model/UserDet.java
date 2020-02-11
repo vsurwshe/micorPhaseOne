@@ -1,12 +1,18 @@
 package com.vany.model;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -58,6 +64,11 @@ public class UserDet {
 	@JsonProperty(access = Access.WRITE_ONLY)
 	private Date updatedAt;
 
+	// One User have Mulitpal Payments
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user")
+	@JsonIgnore
+	private Set<Profile> profile = new HashSet<Profile>();
+
 	public Integer getUser_id() {
 		return user_id;
 	}
@@ -104,6 +115,14 @@ public class UserDet {
 
 	public void setUpdatedAt(Date updatedAt) {
 		this.updatedAt = updatedAt;
+	}
+
+	public Set<Profile> getProfile() {
+		return profile;
+	}
+
+	public void setProfile(Set<Profile> profile) {
+		this.profile = profile;
 	}
 
 }
