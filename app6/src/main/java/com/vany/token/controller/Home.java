@@ -10,12 +10,7 @@ public class Home{
 
     @GetMapping(value="/")
     public String getIndex() {
-        return "Welcome to Resource Applications";
+        return "Welcome to Email Service Applications";
     }
-
-    @GetMapping(value="/res")
-    public String getHello() {
-        return "Hi This is Your Resource";
-    }
-    
+ 
 }

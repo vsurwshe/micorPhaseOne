@@ -10,9 +10,9 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.vany</groupId>
-	<artifactId>ResourceAPI</artifactId>
+	<artifactId>EmailAPI</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>ResourceAPI</name>
+	<name>EmailAPI</name>
 	<description>Demo project for Spring Boot</description>
 
 	<properties>
