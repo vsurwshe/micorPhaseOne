@@ -42,7 +42,7 @@ COPY --from=build /home/gateway/target/zuulApiGateway-0.0.1-SNAPSHOT.jar /opt/li
 COPY --from=build /home/app1/target/AuthAPI-0.0.1-SNAPSHOT.jar /opt/lib/auth.jar
 COPY --from=build /home/app2/target/ProfileAPI-0.0.1-SNAPSHOT.jar /opt/lib/profileAuth.jar
 COPY --from=build /home/app3/target/ResourceAPI-0.0.1-SNAPSHOT.jar /opt/lib/resource.jar
-COPY --from=build /home/app3/target/EmailAPI-0.0.1-SNAPSHOT.jar /opt/lib/emailService.jar
+COPY --from=build /home/app4/target/EmailAPI-0.0.1-SNAPSHOT.jar /opt/lib/emailService.jar
 
 # Adding outside of conatiner run.sh file into conatiner 
 COPY ./projectConfig/EntryPoint.sh /EntryPoint.sh
