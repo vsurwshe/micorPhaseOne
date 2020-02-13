@@ -24,7 +24,7 @@ public class EmailService {
 			transport.sendMessage(this.setEmailMessage(email), this.setEmailMessage(email).getAllRecipients());
 			result="Your Email Has Been Send";
 		} catch (MessagingException e) {
-			e.printStackTrace();
+			LogService.setLogger("Error: "+e.getMessage());
 		}
 		return result;
 	}
@@ -40,7 +40,7 @@ public class EmailService {
 			props.put("mail.smtp.socketFactory.port", "465");
 			props.put("mail.smtp.socketFactory.fallback", "false");
 		} catch (Exception e) {
-			System.out.println("Error: "+ e.getMessage());
+			LogService.setLogger("Error: "+e.getMessage());
 		}
 		return props;
 	}
@@ -51,7 +51,7 @@ public class EmailService {
 			mailSession=Session.getDefaultInstance(this.setEmailProps(),null);
 			mailSession.setDebug(true);
 		} catch (Exception e) {
-			System.out.println("Error: "+e.getMessage());
+			LogService.setLogger("Error: "+e.getMessage());
 		}
 		return mailSession;
 	}
@@ -64,9 +64,8 @@ public class EmailService {
 			mailMessage.setRecipient(Message.RecipientType.TO, new InternetAddress(email.getToAddress()));
 			mailMessage.setContent(email.getBody(), "text/html");
 			mailMessage.setSubject(email.getSubject());
-			
 		} catch (Exception e) {
-			System.out.println("Error: "+e.getMessage());
+			LogService.setLogger("Error: "+e.getMessage());
 		}
 		return mailMessage;
 	}
