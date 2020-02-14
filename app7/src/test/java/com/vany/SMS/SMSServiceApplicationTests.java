@@ -1,4 +1,4 @@
-package com.vany.email;
+package com.vany.SMS;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

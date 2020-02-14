@@ -1,10 +1,6 @@
 package com.vany.SMS.controller;
 
 import org.springframework.web.bind.annotation.RestController;
-
-import com.vany.email.dto.EmailModule;
-import com.vany.email.service.EmailService;
-
 import org.apache.log4j.Logger;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,14 +14,10 @@ public class EmailController{
     public String getIndex() {
     	//logs debug message
     	if(logger.isDebugEnabled()){
-    			logger.debug("Welcome | Email Service is executed!");
+    			logger.debug("Welcome | SMS Service is executed!");
     	}
-        return "Welcome to Email Service Applications";
+        return "Welcome to SMS Service Applications";
     }
     
-    @PostMapping(value = "/sendEmail")
-    public String sendEmail(@RequestBody EmailModule emailModule) {
-      return  new EmailService().sendEmail(emailModule);
-    }
- 
+    
 }

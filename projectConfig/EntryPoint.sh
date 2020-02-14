@@ -13,7 +13,9 @@ java -jar /opt/lib/profileAuth.jar &
 # This line continoues executing jar file not puting as background process
 java -jar /opt/lib/resource.jar &
 # This line continoues executing jar file not puting as background process
-java -jar /opt/lib/emailService.jar 
+java -jar /opt/lib/emailService.jar &
+# This line continoues executing jar file not puting as background process
+java -jar /opt/lib/SMSService.jar 
 
 
 

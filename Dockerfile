@@ -31,6 +31,11 @@ COPY app6/src /home/app4/src
 COPY app6/pom.xml /home/app4
 RUN mvn -f /home/app4/pom.xml package
 
+# Copy thired project and packageing
+COPY app7/src /home/app5/src
+COPY app7/pom.xml /home/app5
+RUN mvn -f /home/app5/pom.xml package
+
 # 
 # Runing The Projects
 # 
@@ -43,6 +48,7 @@ COPY --from=build /home/app1/target/AuthAPI-0.0.1-SNAPSHOT.jar /opt/lib/auth.jar
 COPY --from=build /home/app2/target/ProfileAPI-0.0.1-SNAPSHOT.jar /opt/lib/profileAuth.jar
 COPY --from=build /home/app3/target/ResourceAPI-0.0.1-SNAPSHOT.jar /opt/lib/resource.jar
 COPY --from=build /home/app4/target/EmailAPI-0.0.1-SNAPSHOT.jar /opt/lib/emailService.jar
+COPY --from=build /home/app5/target/SMSAPI-0.0.1-SNAPSHOT.jar /opt/lib/SMSService.jar
 
 # Adding outside of conatiner run.sh file into conatiner 
 COPY ./projectConfig/EntryPoint.sh /EntryPoint.sh
