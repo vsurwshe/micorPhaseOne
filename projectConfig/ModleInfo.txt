@@ -1,0 +1,43 @@
+
+
+SMS Service
+--------------
+
+SMSModule{
+Parameters:
+	Content-Type:application/json
+Body:
+	"message":"Hi This is Test",
+	"numbers":"8149648134"
+-------------------
+optional 
+	"sender_id":"FSTSMS",
+	"language":"english",
+	"route":"p"
+}
+
+ResultSms{
+    "request_id": "4ak2pjo3qh1lrtn",
+    "message": [
+        "Message sent successfully to NonDND numbers"
+    ]
+}
+
+Email Service
+------------------------------------
+EmailSender{
+"toAddress":"vsurwshe@gmail.com",
+	"subject":"Hi Test",
+	"body":"This is Test"
+}
+
+
+
+Auth Service
+-----------------
+userRegister{
+	
+	"name":"vishva",
+	"userEmail":"v@v.com",
+	"userPassword":"123456"
+}
