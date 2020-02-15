@@ -6,12 +6,14 @@ import com.vany.email.dto.EmailModule;
 import com.vany.email.service.EmailService;
 
 import org.apache.log4j.Logger;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 
 @RestController
+@CrossOrigin(origins = "*")
 public class EmailController{
 	private static final Logger logger = Logger.getLogger(EmailController.class);
     @GetMapping(value="/")

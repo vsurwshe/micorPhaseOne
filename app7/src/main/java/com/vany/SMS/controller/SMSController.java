@@ -13,11 +13,13 @@ import java.util.Collections;
 import javax.validation.Valid;
 
 import org.apache.log4j.Logger;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
+@CrossOrigin(origins = "*")
 public class SMSController {
 	private static final Logger logger = Logger.getLogger(SMSController.class);
 
