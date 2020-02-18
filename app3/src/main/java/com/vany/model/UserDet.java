@@ -51,6 +51,10 @@ public class UserDet {
 	@Column
 	@JsonProperty(access = Access.WRITE_ONLY)
 	private String userPassword;
+	
+	@Column
+	private boolean isEnabled;
+
 
 	@Column(nullable = false, updatable = false)
 	@Temporal(TemporalType.TIMESTAMP)

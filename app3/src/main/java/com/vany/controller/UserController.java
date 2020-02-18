@@ -10,7 +10,6 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,12 +23,13 @@ import com.vany.model.UserTokenResponse;
 import com.vany.securityconfig.JwtTokenUtil;
 import com.vany.service.ErrorMessageService;
 import com.vany.service.JwtUserDetailsService;
+import com.vany.service.LogService;
 
 @RestController
 @CrossOrigin(origins = "*")
 @RequestMapping("/user")
 public class UserController {
-
+	
 	@Autowired
 	private AuthenticationManager authenticationManager;
 
@@ -46,28 +46,11 @@ public class UserController {
 	public ResponseEntity<?> getUserToken(@Valid @RequestBody JwtRequest jwtRequest) throws Exception {
 		// Check user passed credtional are correct or not
 		authenticate(jwtRequest.getUserEmail(), jwtRequest.getUserPassword());
-
 		// after successfully authencticated we get user details
 		final UserDetails userDetails = jwtUserDetailsService.loadUserByUsername(jwtRequest.getUserEmail());
-
-		// after geting user details genrate the token using user informations
-		final String userToken = jwtTokenUtil.generateToken(userDetails);
-
-		// after geting user token, we try to genrate refresh token for geting new user
-		// token
-		final String userRefreshToken = jwtTokenUtil.genrateRefreshToken(userDetails);
-
 		Long tokenTime = System.currentTimeMillis() + (5 * 60) * 1000;
-
-		// after all process doen we bind it to one enity so we can send this enity as
-		// output of this service
-		UserTokenResponse userTokenResponse = new UserTokenResponse();
-		userTokenResponse.setTokenExprieTime(tokenTime);
-		userTokenResponse.setUserToken(userToken);
-		userTokenResponse.setUserRefreshToken(userRefreshToken);
 		// we returning above single bounded entity
-		return ResponseEntity.ok(userTokenResponse);
-
+		return ResponseEntity.ok(this.setUserTokenResponse(tokenTime,userDetails));
 	}
 
 	// this method resgiter the user in database.
@@ -80,8 +63,10 @@ public class UserController {
 		try {
 			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
 		} catch (DisabledException e) {
+			LogService.setLogger(ErrorMessageService.USER_LOCKED+" "+e.getMessage());
 			throw new UserServiceException(ErrorMessageService.USER_LOCKED + e.getMessage());
 		} catch (BadCredentialsException e) {
+			LogService.setLogger(ErrorMessageService.INVALID_CREDTIONAL+" "+e.getMessage());
 			throw new Exception(ErrorMessageService.INVALID_CREDTIONAL + e.getMessage());
 		}
 	}
@@ -89,25 +74,33 @@ public class UserController {
 	// this method take refresh token and provide to user fresh token with new
 	// refresh token
 	@RequestMapping(value = "/refreshToken", method = RequestMethod.POST)
-	public ResponseEntity<?> getUserRefreshToken(HttpServletRequest userReuest) {
+	public ResponseEntity<?> getUserRefreshToken(HttpServletRequest userReuest) throws Exception {
 		// this line get refresh token form user request named as refresh
 		String refreshToken = userReuest.getHeader("refresh");
 		// this line get username from refresh token
 		String username = jwtTokenUtil.getUsernameFromToken(refreshToken);
 		// form username we find the user details
 		final UserDetails userDetails = jwtUserDetailsService.loadUserByUsername(username);
-		// after geting user details genrate the token using user informations
-		final String userToken = jwtTokenUtil.generateToken(userDetails);
-		// after geting user token, we try to genrate refresh token for geting new user token
-		final String userRefreshToken = jwtTokenUtil.genrateRefreshToken(userDetails);
 		Long tokenTime = System.currentTimeMillis() + (5 * 60 * 60 ) * 1000;
-		// output of this service
-		UserTokenResponse userTokenResponse = new UserTokenResponse();
-		userTokenResponse.setTokenExprieTime(tokenTime);
-		userTokenResponse.setUserToken(userToken);
-		userTokenResponse.setUserRefreshToken(userRefreshToken);
 		// we returning above single bounded entity
-		return ResponseEntity.ok(userTokenResponse);
+		return ResponseEntity.ok(this.setUserTokenResponse(tokenTime,userDetails));
 	}
-
+	//---------- Private Methods
+	private UserTokenResponse setUserTokenResponse(Long tokenTime, UserDetails userDetails) throws Exception {
+		UserTokenResponse userTokenResponse=null;
+		try {
+			// after geting user token, we try to genrate token for geting new user
+			final String userToken = jwtTokenUtil.generateToken(userDetails);
+			// after geting user token, we try to genrate refresh token for geting new user token
+			final String userRefreshToken = jwtTokenUtil.genrateRefreshToken(userDetails);
+			userTokenResponse = new UserTokenResponse();
+			userTokenResponse.setTokenExprieTime(tokenTime);
+			userTokenResponse.setUserToken(userToken);
+			userTokenResponse.setUserRefreshToken(userRefreshToken);
+		} catch (Exception e) {
+			LogService.setLogger(e.getMessage());
+			throw new Exception(ErrorMessageService.NOT_VALID_USER+" "+e.getMessage());
+		}
+		return userTokenResponse;
+	}
 }
