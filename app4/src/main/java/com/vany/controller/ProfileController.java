@@ -15,7 +15,9 @@ import com.vany.exception.UserServiceException;
 import com.vany.model.Address;
 import com.vany.model.Payments;
 import com.vany.model.Profile;
+import com.vany.model.UserDet;
 import com.vany.repository.ProfileRespositery;
+import com.vany.service.ErrorServiceMessage;
 import com.vany.service.LogService;
 
 import java.util.*;
@@ -63,17 +65,24 @@ public class ProfileController {
 	// This method get all Payments details by id
 	@GetMapping(value = "/{profileId}/payments")
 	private List<Payments> findPaymentsById(@PathVariable Integer profileId) {
-		return this.getPaymentsById(profileId);
+		return this.getPaymentsByProfileId(profileId);
 	}
 
 	// This method get all Payments details by id
 	@GetMapping(value = "/{profileId}/address")
 	private List<Address> findAddressById(@PathVariable Integer profileId) {
-		return this.getAddressById(profileId);
+		return this.getAddressByProfileId(profileId);
 	}
 
-	// ----------- custome profile find
-	private List<Profile> getAllProfiles() {
+	// This method get user details bu profile id
+	@GetMapping(value = "/{profileId}/user")
+	private UserDet findUserDetailsByProfileId(@PathVariable Integer profileId) {
+		return this.getUserByProfileId(profileId);
+	}
+
+	// ----------- Custom profile find
+	// This method get all profiles
+	public List<Profile> getAllProfiles() {
 		List<Profile> profiles = null;
 		try {
 			profiles = profileRepo.findAll();
@@ -83,17 +92,19 @@ public class ProfileController {
 		return profiles;
 	}
 
-	private Profile getByProfile(int id) {
+	// This method get profile by profileId
+	public Profile getByProfile(Integer profileId) {
 		Profile profile = null;
 		try {
-			profile = profileRepo.findByprofileId(id);
+			profile = profileRepo.findByprofileId(profileId);
 		} catch (Exception e) {
 			LogService.setLogger(e.getMessage());
 		}
 		return profile;
 	}
 
-	private Profile saveProfile(Profile profile) {
+	// this method save profile
+	public Profile saveProfile(Profile profile) {
 		Profile userProfile = null;
 		try {
 			userProfile = profileRepo.save(profile);
@@ -103,7 +114,8 @@ public class ProfileController {
 		return userProfile;
 	}
 
-	private Profile updateProfile(@Valid Profile profile, Integer profileId) {
+	// This method update profile by id
+	public Profile updateProfile(@Valid Profile profile, Integer profileId) {
 		Profile userProfile = null;
 		try {
 			Profile tempProfile = this.getByProfile(profileId);
@@ -114,14 +126,14 @@ public class ProfileController {
 					tempProfile.setType(profile.getType());
 					tempProfile.setVersion(profile.getVersion() + 1);
 				} else {
-					LogService.setLogger(profile.getVersion() + " this not Correct version, expected version "
+					LogService.setLogger(profile.getVersion() + ErrorServiceMessage.PROFILE_UPDATE_WORNG_VERSION
 							+ tempProfile.getVersion());
-					throw new UserServiceException(profile.getVersion() + " this not Correct version, expected version "
-							+ tempProfile.getVersion());
+					throw new UserServiceException(profile.getVersion()
+							+ ErrorServiceMessage.PROFILE_UPDATE_WORNG_VERSION + tempProfile.getVersion());
 				}
 			} else {
-				LogService.setLogger(profileId + " This Profile Not Found Exception");
-				throw new UserServiceException(profileId + " This Profile Not Found Exception");
+				LogService.setLogger(profileId + ErrorServiceMessage.NO_REC_PROFILE);
+				throw new UserServiceException(profileId + ErrorServiceMessage.NO_REC_PROFILE);
 			}
 
 		} catch (Exception e) {
@@ -130,7 +142,8 @@ public class ProfileController {
 		return userProfile;
 	}
 
-	private List<Payments> getPaymentsById(Integer profileId) {
+	// This method get all payments by profile id
+	public List<Payments> getPaymentsByProfileId(Integer profileId) {
 		List<Payments> payments = null;
 		try {
 			payments = profileRepo.findPaymentsByProfileId(profileId);
@@ -140,15 +153,16 @@ public class ProfileController {
 		return payments;
 	}
 
-	private String deleteProfileById(Integer profileId) {
+	// This method delete profile by profile id
+	public String deleteProfileById(Integer profileId) {
 		String deleteMessage = null;
 		try {
-			// This condtions checking profile is available or not
+			// This condition checking profile is available or not
 			if (this.getByProfile(profileId) != null) {
 				profileRepo.deleteById(profileId);
-				return "Your Profile Deleted SuccessFull !!!";
+				deleteMessage = ErrorServiceMessage.PROFILE_DELETE_SUCCESS;
 			} else {
-				throw new UserServiceException(profileId + " this Profile not found");
+				throw new UserServiceException(profileId + ErrorServiceMessage.NO_REC_PROFILE);
 			}
 		} catch (Exception e) {
 			LogService.setLogger(e.getMessage());
@@ -156,7 +170,8 @@ public class ProfileController {
 		return deleteMessage;
 	}
 
-	private List<Address> getAddressById(Integer profileId) {
+	// This method get list of address by profile id
+	public List<Address> getAddressByProfileId(Integer profileId) {
 		List<Address> address = null;
 		try {
 			address = profileRepo.findAddressByProfileId(profileId);
@@ -166,4 +181,14 @@ public class ProfileController {
 		return address;
 	}
 
+	// This method get user details by profile id
+	public UserDet getUserByProfileId(Integer profileId) {
+		UserDet user = null;
+		try {
+			user = profileRepo.findUserByProfileId(profileId);
+		} catch (Exception e) {
+			LogService.setLogger(e.getMessage());
+		}
+		return user;
+	}
 }
