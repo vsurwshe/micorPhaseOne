@@ -40,7 +40,7 @@ public class ProfileController {
 
 	// This method return the profile details by id
 	@GetMapping(value = "/{profileId}")
-	private Profile findByIdProfile(@PathVariable Integer profileId) {
+	private Profile findByIdProfile(@PathVariable(value = "profileId") Integer profileId) {
 		return this.getByProfile(profileId);
 	}
 
@@ -51,32 +51,33 @@ public class ProfileController {
 	}
 
 	// This method update profile
-	@PutMapping(value = "/updateProfile")
-	private Profile updateProfileDetails(@Valid @RequestBody Profile profile, @PathVariable Integer profileId) {
+	@PutMapping(value = "/{profileId}/updateProfile")
+	private Profile updateProfileDetails(@Valid @RequestBody Profile profile,
+			@PathVariable(value = "profileId") Integer profileId) {
 		return this.updateProfile(profile, profileId);
 	}
 
 	// This method delete profile
 	@DeleteMapping(value = "/{profileId}")
-	private String deleteProfile(@PathVariable Integer profileId) {
+	private String deleteProfile(@PathVariable(value = "profileId") Integer profileId) {
 		return this.deleteProfileById(profileId);
 	}
 
 	// This method get all Payments details by id
 	@GetMapping(value = "/{profileId}/payments")
-	private List<Payments> findPaymentsById(@PathVariable Integer profileId) {
+	private List<Payments> findPaymentsById(@PathVariable(value = "profileId") Integer profileId) {
 		return this.getPaymentsByProfileId(profileId);
 	}
 
 	// This method get all Payments details by id
 	@GetMapping(value = "/{profileId}/address")
-	private List<Address> findAddressById(@PathVariable Integer profileId) {
+	private List<Address> findAddressById(@PathVariable(value = "profileId") Integer profileId) {
 		return this.getAddressByProfileId(profileId);
 	}
 
-	// This method get user details bu profile id
+	// This method get user details by profile id
 	@GetMapping(value = "/{profileId}/user")
-	private UserDet findUserDetailsByProfileId(@PathVariable Integer profileId) {
+	private UserDet findUserDetailsByProfileId(@PathVariable(value = "profileId") Integer profileId) {
 		return this.getUserByProfileId(profileId);
 	}
 

@@ -8,8 +8,9 @@ public class ErrorServiceMessage {
 	//--- Profile
 	public static final String NO_REC_PROFILE = " This profile related  no record found";
 	public static final String PROFILE_UPDATE_WORNG_VERSION = " this not Correct version, expected version";
-	public static final String PROFILE_DELETE_SUCCESS = " Your Profile Deleted SuccessFull !!!";
+	public static final String PROFILE_DELETE_SUCCESS = " Your profile deleted successfully !!!";
 	//--- Payment
 	public static final String NO_REC_PAYMENT = " Payment record Not found";
 	public static final String NO_REC_PROFILE_WITH_PAYMENT = " profile idd realted, no payment record found with payment id ";
+	public static final String PAYMENT_DELETE_SUCCESS = " your payment deleted successfully !!!";
 }
