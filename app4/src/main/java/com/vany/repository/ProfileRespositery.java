@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.vany.model.Address;
 import com.vany.model.Payments;
 import com.vany.model.Profile;
+import com.vany.model.UserDet;
 
 public interface ProfileRespositery extends JpaRepository<Profile, Integer> {
 	// This Method Return the Profile Details by id	
@@ -15,5 +16,6 @@ public interface ProfileRespositery extends JpaRepository<Profile, Integer> {
 	List<Payments> findPaymentsByProfileId(Integer profileId);
 	// This method return list of Address by profile id	
 	List<Address> findAddressByProfileId(Integer profileId);
-	
+	// This method return user details by profile id	 
+	UserDet findUserByProfileId(Integer profileId);
 }
