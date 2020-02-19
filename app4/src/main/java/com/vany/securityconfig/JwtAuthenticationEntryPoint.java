@@ -14,15 +14,15 @@ import org.springframework.stereotype.Component;
 import com.vany.service.ErrorServiceMessage;
 
 @Component
-public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint,Serializable {
+public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint, Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Override
 	public void commence(HttpServletRequest request, HttpServletResponse response,
 			AuthenticationException authException) throws IOException, ServletException {
-		response.sendError(HttpServletResponse.SC_UNAUTHORIZED,ErrorServiceMessage.NOT_VALID_USER);
-		
+		response.sendError(HttpServletResponse.SC_UNAUTHORIZED, ErrorServiceMessage.NOT_VALID_USER);
+
 	}
 
 }

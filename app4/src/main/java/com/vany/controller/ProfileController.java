@@ -1,6 +1,8 @@
 package com.vany.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +19,7 @@ import com.vany.model.Payments;
 import com.vany.model.Profile;
 import com.vany.model.UserDet;
 import com.vany.repository.ProfileRespositery;
+import com.vany.repository.UserRepository;
 import com.vany.service.ErrorServiceMessage;
 import com.vany.service.LogService;
 
@@ -31,6 +34,9 @@ public class ProfileController {
 
 	@Autowired
 	public ProfileRespositery profileRepo;
+
+	@Autowired
+	private UserRepository userRepository;
 
 	// This method return the all User Profiles
 	@GetMapping(value = "/getAll")
@@ -108,6 +114,7 @@ public class ProfileController {
 	public Profile saveProfile(Profile profile) {
 		Profile userProfile = null;
 		try {
+			profile.setUser(this.getUser());
 			userProfile = profileRepo.save(profile);
 		} catch (Exception e) {
 			LogService.setLogger(e.getMessage());
@@ -191,5 +198,19 @@ public class ProfileController {
 			LogService.setLogger(e.getMessage());
 		}
 		return user;
+	}
+
+	// This Functiosn get Username form Token And Return the User Details
+	public UserDet getUser() {
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		String username;
+		if (principal instanceof UserDetails) {
+			username = ((UserDetails) principal).getUsername();
+		} else {
+			username = principal.toString();
+		}
+		System.out.println("Your User Name :" + username);
+		UserDet daoUser = userRepository.findByUserEmail(username);
+		return daoUser;
 	}
 }

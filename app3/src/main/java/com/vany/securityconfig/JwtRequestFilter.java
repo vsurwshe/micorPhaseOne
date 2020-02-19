@@ -52,12 +52,9 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 				throw new UserServiceException(ErrorMessageService.TOKEN_EXPIRED);
 			}
 		}
-
 		// Once we get the token validate it.
 		if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-
 			UserDetails userDetails = this.jwtUserDetailsService.loadUserByUsername(username);
-
 			// if token is valid configure Spring Security to manually set
 			// authentication
 			if (jwtTokenUtil.validateToken(jwtToken, userDetails)) {
@@ -72,10 +69,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 				SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
 			}
 		}
-
 		// Filtering another request
 		filterChain.doFilter(request, response);
-
 	}
-
 }
