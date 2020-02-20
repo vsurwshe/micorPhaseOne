@@ -6,6 +6,8 @@ import org.springframework.web.client.RestTemplate;
 import com.vany.SMS.dto.ResultSMS;
 import com.vany.SMS.dto.SMSMoulde;
 import com.vany.SMS.service.LogService;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 
 import java.util.Collections;
@@ -23,6 +25,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class SMSController {
 	private static final Logger logger = Logger.getLogger(SMSController.class);
 
+	@Value("${app.sms.key}")
+	private String devKey;
+
+	
 	@GetMapping(value = "/")
 	public String getIndex() {
 		// logs debug message
@@ -45,8 +51,7 @@ public class SMSController {
 		// set `accept` header
 		headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
 		// set custom header
-		headers.set("authorization",
-				"awy6NGlBQERLZjvkDPd9Ffe2bATzUKM8VCrcnS375JWYOgu0px73wfTzV0KkpBsgo9JZyURMndDuIitj");
+		headers.set("authorization",devKey);
 		// build the request
 		return new HttpEntity<SMSMoulde>(smsMoulde, headers);
 	}
