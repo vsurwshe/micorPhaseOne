@@ -12,14 +12,23 @@ import com.vany.model.Profile;
 import com.vany.model.UserDet;
 
 public interface ProfileRespositery extends JpaRepository<Profile, Integer> {
-	// This Method Return the Profile Details by id	
+
+	@Query(value = "select case when count(*)>0 then true else false end from profile where profile_id=:profileId", nativeQuery = true)
+	boolean existsProileId(@Param("profileId") Integer profileId);
+
+	boolean existsById(Integer profileId);
+
+	// This Method Return the Profile Details by id
 	Profile findByprofileId(Integer profileId);
+
 	// This method return list of payments by profile id
-	@Query(value = "select * from payments  where profile_id=:profileId",nativeQuery = true)
-	List<Payments> findPaymentsByProfileId(Integer profileId);
-	// This method return list of Address by profile id	
-	@Query(value = "select * from address  where profile_id=:profileId",nativeQuery = true)
-	List<Address> findAddressByProfileId(@Param("profileId")Integer profileId);
-	// This method return user details by profile id	 
+	@Query(value = "select * from payments  where profile_id=:profileId", nativeQuery = true)
+	List<Payments> findPaymentsByProfileId(@Param("profileId") Integer profileId);
+
+	// This method return list of Address by profile id
+	@Query(value = "select * from address  where profile_id=:profileId", nativeQuery = true)
+	List<Address> findAddressByProfileId(@Param("profileId") Integer profileId);
+
+	// This method return user details by profile id
 	UserDet findUserByProfileId(Integer profileId);
 }

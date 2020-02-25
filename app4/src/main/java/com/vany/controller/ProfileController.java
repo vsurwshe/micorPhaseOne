@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.vany.exception.UserServiceException;
 import com.vany.model.Address;
 import com.vany.model.Payments;
 import com.vany.model.Profile;
@@ -95,7 +96,7 @@ public class ProfileController {
 		List<Profile> profiles = null;
 		try {
 			profiles = profileRepo.findAll();
-			if(profiles.isEmpty()){
+			if (profiles.isEmpty()) {
 				return ResponseEntityResult.badRequest(ErrorServiceMessage.NO_REC_PROFILE);
 			}
 		} catch (Exception e) {
@@ -110,8 +111,8 @@ public class ProfileController {
 		Profile profile = null;
 		try {
 			profile = profileRepo.findByprofileId(profileId);
-			if(profile.equals(null)){
-				return ResponseEntityResult.badRequest(profileId+ErrorServiceMessage.NO_REC_PROFILE);
+			if (profile.equals(null)) {
+				return ResponseEntityResult.badRequest(profileId + ErrorServiceMessage.NO_REC_PROFILE);
 			}
 		} catch (Exception e) {
 			LogService.setLogger(e.getMessage());
@@ -126,8 +127,8 @@ public class ProfileController {
 		try {
 			profile.setUser(this.getUser());
 			userProfile = profileRepo.save(profile);
-			if(userProfile.equals(null)){
-				return ResponseEntityResult.badRequest(profile.getProfileId()+ErrorServiceMessage.PROFILE_NOT_UPDATE);
+			if (userProfile.equals(null)) {
+				return ResponseEntityResult.badRequest(profile.getProfileId() + ErrorServiceMessage.PROFILE_NOT_UPDATE);
 			}
 		} catch (Exception e) {
 			LogService.setLogger(e.getMessage());
@@ -140,7 +141,7 @@ public class ProfileController {
 	public ResponseEntity<?> updateProfile(@Valid Profile profile, Integer profileId) {
 		Profile userProfile = null;
 		try {
-			Profile tempProfile =  profileRepo.findByprofileId(profileId);
+			Profile tempProfile = profileRepo.findByprofileId(profileId);
 			if (tempProfile != null) {
 				if (profile.getVersion().equals(tempProfile.getVersion())) {
 					tempProfile.setAddress(profile.getAddress());
@@ -151,8 +152,8 @@ public class ProfileController {
 				} else {
 					LogService.setLogger(profile.getVersion() + ErrorServiceMessage.PROFILE_UPDATE_WORNG_VERSION
 							+ tempProfile.getVersion());
-					return ResponseEntityResult.badRequest(profile.getVersion() + ErrorServiceMessage.PROFILE_UPDATE_WORNG_VERSION
-					+ tempProfile.getVersion());
+					return ResponseEntityResult.badRequest(profile.getVersion()
+							+ ErrorServiceMessage.PROFILE_UPDATE_WORNG_VERSION + tempProfile.getVersion());
 				}
 			} else {
 				LogService.setLogger(profileId + ErrorServiceMessage.NO_REC_PROFILE);
@@ -171,7 +172,7 @@ public class ProfileController {
 		List<Payments> payments = null;
 		try {
 			payments = profileRepo.findPaymentsByProfileId(profileId);
-			if(payments.isEmpty()){
+			if (payments.isEmpty()) {
 				return ResponseEntityResult.badRequest(profileId + ErrorServiceMessage.NO_REC_PROFILE);
 			}
 		} catch (Exception e) {
@@ -193,6 +194,7 @@ public class ProfileController {
 				return ResponseEntityResult.badRequest(profileId + ErrorServiceMessage.NO_REC_PROFILE);
 			}
 		} catch (Exception e) {
+			System.out.println(e);
 			LogService.setLogger(e.getMessage());
 			return ResponseEntityResult.badRequest(e.getMessage());
 		}
@@ -204,14 +206,14 @@ public class ProfileController {
 		List<Address> address = null;
 		try {
 			address = profileRepo.findAddressByProfileId(profileId);
-			if(address.isEmpty()) {
-				return ResponseEntityResult.badRequest(profileId+ErrorServiceMessage.PROFILE_NOT_FOUND_ADDRESS);
+			if (address.isEmpty()) {
+				return ResponseEntityResult.badRequest(profileId + ErrorServiceMessage.PROFILE_NOT_FOUND_ADDRESS);
 			}
 		} catch (Exception e) {
 			LogService.setLogger(e.getMessage());
 			return ResponseEntityResult.badRequest(e.getMessage());
 		}
-		return  ResponseEntityResult.successResponseEntity(address);
+		return ResponseEntityResult.successResponseEntity(address);
 	}
 
 	// This method get user details by profile id
@@ -219,8 +221,8 @@ public class ProfileController {
 		UserDet user = null;
 		try {
 			user = profileRepo.findUserByProfileId(profileId);
-			if(user.equals(null)){
-				return ResponseEntityResult.badRequest(profileId+ErrorServiceMessage.PROFILE_NOT_FOUND_USER);
+			if (user.equals(null)) {
+				return ResponseEntityResult.badRequest(profileId + ErrorServiceMessage.PROFILE_NOT_FOUND_USER);
 			}
 		} catch (Exception e) {
 			LogService.setLogger(e.getMessage());
@@ -240,5 +242,12 @@ public class ProfileController {
 		}
 		UserDet daoUser = userRepository.findByUserEmail(username);
 		return daoUser;
+	}
+
+	// This method checking profile is there not	
+	public void checkProfileIsOrNot(Integer profileId) {
+		if (!profileRepo.existsById(profileId)) {
+			throw new UserServiceException(profileId + ErrorServiceMessage.NO_REC_PROFILE);
+		}
 	}
 }
