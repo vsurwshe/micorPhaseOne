@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.vany.exception.UserServiceException;
 import com.vany.model.Address;
 import com.vany.model.Payments;
 import com.vany.model.Profile;
@@ -24,6 +23,7 @@ import com.vany.repository.ProfileRespositery;
 import com.vany.repository.UserRepository;
 import com.vany.service.ErrorServiceMessage;
 import com.vany.service.LogService;
+import com.vany.service.ResponseEntityResult;
 
 import java.util.*;
 
@@ -96,13 +96,13 @@ public class ProfileController {
 		try {
 			profiles = profileRepo.findAll();
 			if(profiles.isEmpty()){
-				return badRequest("Not Found the profiles");
+				return ResponseEntityResult.badRequest(ErrorServiceMessage.NO_REC_PROFILE);
 			}
 		} catch (Exception e) {
 			LogService.setLogger(e.getMessage());
-			return badRequest(e.getMessage());
+			return ResponseEntityResult.badRequest(e.getMessage());
 		}
-		return successResponseEntity(profiles);
+		return ResponseEntityResult.successResponseEntity(profiles);
 	}
 
 	// This method get profile by profileId
@@ -111,13 +111,13 @@ public class ProfileController {
 		try {
 			profile = profileRepo.findByprofileId(profileId);
 			if(profile.equals(null)){
-				return badRequest(profileId+" this profile id realted details not found");
+				return ResponseEntityResult.badRequest(profileId+ErrorServiceMessage.NO_REC_PROFILE);
 			}
 		} catch (Exception e) {
 			LogService.setLogger(e.getMessage());
-			return badRequest(e.getMessage());
+			return ResponseEntityResult.badRequest(e.getMessage());
 		}
-		return successResponseEntity(profile);
+		return ResponseEntityResult.successResponseEntity(profile);
 	}
 
 	// this method save profile
@@ -127,13 +127,13 @@ public class ProfileController {
 			profile.setUser(this.getUser());
 			userProfile = profileRepo.save(profile);
 			if(userProfile.equals(null)){
-				return badRequest(profile.getProfileId()+" this profile id data not updated sucessfully");
+				return ResponseEntityResult.badRequest(profile.getProfileId()+ErrorServiceMessage.PROFILE_NOT_UPDATE);
 			}
 		} catch (Exception e) {
 			LogService.setLogger(e.getMessage());
-			return badRequest(e.getMessage());
+			return ResponseEntityResult.badRequest(e.getMessage());
 		}
-		return successResponseEntity(userProfile);
+		return ResponseEntityResult.successResponseEntity(userProfile);
 	}
 
 	// This method update profile by id
@@ -151,19 +151,19 @@ public class ProfileController {
 				} else {
 					LogService.setLogger(profile.getVersion() + ErrorServiceMessage.PROFILE_UPDATE_WORNG_VERSION
 							+ tempProfile.getVersion());
-					return badRequest(profile.getVersion() + ErrorServiceMessage.PROFILE_UPDATE_WORNG_VERSION
+					return ResponseEntityResult.badRequest(profile.getVersion() + ErrorServiceMessage.PROFILE_UPDATE_WORNG_VERSION
 					+ tempProfile.getVersion());
 				}
 			} else {
 				LogService.setLogger(profileId + ErrorServiceMessage.NO_REC_PROFILE);
-				return badRequest(profileId + ErrorServiceMessage.NO_REC_PROFILE);
+				return ResponseEntityResult.badRequest(profileId + ErrorServiceMessage.NO_REC_PROFILE);
 			}
 
 		} catch (Exception e) {
 			LogService.setLogger(e.getMessage());
-			return badRequest(e.getMessage());
+			return ResponseEntityResult.badRequest(e.getMessage());
 		}
-		return successResponseEntity(userProfile);
+		return ResponseEntityResult.successResponseEntity(userProfile);
 	}
 
 	// This method get all payments by profile id
@@ -172,13 +172,13 @@ public class ProfileController {
 		try {
 			payments = profileRepo.findPaymentsByProfileId(profileId);
 			if(payments.isEmpty()){
-				return badRequest(profileId + ErrorServiceMessage.NO_REC_PROFILE);
+				return ResponseEntityResult.badRequest(profileId + ErrorServiceMessage.NO_REC_PROFILE);
 			}
 		} catch (Exception e) {
 			LogService.setLogger(e.getMessage());
-			return badRequest(e.getMessage());
+			return ResponseEntityResult.badRequest(e.getMessage());
 		}
-		return successResponseEntity(payments);
+		return ResponseEntityResult.successResponseEntity(payments);
 	}
 
 	// This method delete profile by profile id
@@ -190,13 +190,13 @@ public class ProfileController {
 				profileRepo.deleteById(profileId);
 				deleteMessage = ErrorServiceMessage.PROFILE_DELETE_SUCCESS;
 			} else {
-				return badRequest(profileId + ErrorServiceMessage.NO_REC_PROFILE);
+				return ResponseEntityResult.badRequest(profileId + ErrorServiceMessage.NO_REC_PROFILE);
 			}
 		} catch (Exception e) {
 			LogService.setLogger(e.getMessage());
-			return badRequest(e.getMessage());
+			return ResponseEntityResult.badRequest(e.getMessage());
 		}
-		return successResponseEntity(deleteMessage);
+		return ResponseEntityResult.successResponseEntity(deleteMessage);
 	}
 
 	// This method get list of address by profile id
@@ -205,13 +205,13 @@ public class ProfileController {
 		try {
 			address = profileRepo.findAddressByProfileId(profileId);
 			if(address.isEmpty()) {
-				return badRequest(profileId+ErrorServiceMessage.PROFILE_NOT_FOUND_ADDRESS);
+				return ResponseEntityResult.badRequest(profileId+ErrorServiceMessage.PROFILE_NOT_FOUND_ADDRESS);
 			}
 		} catch (Exception e) {
 			LogService.setLogger(e.getMessage());
-			return badRequest(e.getMessage());
+			return ResponseEntityResult.badRequest(e.getMessage());
 		}
-		return  successResponseEntity(address);
+		return  ResponseEntityResult.successResponseEntity(address);
 	}
 
 	// This method get user details by profile id
@@ -220,13 +220,13 @@ public class ProfileController {
 		try {
 			user = profileRepo.findUserByProfileId(profileId);
 			if(user.equals(null)){
-				return badRequest(profileId+" this profile realted no user data found");
+				return ResponseEntityResult.badRequest(profileId+ErrorServiceMessage.PROFILE_NOT_FOUND_USER);
 			}
 		} catch (Exception e) {
 			LogService.setLogger(e.getMessage());
-			return badRequest(e.getMessage());
+			return ResponseEntityResult.badRequest(e.getMessage());
 		}
-		return successResponseEntity(user);
+		return ResponseEntityResult.successResponseEntity(user);
 	}
 
 	// This Functiosn get Username form Token And Return the User Details
@@ -238,18 +238,7 @@ public class ProfileController {
 		} else {
 			username = principal.toString();
 		}
-		System.out.println("Your User Name :" + username);
 		UserDet daoUser = userRepository.findByUserEmail(username);
 		return daoUser;
-	}
-
-	// this method return as response entity as a bad request
-	public static ResponseEntity<?> badRequest(String message){
-		return new  ResponseEntity<String>(message,HttpStatus.BAD_REQUEST);
-	}
-
-	// this method return as response enitiy and ok status
-	public static ResponseEntity<?> successResponseEntity(Object classObject){
-		return new ResponseEntity<Object>(classObject,HttpStatus.OK);
 	}
 }
