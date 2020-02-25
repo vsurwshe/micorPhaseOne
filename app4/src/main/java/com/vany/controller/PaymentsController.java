@@ -5,6 +5,7 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,6 +23,7 @@ import com.vany.repository.PaymentsRepository;
 import com.vany.repository.ProfileRespositery;
 import com.vany.service.ErrorServiceMessage;
 import com.vany.service.LogService;
+import com.vany.service.ResponseEntityResult;
 
 @RestController
 @CrossOrigin(origins = "*")
@@ -34,9 +36,14 @@ public class PaymentsController {
 	@Autowired
 	public ProfileRespositery profileRepo;
 
+	@GetMapping(value = "/check")
+	public boolean checkProfileId(@PathVariable(value = "profileId") Integer profileId) {
+		return profileRepo.existsById(profileId);
+	}
+
 	// This method get payment by payment id
 	@GetMapping(value = "/payment/{paymentId}")
-	public Payments findPaymentsById(@PathVariable(value = "profileId") Integer profileId,
+	public ResponseEntity<?> findPaymentsById(@PathVariable(value = "profileId") Integer profileId,
 			@PathVariable(value = "paymentId") Integer paymentId) {
 		return this.getPaymentById(profileId, paymentId);
 	}
@@ -78,40 +85,31 @@ public class PaymentsController {
 
 	// --------------- Custom method development
 	// This method get payments by payment id & profile id
-	public Payments getPaymentById(Integer profileId, Integer paymentId) {
+	public ResponseEntity<?> getPaymentById(Integer profileId, Integer paymentId) {
 		Payments pay = null;
 		try {
-			if (this.checkingPaymentByProfileId(profileId)) {
-				List<Payments> payments =profileRepo.findPaymentsByProfileId(profileId);
-				// this condition checking in above payments list have a payment details by
-				// provided user payment id
-				if (payments.contains(paymentsRepo.findBypayId(paymentId))) {
-					pay = paymentsRepo.findBypayId(paymentId);
-				} else {
-					throw new UserServiceException(
-							profileId + ErrorServiceMessage.NO_REC_PROFILE_WITH_PAYMENT + paymentId);
-				}
+			this.checkProfileIsOrNot(profileId);
+			this.checkPaymentIsOrNot(paymentId);
+			pay = paymentsRepo.findBypayId(paymentId, profileId);
+			if (pay.equals(null)) {
+				ResponseEntityResult
+						.badRequest(profileId + " this profile related no record found with payment id " + paymentId);
 			}
+			// if (this.checkingPaymentByProfileId(profileId)) {
+			// List<Payments> payments =profileRepo.findPaymentsByProfileId(profileId);
+			// // provided user payment id
+			// if (payments.contains(paymentsRepo.findBypayId(paymentId))) {
+			// pay = paymentsRepo.findBypayId(paymentId);
+			// } else {
+			// throw new UserServiceException(
+			// profileId + ErrorServiceMessage.NO_REC_PROFILE_WITH_PAYMENT + paymentId);
+			// }
+			// }
 		} catch (Exception e) {
 			LogService.setLogger(e.getMessage());
+			return ResponseEntityResult.badRequest(e.getMessage());
 		}
-		return pay;
-	}
-
-	// This method checking payment id is valid or not
-	public boolean checkingPaymentByProfileId(Integer profileId) {
-		boolean result = false;
-		try {
-			// this condition checking user provided profile id have payments or not
-			if (!profileRepo.findPaymentsByProfileId(profileId).isEmpty()) {
-				result = true;
-			} else {
-				throw new UserServiceException(profileId + ErrorServiceMessage.NO_REC_PROFILE);
-			}
-		} catch (Exception e) {
-			LogService.setLogger(e.getMessage());
-		}
-		return result;
+		return ResponseEntityResult.successResponseEntity(pay);
 	}
 
 	// This method saving the payments details
@@ -192,11 +190,41 @@ public class PaymentsController {
 		PaymentVerified verifyValue = null;
 		try {
 			if (this.checkingPaymentByProfileId(profileId)) {
-				verifyValue = paymentsRepo.findBypayId(paymentId).getVerify();
+				verifyValue = paymentsRepo.findBypayId(paymentId, profileId).getVerify();
 			}
 		} catch (Exception e) {
 			LogService.setLogger(e.getMessage());
 		}
 		return verifyValue;
 	}
+
+	// This method checking payment id is valid or not
+	public boolean checkingPaymentByProfileId(Integer profileId) {
+		boolean result = false;
+		try {
+			// this condition checking user provided profile id have payments or not
+			if (!profileRepo.findPaymentsByProfileId(profileId).isEmpty()) {
+				result = true;
+			} else {
+				throw new UserServiceException(profileId + ErrorServiceMessage.NO_REC_PROFILE);
+			}
+		} catch (Exception e) {
+			LogService.setLogger(e.getMessage());
+		}
+		return result;
+	}
+
+	// This method checking profile is there not
+	public void checkProfileIsOrNot(Integer profileId) {
+		if (!profileRepo.existsById(profileId)) {
+			throw new UserServiceException(profileId + ErrorServiceMessage.NO_REC_PROFILE);
+		}
+	}
+
+	public void checkPaymentIsOrNot(Integer paymentId) {
+		if (!paymentsRepo.existsBypayId(paymentId)) {
+			throw new UserServiceException(paymentId + ErrorServiceMessage.NO_REC_PAYMENT);
+		}
+	}
+
 }
