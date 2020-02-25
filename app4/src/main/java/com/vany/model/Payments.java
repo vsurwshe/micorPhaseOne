@@ -27,29 +27,30 @@ public class Payments {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name="pay_id")
 	private Integer payId;
 
-	@Column
+	@Column(name="mode")
 	private PaymentMode mode;
 
-	@Column
+	@Column(name = "transctions_id")
 	private String transctionsId;
 
-	@Column
+	@Column(name = "amount")
 	private String amount;
 
-	@Column
+	@Column(name = "tarns_date")
 	private String tarnsDate;
 
-	@Column
+	@Column(name ="verify")
 	private PaymentVerified verify;
 
-	@Column
+	@Column(name = "version")
 	private Integer version;
 
 	// Many payments have one user
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "profileId", nullable = false)
+	@JoinColumn(name = "profile_id", nullable = false)
 	@JsonIgnore
 	private Profile profile;
 

@@ -1,6 +1,8 @@
 package com.vany.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -40,129 +42,147 @@ public class ProfileController {
 
 	// This method return the all User Profiles
 	@GetMapping(value = "/getAll")
-	private List<Profile> findAllProfiles() {
+	private ResponseEntity<?> findAllProfiles() {
 		return this.getAllProfiles();
 	}
 
 	// This method return the profile details by id
 	@GetMapping(value = "/{profileId}")
-	private Profile findByIdProfile(@PathVariable(value = "profileId") Integer profileId) {
+	private ResponseEntity<?> findByIdProfile(@PathVariable(value = "profileId") Integer profileId) {
 		return this.getByProfile(profileId);
 	}
 
 	// This method save profile
 	@PostMapping(value = "/saveProfile")
-	private Profile saveProfileDetails(@Valid @RequestBody Profile profile) {
+	private ResponseEntity<?> saveProfileDetails(@Valid @RequestBody Profile profile) {
 		return this.saveProfile(profile);
 	}
 
 	// This method update profile
 	@PutMapping(value = "/{profileId}/updateProfile")
-	private Profile updateProfileDetails(@Valid @RequestBody Profile profile,
+	private ResponseEntity<?> updateProfileDetails(@Valid @RequestBody Profile profile,
 			@PathVariable(value = "profileId") Integer profileId) {
 		return this.updateProfile(profile, profileId);
 	}
 
 	// This method delete profile
 	@DeleteMapping(value = "/{profileId}")
-	private String deleteProfile(@PathVariable(value = "profileId") Integer profileId) {
+	private ResponseEntity<?> deleteProfile(@PathVariable(value = "profileId") Integer profileId) {
 		return this.deleteProfileById(profileId);
 	}
 
 	// This method get all Payments details by id
 	@GetMapping(value = "/{profileId}/payments")
-	private List<Payments> findPaymentsById(@PathVariable(value = "profileId") Integer profileId) {
+	private ResponseEntity<?> findPaymentsById(@PathVariable(value = "profileId") Integer profileId) {
 		return this.getPaymentsByProfileId(profileId);
 	}
 
 	// This method get all Payments details by id
 	@GetMapping(value = "/{profileId}/address")
-	private List<Address> findAddressById(@PathVariable(value = "profileId") Integer profileId) {
+	private ResponseEntity<?> findAddressById(@PathVariable(value = "profileId") Integer profileId) {
 		return this.getAddressByProfileId(profileId);
 	}
 
 	// This method get user details by profile id
 	@GetMapping(value = "/{profileId}/user")
-	private UserDet findUserDetailsByProfileId(@PathVariable(value = "profileId") Integer profileId) {
+	private ResponseEntity<?> findUserDetailsByProfileId(@PathVariable(value = "profileId") Integer profileId) {
 		return this.getUserByProfileId(profileId);
 	}
 
 	// ----------- Custom profile find
 	// This method get all profiles
-	public List<Profile> getAllProfiles() {
+	public ResponseEntity<?> getAllProfiles() {
 		List<Profile> profiles = null;
 		try {
 			profiles = profileRepo.findAll();
+			if(profiles.isEmpty()){
+				return badRequest("Not Found the profiles");
+			}
 		} catch (Exception e) {
 			LogService.setLogger(e.getMessage());
+			return badRequest(e.getMessage());
 		}
-		return profiles;
+		return successResponseEntity(profiles);
 	}
 
 	// This method get profile by profileId
-	public Profile getByProfile(Integer profileId) {
+	public ResponseEntity<?> getByProfile(Integer profileId) {
 		Profile profile = null;
 		try {
 			profile = profileRepo.findByprofileId(profileId);
+			if(profile.equals(null)){
+				return badRequest(profileId+" this profile id realted details not found");
+			}
 		} catch (Exception e) {
 			LogService.setLogger(e.getMessage());
+			return badRequest(e.getMessage());
 		}
-		return profile;
+		return successResponseEntity(profile);
 	}
 
 	// this method save profile
-	public Profile saveProfile(Profile profile) {
+	public ResponseEntity<?> saveProfile(Profile profile) {
 		Profile userProfile = null;
 		try {
 			profile.setUser(this.getUser());
 			userProfile = profileRepo.save(profile);
+			if(userProfile.equals(null)){
+				return badRequest(profile.getProfileId()+" this profile id data not updated sucessfully");
+			}
 		} catch (Exception e) {
 			LogService.setLogger(e.getMessage());
+			return badRequest(e.getMessage());
 		}
-		return userProfile;
+		return successResponseEntity(userProfile);
 	}
 
 	// This method update profile by id
-	public Profile updateProfile(@Valid Profile profile, Integer profileId) {
+	public ResponseEntity<?> updateProfile(@Valid Profile profile, Integer profileId) {
 		Profile userProfile = null;
 		try {
-			Profile tempProfile = this.getByProfile(profileId);
+			Profile tempProfile =  profileRepo.findByprofileId(profileId);
 			if (tempProfile != null) {
 				if (profile.getVersion().equals(tempProfile.getVersion())) {
 					tempProfile.setAddress(profile.getAddress());
 					tempProfile.setProfileName(profile.getProfileName());
 					tempProfile.setType(profile.getType());
 					tempProfile.setVersion(profile.getVersion() + 1);
+					profileRepo.saveAndFlush(tempProfile);
 				} else {
 					LogService.setLogger(profile.getVersion() + ErrorServiceMessage.PROFILE_UPDATE_WORNG_VERSION
 							+ tempProfile.getVersion());
-					throw new UserServiceException(profile.getVersion()
-							+ ErrorServiceMessage.PROFILE_UPDATE_WORNG_VERSION + tempProfile.getVersion());
+					return badRequest(profile.getVersion() + ErrorServiceMessage.PROFILE_UPDATE_WORNG_VERSION
+					+ tempProfile.getVersion());
 				}
 			} else {
 				LogService.setLogger(profileId + ErrorServiceMessage.NO_REC_PROFILE);
-				throw new UserServiceException(profileId + ErrorServiceMessage.NO_REC_PROFILE);
+				return badRequest(profileId + ErrorServiceMessage.NO_REC_PROFILE);
 			}
 
 		} catch (Exception e) {
 			LogService.setLogger(e.getMessage());
+			return badRequest(e.getMessage());
 		}
-		return userProfile;
+		return successResponseEntity(userProfile);
 	}
 
 	// This method get all payments by profile id
-	public List<Payments> getPaymentsByProfileId(Integer profileId) {
+	public ResponseEntity<?> getPaymentsByProfileId(Integer profileId) {
 		List<Payments> payments = null;
 		try {
 			payments = profileRepo.findPaymentsByProfileId(profileId);
+			if(payments.isEmpty()){
+				return badRequest(profileId + ErrorServiceMessage.NO_REC_PROFILE);
+			}
 		} catch (Exception e) {
 			LogService.setLogger(e.getMessage());
+			return badRequest(e.getMessage());
 		}
-		return payments;
+		return successResponseEntity(payments);
 	}
 
 	// This method delete profile by profile id
-	public String deleteProfileById(Integer profileId) {
+	public ResponseEntity<?> deleteProfileById(Integer profileId) {
 		String deleteMessage = null;
 		try {
 			// This condition checking profile is available or not
@@ -170,34 +190,43 @@ public class ProfileController {
 				profileRepo.deleteById(profileId);
 				deleteMessage = ErrorServiceMessage.PROFILE_DELETE_SUCCESS;
 			} else {
-				throw new UserServiceException(profileId + ErrorServiceMessage.NO_REC_PROFILE);
+				return badRequest(profileId + ErrorServiceMessage.NO_REC_PROFILE);
 			}
 		} catch (Exception e) {
 			LogService.setLogger(e.getMessage());
+			return badRequest(e.getMessage());
 		}
-		return deleteMessage;
+		return successResponseEntity(deleteMessage);
 	}
 
 	// This method get list of address by profile id
-	public List<Address> getAddressByProfileId(Integer profileId) {
+	public ResponseEntity<?> getAddressByProfileId(Integer profileId) {
 		List<Address> address = null;
 		try {
 			address = profileRepo.findAddressByProfileId(profileId);
+			if(address.isEmpty()) {
+				return badRequest(profileId+ErrorServiceMessage.PROFILE_NOT_FOUND_ADDRESS);
+			}
 		} catch (Exception e) {
 			LogService.setLogger(e.getMessage());
+			return badRequest(e.getMessage());
 		}
-		return address;
+		return  successResponseEntity(address);
 	}
 
 	// This method get user details by profile id
-	public UserDet getUserByProfileId(Integer profileId) {
+	public ResponseEntity<?> getUserByProfileId(Integer profileId) {
 		UserDet user = null;
 		try {
 			user = profileRepo.findUserByProfileId(profileId);
+			if(user.equals(null)){
+				return badRequest(profileId+" this profile realted no user data found");
+			}
 		} catch (Exception e) {
 			LogService.setLogger(e.getMessage());
+			return badRequest(e.getMessage());
 		}
-		return user;
+		return successResponseEntity(user);
 	}
 
 	// This Functiosn get Username form Token And Return the User Details
@@ -212,5 +241,15 @@ public class ProfileController {
 		System.out.println("Your User Name :" + username);
 		UserDet daoUser = userRepository.findByUserEmail(username);
 		return daoUser;
+	}
+
+	// this method return as response entity as a bad request
+	public static ResponseEntity<?> badRequest(String message){
+		return new  ResponseEntity<String>(message,HttpStatus.BAD_REQUEST);
+	}
+
+	// this method return as response enitiy and ok status
+	public static ResponseEntity<?> successResponseEntity(Object classObject){
+		return new ResponseEntity<Object>(classObject,HttpStatus.OK);
 	}
 }

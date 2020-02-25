@@ -19,6 +19,7 @@ import com.vany.exception.UserServiceException;
 import com.vany.model.Payments;
 import com.vany.model.enu.PaymentVerified;
 import com.vany.repository.PaymentsRepository;
+import com.vany.repository.ProfileRespositery;
 import com.vany.service.ErrorServiceMessage;
 import com.vany.service.LogService;
 
@@ -29,6 +30,9 @@ public class PaymentsController {
 
 	@Autowired
 	private PaymentsRepository paymentsRepo;
+
+	@Autowired
+	public ProfileRespositery profileRepo;
 
 	// This method get payment by payment id
 	@GetMapping(value = "/payment/{paymentId}")
@@ -78,7 +82,7 @@ public class PaymentsController {
 		Payments pay = null;
 		try {
 			if (this.checkingPaymentByProfileId(profileId)) {
-				List<Payments> payments = new ProfileController().getPaymentsByProfileId(profileId);
+				List<Payments> payments =profileRepo.findPaymentsByProfileId(profileId);
 				// this condition checking in above payments list have a payment details by
 				// provided user payment id
 				if (payments.contains(paymentsRepo.findBypayId(paymentId))) {
@@ -99,7 +103,7 @@ public class PaymentsController {
 		boolean result = false;
 		try {
 			// this condition checking user provided profile id have payments or not
-			if (!new ProfileController().getPaymentsByProfileId(profileId).isEmpty()) {
+			if (!profileRepo.findPaymentsByProfileId(profileId).isEmpty()) {
 				result = true;
 			} else {
 				throw new UserServiceException(profileId + ErrorServiceMessage.NO_REC_PROFILE);
@@ -115,7 +119,7 @@ public class PaymentsController {
 		Payments userPay = null;
 		try {
 			if (this.checkingPaymentByProfileId(profileId)) {
-				userPayment.setProfile(new ProfileController().getByProfile(profileId));
+				userPayment.setProfile(profileRepo.findByprofileId(profileId));
 				userPay = paymentsRepo.saveAndFlush(userPayment);
 			}
 
