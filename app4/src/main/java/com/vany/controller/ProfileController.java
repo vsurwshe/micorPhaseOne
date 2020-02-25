@@ -244,7 +244,7 @@ public class ProfileController {
 		return daoUser;
 	}
 
-	// This method checking profile is there not	
+	// This method checking profile is there not
 	public void checkProfileIsOrNot(Integer profileId) {
 		if (!profileRepo.existsById(profileId)) {
 			throw new UserServiceException(profileId + ErrorServiceMessage.NO_REC_PROFILE);
