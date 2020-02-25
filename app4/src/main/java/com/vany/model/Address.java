@@ -28,49 +28,50 @@ public class Address {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@ApiModelProperty(notes = "Address Id is Automated Genrated")
+	@Column(name = "add_id")
 	private Integer addId;
 
-	@Column
+	@Column(name = "address1")
 	@ApiModelProperty(notes = " Address1 String Value Optional ")
 	private String address1;
 
-	@Column
 	@ApiModelProperty(notes = " Address2 String Value Optional ")
+	@Column(name = "address2")
 	private String address2;
 
-	@Column
+	@Column(name = "district")
 	@ApiModelProperty(notes = " District String Value Optional ")
 	private String district;
 
-	@Column
+	@Column(name = "state")
 	@ApiModelProperty(notes = " State String Value Optional ")
 	private String state;
 
-	@Column
+	@Column(name = "country")
 	@ApiModelProperty(notes = " Country String Value Optional ")
 	private String country;
 
-	@Column
+	@Column(name = "phone_no")
 	@ApiModelProperty(notes = " Phone/Mobile Number String Value Optional ")
 	private String phoneNo;
 
-	@Column
+	@Column(name = "version")
 	private Integer version;
 
 	// Many Address Have One User
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "profileId", nullable = false)
+	@JoinColumn(name = "profile_id", nullable = false)
 	@JsonIgnore
 	private Profile profile;
 
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "created_at", nullable = false, updatable = false)
+	@Column(name = "createdAt", nullable = false, updatable = false)
 	@CreatedDate
 	@JsonIgnore
 	private Date createdAt;
 
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "updated_at", nullable = false)
+	@Column(name = "updatedAt", nullable = false)
 	@LastModifiedDate
 	@JsonIgnore
 	private Date updatedAt;

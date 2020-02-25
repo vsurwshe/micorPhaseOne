@@ -162,9 +162,12 @@ public class ProfileController {
 		List<Address> address = null;
 		try {
 			address = profileRepo.findAddressByProfileId(profileId);
+			if(address.isEmpty()) {
+				return new  ResponseEntity<String>(profileId+"Not Found Address ",HttpStatus.BAD_REQUEST);
+			}
 		} catch (Exception e) {
 			LogService.setLogger(e.getMessage());
-			return  ResponseEntity.badRequest().body(profileId+"Not Found");
+			return new  ResponseEntity<String>(profileId+"Not Found",HttpStatus.BAD_REQUEST);
 		}
 		return new ResponseEntity<List<Address>>(address,HttpStatus.OK) ;
 	}
