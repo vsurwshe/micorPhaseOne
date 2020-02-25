@@ -1,6 +1,8 @@
 package com.vany.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -68,7 +70,7 @@ public class ProfileController {
 
 	// This method get all Payments details by id
 	@GetMapping(value = "/{profileId}/address")
-	private List<Address> findAddressById(@PathVariable Integer profileId) {
+	private ResponseEntity<?> findAddressById(@PathVariable Integer profileId) {
 		return this.getAddressById(profileId);
 	}
 
@@ -156,14 +158,15 @@ public class ProfileController {
 		return deleteMessage;
 	}
 
-	private List<Address> getAddressById(Integer profileId) {
+	private ResponseEntity<?> getAddressById(Integer profileId) {
 		List<Address> address = null;
 		try {
 			address = profileRepo.findAddressByProfileId(profileId);
 		} catch (Exception e) {
 			LogService.setLogger(e.getMessage());
+			return  ResponseEntity.badRequest().body(profileId+"Not Found");
 		}
-		return address;
+		return new ResponseEntity<List<Address>>(address,HttpStatus.OK) ;
 	}
 
 }
