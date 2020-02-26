@@ -4,6 +4,7 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -16,21 +17,25 @@ import javax.persistence.TemporalType;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.vany.model.enu.PaymentMode;
 import com.vany.model.enu.PaymentVerified;
 
 @Entity
 @Table(name = "payments")
+@EntityListeners(AuditingEntityListener.class)
+@JsonIgnoreProperties(value = { "createdAt", "updatedAt" }, allowGetters = true)
 public class Payments {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="pay_id")
+	@Column(name = "pay_id")
 	private Integer payId;
 
-	@Column(name="mode")
+	@Column(name = "mode")
 	private PaymentMode mode;
 
 	@Column(name = "transctions_id")
@@ -42,7 +47,7 @@ public class Payments {
 	@Column(name = "tarns_date")
 	private String tarnsDate;
 
-	@Column(name ="verify")
+	@Column(name = "verify")
 	private PaymentVerified verify;
 
 	@Column(name = "version")

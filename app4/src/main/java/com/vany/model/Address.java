@@ -4,6 +4,7 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -16,13 +17,17 @@ import javax.persistence.TemporalType;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import io.swagger.annotations.ApiModelProperty;
 
 @Entity
 @Table(name = "address")
+@EntityListeners(AuditingEntityListener.class)
+@JsonIgnoreProperties(value = { "createdAt", "updatedAt" }, allowGetters = true)
 public class Address {
 
 	@Id
@@ -30,36 +35,36 @@ public class Address {
 	@ApiModelProperty(notes = "Address Id is Automated Genrated")
 	private Integer addId;
 
-	@Column
+	@Column(name="address1")
 	@ApiModelProperty(notes = " Address1 String Value Optional ")
 	private String address1;
 
-	@Column
+	@Column(name = "address2")
 	@ApiModelProperty(notes = " Address2 String Value Optional ")
 	private String address2;
 
-	@Column
+	@Column(name = "district")
 	@ApiModelProperty(notes = " District String Value Optional ")
 	private String district;
 
-	@Column
+	@Column(name = "state")
 	@ApiModelProperty(notes = " State String Value Optional ")
 	private String state;
 
-	@Column
+	@Column(name = "country")
 	@ApiModelProperty(notes = " Country String Value Optional ")
 	private String country;
 
-	@Column
+	@Column(name = "phone_no")
 	@ApiModelProperty(notes = " Phone/Mobile Number String Value Optional ")
 	private String phoneNo;
 
-	@Column
+	@Column(name = "version")
 	private Integer version;
 
 	// Many Address Have One User
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "profileId", nullable = false)
+	@JoinColumn(name = "profile_id", nullable = false)
 	@JsonIgnore
 	private Profile profile;
 
