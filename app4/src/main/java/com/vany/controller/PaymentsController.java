@@ -36,11 +36,6 @@ public class PaymentsController {
 	@Autowired
 	public ProfileRespositery profileRepo;
 
-	@GetMapping(value = "/check")
-	public boolean checkProfileId(@PathVariable(value = "profileId") Integer profileId) {
-		return profileRepo.existsById(profileId);
-	}
-
 	// This method get payment by payment id
 	@GetMapping(value = "/payment/{paymentId}")
 	public ResponseEntity<?> findPaymentsById(@PathVariable(value = "profileId") Integer profileId,
@@ -70,10 +65,10 @@ public class PaymentsController {
 	}
 
 	// This method update the payments details
-	@PutMapping(value = "/payment/update")
-	public ResponseEntity<?> updatePayments(@PathVariable(value = "profileId") Integer profileId,
+	@PutMapping(value = "/payment/{paymentId}/update")
+	public ResponseEntity<?> updatePayments(@PathVariable(value = "profileId") Integer profileId,@PathVariable(value = "paymentId") Integer paymentId,
 			@Valid @RequestBody Payments payments) {
-		return this.updatePaymnetsDetails(profileId, payments);
+		return this.updatePaymnetsDetails(profileId, paymentId, payments);
 	}
 
 	// This method delete the payments details by payment id
@@ -93,7 +88,7 @@ public class PaymentsController {
 			pay = paymentsRepo.findBypayId(paymentId, profileId);
 			if (pay.equals(null)) {
 				ResponseEntityResult
-						.badRequest(profileId + " this profile related no record found with payment id " + paymentId);
+						.badRequest(profileId + ErrorServiceMessage.NO_REC_PROFILE_WITH_PAYMENT+ paymentId);
 			}
 
 		} catch (Exception e) {
@@ -107,8 +102,10 @@ public class PaymentsController {
 	public ResponseEntity<?> saveUserPayment(Integer profileId, @Valid Payments userPayment) {
 		Payments userPay = null;
 		try {
-			this.checkProfileId(profileId);
+			this.checkProfileIsOrNot(profileId);
 			userPayment.setProfile(profileRepo.findByprofileId(profileId));
+			userPayment.setVerify(PaymentVerified.No);
+			userPayment.setVersion(0);
 			userPay = paymentsRepo.saveAndFlush(userPayment);
 		} catch (Exception e) {
 			LogService.setLogger(e.getMessage());
@@ -118,13 +115,12 @@ public class PaymentsController {
 	}
 
 	// This method update the payments details
-	public ResponseEntity<?> updatePaymnetsDetails(Integer profileId, Payments payments) {
+	public ResponseEntity<?> updatePaymnetsDetails(Integer profileId, Integer paymentId, Payments payments) {
 		Payments userPay = null;
 		try {
-			this.checkProfileId(profileId);
-			this.checkPaymentIsOrNot(payments.getPayId());
-			Payments tempPayments = paymentsRepo.findById(payments.getPayId()).orElseThrow(
-					() -> new UserServiceException(payments.getPayId() + ErrorServiceMessage.NO_REC_PAYMENT));
+			this.checkProfileIsOrNot(profileId);
+			this.checkPaymentIsOrNot(paymentId);
+			Payments tempPayments = paymentsRepo.findBypayId(paymentId,profileId);
 			// this condtion cechking version by send user and current object
 			if (tempPayments.getVersion().equals(payments.getVersion())) {
 				tempPayments.setAmount(payments.getAmount());
@@ -150,9 +146,12 @@ public class PaymentsController {
 	public ResponseEntity<?> deletePaymnetsDetails(Integer profileId, Integer paymentId) {
 		String userDeleteMessage = null;
 		try {
-			this.checkProfileId(profileId);
+			this.checkProfileIsOrNot(profileId);
 			this.checkPaymentIsOrNot(paymentId);
-			Payments tempPayments = paymentsRepo.findBypayId(profileId, paymentId);
+			Payments tempPayments = paymentsRepo.findBypayId(paymentId,profileId);
+			if(tempPayments.equals(null)){
+				throw new UserServiceException(profileId+" this profile id related with this pyment id no record found "+paymentId );
+			}
 			paymentsRepo.delete(tempPayments);
 			userDeleteMessage = paymentId + ErrorServiceMessage.PAYMENT_DELETE_SUCCESS;
 		} catch (Exception e) {
@@ -166,7 +165,7 @@ public class PaymentsController {
 	private ResponseEntity<?> getPaymentByTransctionDate(Integer profileId, String transctionDate) {
 		List<Payments> userPayments = null;
 		try {
-			this.checkProfileId(profileId);
+			this.checkPaymentIsOrNot(profileId);
 			userPayments = paymentsRepo.findBytarnsDate(transctionDate);
 		} catch (Exception e) {
 			LogService.setLogger(e.getMessage());
@@ -179,7 +178,7 @@ public class PaymentsController {
 	private ResponseEntity<?> getVerifyValueByPaymentId(Integer profileId, Integer paymentId) {
 		PaymentVerified verifyValue = null;
 		try {
-			this.checkProfileId(profileId);
+			this.checkPaymentIsOrNot(profileId);
 			verifyValue = paymentsRepo.findBypayId(paymentId, profileId).getVerify();
 		} catch (Exception e) {
 			LogService.setLogger(e.getMessage());
@@ -187,7 +186,7 @@ public class PaymentsController {
 		}
 		return ResponseEntityResult.successResponseEntity(verifyValue);
 	}
-	
+
 	// This method checking profile is there not
 	public void checkProfileIsOrNot(Integer profileId) {
 		if (!profileRepo.existsById(profileId)) {

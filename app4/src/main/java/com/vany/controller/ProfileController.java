@@ -1,7 +1,6 @@
 package com.vany.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,6 +19,8 @@ import com.vany.model.Address;
 import com.vany.model.Payments;
 import com.vany.model.Profile;
 import com.vany.model.UserDet;
+import com.vany.repository.AddressRepository;
+import com.vany.repository.PaymentsRepository;
 import com.vany.repository.ProfileRespositery;
 import com.vany.repository.UserRepository;
 import com.vany.service.ErrorServiceMessage;
@@ -37,6 +38,12 @@ public class ProfileController {
 
 	@Autowired
 	public ProfileRespositery profileRepo;
+
+	@Autowired
+	public PaymentsRepository paymentRepo;
+
+	@Autowired
+	public AddressRepository addressRepo;
 
 	@Autowired
 	private UserRepository userRepository;
@@ -73,7 +80,7 @@ public class ProfileController {
 	}
 
 	// This method get all Payments details by id
-	@GetMapping(value = "/{profileId}/payments")
+	@GetMapping(value = "/{profileId}/payment")
 	private ResponseEntity<?> findPaymentsById(@PathVariable(value = "profileId") Integer profileId) {
 		return this.getPaymentsByProfileId(profileId);
 	}
@@ -112,7 +119,7 @@ public class ProfileController {
 		try {
 			profile = profileRepo.findByprofileId(profileId);
 			if (profile.equals(null)) {
-				return ResponseEntityResult.badRequest(profileId + ErrorServiceMessage.NO_REC_PROFILE);
+				return ResponseEntityResult.badRequest(ErrorServiceMessage.NO_REC_PROFILE+profileId);
 			}
 		} catch (Exception e) {
 			LogService.setLogger(e.getMessage());
@@ -128,7 +135,7 @@ public class ProfileController {
 			profile.setUser(this.getUser());
 			userProfile = profileRepo.save(profile);
 			if (userProfile.equals(null)) {
-				return ResponseEntityResult.badRequest(profile.getProfileId() + ErrorServiceMessage.PROFILE_NOT_UPDATE);
+				return ResponseEntityResult.badRequest( ErrorServiceMessage.PROFILE_NOT_UPDATE+ profile.getProfileId());
 			}
 		} catch (Exception e) {
 			LogService.setLogger(e.getMessage());
@@ -156,8 +163,8 @@ public class ProfileController {
 							+ ErrorServiceMessage.PROFILE_UPDATE_WORNG_VERSION + tempProfile.getVersion());
 				}
 			} else {
-				LogService.setLogger(profileId + ErrorServiceMessage.NO_REC_PROFILE);
-				return ResponseEntityResult.badRequest(profileId + ErrorServiceMessage.NO_REC_PROFILE);
+				LogService.setLogger(ErrorServiceMessage.NO_REC_PROFILE+profileId);
+				return ResponseEntityResult.badRequest( ErrorServiceMessage.NO_REC_PROFILE +profileId);
 			}
 
 		} catch (Exception e) {
@@ -171,9 +178,11 @@ public class ProfileController {
 	public ResponseEntity<?> getPaymentsByProfileId(Integer profileId) {
 		List<Payments> payments = null;
 		try {
-			payments = profileRepo.findPaymentsByProfileId(profileId);
+
+			payments = paymentRepo.findPaymentsByProfileId(profileId);
+
 			if (payments.isEmpty()) {
-				return ResponseEntityResult.badRequest(profileId + ErrorServiceMessage.NO_REC_PROFILE);
+				return ResponseEntityResult.badRequest(ErrorServiceMessage.NO_REC_PROFILE+profileId);
 			}
 		} catch (Exception e) {
 			LogService.setLogger(e.getMessage());
@@ -191,7 +200,7 @@ public class ProfileController {
 				profileRepo.deleteById(profileId);
 				deleteMessage = ErrorServiceMessage.PROFILE_DELETE_SUCCESS;
 			} else {
-				return ResponseEntityResult.badRequest(profileId + ErrorServiceMessage.NO_REC_PROFILE);
+				return ResponseEntityResult.badRequest(ErrorServiceMessage.NO_REC_PROFILE+profileId);
 			}
 		} catch (Exception e) {
 			System.out.println(e);
@@ -205,9 +214,9 @@ public class ProfileController {
 	public ResponseEntity<?> getAddressByProfileId(Integer profileId) {
 		List<Address> address = null;
 		try {
-			address = profileRepo.findAddressByProfileId(profileId);
+			address = addressRepo.findAddressByProfileId(profileId);
 			if (address.isEmpty()) {
-				return ResponseEntityResult.badRequest(profileId + ErrorServiceMessage.PROFILE_NOT_FOUND_ADDRESS);
+				return ResponseEntityResult.badRequest(ErrorServiceMessage.PROFILE_NOT_FOUND_ADDRESS+profileId);
 			}
 		} catch (Exception e) {
 			LogService.setLogger(e.getMessage());
@@ -222,7 +231,7 @@ public class ProfileController {
 		try {
 			user = profileRepo.findUserByProfileId(profileId);
 			if (user.equals(null)) {
-				return ResponseEntityResult.badRequest(profileId + ErrorServiceMessage.PROFILE_NOT_FOUND_USER);
+				return ResponseEntityResult.badRequest(ErrorServiceMessage.PROFILE_NOT_FOUND_USER+profileId);
 			}
 		} catch (Exception e) {
 			LogService.setLogger(e.getMessage());
@@ -247,7 +256,7 @@ public class ProfileController {
 	// This method checking profile is there not
 	public void checkProfileIsOrNot(Integer profileId) {
 		if (!profileRepo.existsById(profileId)) {
-			throw new UserServiceException(profileId + ErrorServiceMessage.NO_REC_PROFILE);
+			throw new UserServiceException(ErrorServiceMessage.NO_REC_PROFILE+profileId);
 		}
 	}
 }
