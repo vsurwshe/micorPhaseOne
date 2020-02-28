@@ -70,7 +70,4 @@ public class ConfirmationToken {
 	public void setUser(UserDet user) {
 		this.user = user;
 	}
-    
-    
-
 }

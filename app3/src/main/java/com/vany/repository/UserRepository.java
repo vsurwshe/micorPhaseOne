@@ -7,6 +7,5 @@ import com.vany.model.UserDet;
 
 @Repository
 public interface UserRepository extends JpaRepository<UserDet, Integer> {
-
 	public UserDet findByUserEmail(String userEmail);
 }
