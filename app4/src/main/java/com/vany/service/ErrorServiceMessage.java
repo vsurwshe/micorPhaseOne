@@ -22,4 +22,8 @@ public class ErrorServiceMessage {
 	// ---- Address
 	public static final String NO_REC_ADDRESS = "No payment records found with id ";
 	public static final String NO_REC_ADDRESS_WITH_PROFILE = "No payment records found with profile id ";
+	
+	// ---- Profile Type
+	public static final String NO_REC_PROFILETYPE = "No profile type records found ";
+
 }
