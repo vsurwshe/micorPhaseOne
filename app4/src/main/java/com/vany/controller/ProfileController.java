@@ -20,6 +20,7 @@ import com.vany.model.Payments;
 import com.vany.model.Profile;
 import com.vany.model.UserDet;
 import com.vany.model.enu.ProfileFeature;
+import com.vany.model.enu.ProfileType;
 import com.vany.repository.AddressRepository;
 import com.vany.repository.PaymentsRepository;
 import com.vany.repository.ProfileRespositery;
@@ -134,7 +135,8 @@ public class ProfileController {
 		Profile userProfile = null;
 		try {
 			profile.setUser(this.getUser());
-			profile.setFeatures(ProfileFeature.READ);
+			EnumSet<ProfileFeature> tempProfileFeatures=this.setPrfileFeatuers(profile);
+			profile.setFeatures(tempProfileFeatures);
 			profile.setVersion(0);
 			userProfile = profileRepo.save(profile);
 			if (userProfile.equals(null)) {
@@ -146,6 +148,8 @@ public class ProfileController {
 		}
 		return ResponseEntityResult.successResponseEntity(userProfile);
 	}
+
+	
 
 	// This method update profile by id
 	public ResponseEntity<?> updateProfile(@Valid Profile profile, Integer profileId) {
@@ -263,5 +267,27 @@ public class ProfileController {
 		if (!profileRepo.existsById(profileId)) {
 			throw new UserServiceException(ErrorServiceMessage.NO_REC_PROFILE+profileId);
 		}
+	}
+
+	// this method setting a profile featuers
+	private EnumSet<ProfileFeature> setPrfileFeatuers(Profile profile){
+		EnumSet<ProfileFeature> profileFeatuer=null;
+		try {
+			if(profile.getType().equals(ProfileType.BASIC) || profile.getType().equals(ProfileType.PERINEUM)){
+				this.checkBalanceProfile(profile);
+			}
+			profileFeatuer=EnumSet.of(ProfileFeature.READ)  ;
+		} catch (Exception e) {
+			LogService.setLogger(e.getMessage());
+			throw new UserServiceException(e.getMessage());
+		}
+		
+		return profileFeatuer;
+	}
+
+	private void checkBalanceProfile(Profile profile) {
+
+		
+
 	}
 }
