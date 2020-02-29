@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 @CrossOrigin(origins = "*")
-@RequestMapping(value = "/profile/")
+@RequestMapping(value = "/profile")
 public class ProfileTypeController {
 
     @Autowired
