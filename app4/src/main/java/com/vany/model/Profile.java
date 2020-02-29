@@ -1,6 +1,7 @@
 package com.vany.model;
 
 import java.util.Date;
+import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -47,10 +48,10 @@ public class Profile {
 
 	@NotNull
 	@Column
-	private ProfileType type;
+	private ProfileType  type;
 
 	@Column
-	private ProfileFeature features;
+	private EnumSet<ProfileFeature> features;
 
 	@Column
 	private Integer version;
@@ -107,11 +108,11 @@ public class Profile {
 		this.type = type;
 	}
 
-	public ProfileFeature getFeatures() {
+	public EnumSet<ProfileFeature> getFeatures() {
 		return features;
 	}
 
-	public void setFeatures(ProfileFeature features) {
+	public void setFeatures(EnumSet<ProfileFeature> features) {
 		this.features = features;
 	}
 
