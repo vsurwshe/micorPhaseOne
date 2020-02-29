@@ -19,6 +19,7 @@ import com.vany.model.Address;
 import com.vany.model.Payments;
 import com.vany.model.Profile;
 import com.vany.model.UserDet;
+import com.vany.model.enu.ProfileFeature;
 import com.vany.repository.AddressRepository;
 import com.vany.repository.PaymentsRepository;
 import com.vany.repository.ProfileRespositery;
@@ -133,6 +134,8 @@ public class ProfileController {
 		Profile userProfile = null;
 		try {
 			profile.setUser(this.getUser());
+			profile.setFeatures(ProfileFeature.READ);
+			profile.setVersion(0);
 			userProfile = profileRepo.save(profile);
 			if (userProfile.equals(null)) {
 				return ResponseEntityResult.badRequest( ErrorServiceMessage.PROFILE_NOT_UPDATE+ profile.getProfileId());
@@ -152,6 +155,8 @@ public class ProfileController {
 			if (tempProfile != null) {
 				if (profile.getVersion().equals(tempProfile.getVersion())) {
 					tempProfile.setAddress(profile.getAddress());
+					tempProfile.setPayments(profile.getPayments());
+					tempProfile.setFeatures(profile.getFeatures());
 					tempProfile.setProfileName(profile.getProfileName());
 					tempProfile.setType(profile.getType());
 					tempProfile.setVersion(profile.getVersion() + 1);
