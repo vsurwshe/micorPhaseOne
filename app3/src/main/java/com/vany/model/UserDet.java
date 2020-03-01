@@ -51,10 +51,12 @@ public class UserDet {
 	@Column
 	@JsonProperty(access = Access.WRITE_ONLY)
 	private String userPassword;
-	
+
 	@Column
 	private boolean isEnabled;
 
+	@Column
+	private Double userBalance;
 
 	@Column(nullable = false, updatable = false)
 	@Temporal(TemporalType.TIMESTAMP)
@@ -72,6 +74,11 @@ public class UserDet {
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user")
 	@JsonIgnore
 	private Set<Profile> profile = new HashSet<Profile>();
+
+	// One User have Mulitpal Payments
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user")
+	@JsonIgnore
+	private Set<Payments> payments = new HashSet<Payments>();
 
 	public Integer getUser_id() {
 		return user_id;
@@ -127,6 +134,29 @@ public class UserDet {
 
 	public void setProfile(Set<Profile> profile) {
 		this.profile = profile;
+	}
+
+	public boolean isEnabled() {
+		return isEnabled;
+	}
+
+	public void setEnabled(boolean isEnabled) {
+		this.isEnabled = isEnabled;
+	}
+
+	public Double getUserBalance() {
+		return userBalance;
+	}
+
+	public void setUserBalance(Double userBalance) {
+		this.userBalance = userBalance;
+	}
+
+	@Override
+	public String toString() {
+		return "UserDet [createdAt=" + createdAt + ", isEnabled=" + isEnabled + ", name=" + name + ", profile="
+				+ profile + ", updatedAt=" + updatedAt + ", userBalance=" + userBalance + ", userEmail=" + userEmail
+				+ ", userPassword=" + userPassword + ", user_id=" + user_id + "]";
 	}
 
 }

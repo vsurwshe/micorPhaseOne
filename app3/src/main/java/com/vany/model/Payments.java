@@ -151,5 +151,4 @@ public class Payments {
 		this.user = user;
 	}
 
-	
 }

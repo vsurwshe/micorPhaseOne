@@ -46,7 +46,7 @@ public class AddressController {
 		try {
 			this.checkProfileIdValidOrNot(profileId);
 			address=addressRepo.findById(profileId);
-			if(address.isEmpty()) {
+			if(address != null) {
 				return ResponseEntityResult.badRequest(ErrorServiceMessage.NO_REC_ADDRESS+addressId);
 			}
 		} catch (Exception e) {
