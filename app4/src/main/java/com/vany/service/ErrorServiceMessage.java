@@ -13,6 +13,7 @@ public class ErrorServiceMessage {
 	public static final String PROFILE_NOT_FOUND_ADDRESS = "No address record found with profile id ";
 	public static final String PROFILE_NOT_FOUND_USER = "No user record found with profile id  ";
 	public static final String PROFILE_NOT_UPDATE = "No profile record is updated successfully with id  ";
+	public static final String PROFILE_USER_BALANCE_NOT_SUFFICENT = "Sorry you can not create the Profile, please make payments accroding to profile cost";
 
 	// --- Payment
 	public static final String NO_REC_PAYMENT = "No payment records found with id ";

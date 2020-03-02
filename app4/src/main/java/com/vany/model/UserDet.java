@@ -39,23 +39,25 @@ public class UserDet {
 	private Integer user_id;
 
 	@NotNull
-	@Column
-	private String name;
+	@Column(name = "user_name")
+	private String userName;
 
 	@NotNull
 	@Email
-	@Column(unique = true)
+	@Column(unique = true, name = "user_email")
 	private String userEmail;
 
 	@NotNull
-	@Column
+	@Column(name = "user_password")
 	@JsonProperty(access = Access.WRITE_ONLY)
 	private String userPassword;
 
-	@Column
+	@Column(name = "is_enabled")
+	@NotNull
 	private boolean isEnabled;
 
-	@Column
+	@Column(name = "user_balance")
+	@NotNull
 	private Double userBalance;
 
 	@Column(nullable = false, updatable = false)
@@ -70,7 +72,7 @@ public class UserDet {
 	@JsonProperty(access = Access.WRITE_ONLY)
 	private Date updatedAt;
 
-	// One User have Mulitpal Payments
+	// One User have Mulitpal profiles
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user")
 	@JsonIgnore
 	private Set<Profile> profile = new HashSet<Profile>();
@@ -88,12 +90,12 @@ public class UserDet {
 		this.user_id = user_id;
 	}
 
-	public String getName() {
-		return name;
+	public String getUserName() {
+		return userName;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 
 	public String getUserEmail() {
@@ -152,9 +154,17 @@ public class UserDet {
 		this.userBalance = userBalance;
 	}
 
+	public Set<Payments> getPayments() {
+		return payments;
+	}
+
+	public void setPayments(Set<Payments> payments) {
+		this.payments = payments;
+	}
+
 	@Override
 	public String toString() {
-		return "UserDet [createdAt=" + createdAt + ", isEnabled=" + isEnabled + ", name=" + name + ", profile="
+		return "UserDet [createdAt=" + createdAt + ", isEnabled=" + isEnabled + ", name=" + userName + ", profile="
 				+ profile + ", updatedAt=" + updatedAt + ", userBalance=" + userBalance + ", userEmail=" + userEmail
 				+ ", userPassword=" + userPassword + ", user_id=" + user_id + "]";
 	}
