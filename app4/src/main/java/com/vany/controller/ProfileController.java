@@ -159,7 +159,7 @@ public class ProfileController {
 			if (tempProfile != null) {
 				if (profile.getVersion().equals(tempProfile.getVersion())) {
 					tempProfile.setAddress(profile.getAddress());
-					tempProfile.setPayments(profile.getPayments());
+//					tempProfile.setPayments(profile.getPayments());
 					tempProfile.setFeatures(profile.getFeatures());
 					tempProfile.setProfileName(profile.getProfileName());
 					tempProfile.setType(profile.getType());

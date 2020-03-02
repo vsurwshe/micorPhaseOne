@@ -103,7 +103,7 @@ public class PaymentsController {
 		Payments userPay = null;
 		try {
 			this.checkProfileIsOrNot(profileId);
-			userPayment.setProfile(profileRepo.findByprofileId(profileId));
+			// userPayment.setProfile(profileRepo.findByprofileId(profileId));
 			userPayment.setVerify(PaymentVerified.No);
 			userPayment.setVersion(0);
 			userPay = paymentsRepo.saveAndFlush(userPayment);

@@ -61,11 +61,6 @@ public class Profile {
 	@JsonIgnore
 	private Set<Address> address = new HashSet<Address>();
 
-	// One User have Mulitpal Payments
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "profile")
-	@JsonIgnore
-	private Set<Payments> payments = new HashSet<Payments>();
-
 	// Many payments have one user
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user", nullable = false)
@@ -130,14 +125,6 @@ public class Profile {
 
 	public void setAddress(Set<Address> address) {
 		this.address = address;
-	}
-
-	public Set<Payments> getPayments() {
-		return payments;
-	}
-
-	public void setPayments(Set<Payments> payments) {
-		this.payments = payments;
 	}
 
 	public Date getCreatedAt() {

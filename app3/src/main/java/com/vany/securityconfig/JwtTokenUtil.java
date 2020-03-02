@@ -20,7 +20,7 @@ public class JwtTokenUtil implements Serializable {
 	
 	   private String secret="Vishva";
 	   public static final long JWT_TOKEN_VALIDITY = 5 * 60;
-		private Clock clock = DefaultClock.INSTANCE;
+	   private Clock clock = DefaultClock.INSTANCE;
 	
 		//retrieve username from jwt token
 		public String getUsernameFromToken(String token) {
