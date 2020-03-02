@@ -24,6 +24,7 @@ import com.vany.model.enu.ProfileType;
 import com.vany.repository.AddressRepository;
 import com.vany.repository.PaymentsRepository;
 import com.vany.repository.ProfileRespositery;
+import com.vany.repository.ProfileTypeRepository;
 import com.vany.repository.UserRepository;
 import com.vany.service.ErrorServiceMessage;
 import com.vany.service.LogService;
@@ -49,6 +50,11 @@ public class ProfileController {
 
 	@Autowired
 	private UserRepository userRepository;
+
+	@Autowired
+	public ProfileTypeRepository profileTypeRepo;
+	
+	
 
 	// This method return the all User Profiles
 	@GetMapping(value = "/getAll")
@@ -121,7 +127,7 @@ public class ProfileController {
 		try {
 			profile = profileRepo.findByprofileId(profileId);
 			if (profile.equals(null)) {
-				return ResponseEntityResult.badRequest(ErrorServiceMessage.NO_REC_PROFILE+profileId);
+				return ResponseEntityResult.badRequest(ErrorServiceMessage.NO_REC_PROFILE + profileId);
 			}
 		} catch (Exception e) {
 			LogService.setLogger(e.getMessage());
@@ -135,12 +141,12 @@ public class ProfileController {
 		Profile userProfile = null;
 		try {
 			profile.setUser(this.getUser());
-			EnumSet<ProfileFeature> tempProfileFeatures=this.setPrfileFeatuers(profile);
+			EnumSet<ProfileFeature> tempProfileFeatures = this.setPrfileFeatuers(profile);
 			profile.setFeatures(tempProfileFeatures);
 			profile.setVersion(0);
 			userProfile = profileRepo.save(profile);
 			if (userProfile.equals(null)) {
-				return ResponseEntityResult.badRequest( ErrorServiceMessage.PROFILE_NOT_UPDATE+ profile.getProfileId());
+				return ResponseEntityResult.badRequest(ErrorServiceMessage.PROFILE_NOT_UPDATE + profile.getProfileId());
 			}
 		} catch (Exception e) {
 			LogService.setLogger(e.getMessage());
@@ -148,8 +154,6 @@ public class ProfileController {
 		}
 		return ResponseEntityResult.successResponseEntity(userProfile);
 	}
-
-	
 
 	// This method update profile by id
 	public ResponseEntity<?> updateProfile(@Valid Profile profile, Integer profileId) {
@@ -159,7 +163,6 @@ public class ProfileController {
 			if (tempProfile != null) {
 				if (profile.getVersion().equals(tempProfile.getVersion())) {
 					tempProfile.setAddress(profile.getAddress());
-//					tempProfile.setPayments(profile.getPayments());
 					tempProfile.setFeatures(profile.getFeatures());
 					tempProfile.setProfileName(profile.getProfileName());
 					tempProfile.setType(profile.getType());
@@ -172,8 +175,8 @@ public class ProfileController {
 							+ ErrorServiceMessage.PROFILE_UPDATE_WORNG_VERSION + tempProfile.getVersion());
 				}
 			} else {
-				LogService.setLogger(ErrorServiceMessage.NO_REC_PROFILE+profileId);
-				return ResponseEntityResult.badRequest( ErrorServiceMessage.NO_REC_PROFILE +profileId);
+				LogService.setLogger(ErrorServiceMessage.NO_REC_PROFILE + profileId);
+				return ResponseEntityResult.badRequest(ErrorServiceMessage.NO_REC_PROFILE + profileId);
 			}
 
 		} catch (Exception e) {
@@ -187,11 +190,9 @@ public class ProfileController {
 	public ResponseEntity<?> getPaymentsByProfileId(Integer profileId) {
 		List<Payments> payments = null;
 		try {
-
 			payments = paymentRepo.findPaymentsByProfileId(profileId);
-
 			if (payments.isEmpty()) {
-				return ResponseEntityResult.badRequest(ErrorServiceMessage.NO_REC_PROFILE+profileId);
+				return ResponseEntityResult.badRequest(ErrorServiceMessage.NO_REC_PROFILE + profileId);
 			}
 		} catch (Exception e) {
 			LogService.setLogger(e.getMessage());
@@ -209,7 +210,7 @@ public class ProfileController {
 				profileRepo.deleteById(profileId);
 				deleteMessage = ErrorServiceMessage.PROFILE_DELETE_SUCCESS;
 			} else {
-				return ResponseEntityResult.badRequest(ErrorServiceMessage.NO_REC_PROFILE+profileId);
+				return ResponseEntityResult.badRequest(ErrorServiceMessage.NO_REC_PROFILE + profileId);
 			}
 		} catch (Exception e) {
 			System.out.println(e);
@@ -225,7 +226,7 @@ public class ProfileController {
 		try {
 			address = addressRepo.findAddressByProfileId(profileId);
 			if (address.isEmpty()) {
-				return ResponseEntityResult.badRequest(ErrorServiceMessage.PROFILE_NOT_FOUND_ADDRESS+profileId);
+				return ResponseEntityResult.badRequest(ErrorServiceMessage.PROFILE_NOT_FOUND_ADDRESS + profileId);
 			}
 		} catch (Exception e) {
 			LogService.setLogger(e.getMessage());
@@ -240,7 +241,7 @@ public class ProfileController {
 		try {
 			user = profileRepo.findUserByProfileId(profileId);
 			if (user.equals(null)) {
-				return ResponseEntityResult.badRequest(ErrorServiceMessage.PROFILE_NOT_FOUND_USER+profileId);
+				return ResponseEntityResult.badRequest(ErrorServiceMessage.PROFILE_NOT_FOUND_USER + profileId);
 			}
 		} catch (Exception e) {
 			LogService.setLogger(e.getMessage());
@@ -265,29 +266,38 @@ public class ProfileController {
 	// This method checking profile is there not
 	public void checkProfileIsOrNot(Integer profileId) {
 		if (!profileRepo.existsById(profileId)) {
-			throw new UserServiceException(ErrorServiceMessage.NO_REC_PROFILE+profileId);
+			throw new UserServiceException(ErrorServiceMessage.NO_REC_PROFILE + profileId);
 		}
 	}
 
 	// this method setting a profile featuers
-	private EnumSet<ProfileFeature> setPrfileFeatuers(Profile profile){
-		EnumSet<ProfileFeature> profileFeatuer=null;
+	private EnumSet<ProfileFeature> setPrfileFeatuers(Profile profile) {
+		EnumSet<ProfileFeature> profileFeatuer = null;
 		try {
-			if(profile.getType().equals(ProfileType.BASIC) || profile.getType().equals(ProfileType.PERINEUM)){
+			if (profile.getType().equals(ProfileType.BASIC) || profile.getType().equals(ProfileType.PERINEUM)) {
 				this.checkBalanceProfile(profile);
+				if (profile.getType().equals(ProfileType.BASIC)) {
+					profileFeatuer = EnumSet.of(ProfileFeature.READ, ProfileFeature.WRITE, ProfileFeature.UPDATE);
+				} else {
+					profileFeatuer = EnumSet.of(ProfileFeature.READ, ProfileFeature.WRITE, ProfileFeature.UPDATE,
+							ProfileFeature.DELETE);
+				}
 			}
-			profileFeatuer=EnumSet.of(ProfileFeature.READ)  ;
+			profileFeatuer = EnumSet.of(ProfileFeature.READ);
 		} catch (Exception e) {
 			LogService.setLogger(e.getMessage());
 			throw new UserServiceException(e.getMessage());
 		}
-		
 		return profileFeatuer;
 	}
 
+	// This method checking User have sufficent balance to create a BASIC/PRENIMUM
+	// profiles
 	private void checkBalanceProfile(Profile profile) {
-
-		
-
+		Double userBalance = profile.getUser().getUserBalance();
+		Double profileCost = profileTypeRepo.findByType(profile.getType());
+		if (userBalance <= profileCost) {
+			throw new UserServiceException(ErrorServiceMessage.PROFILE_USER_BALANCE_NOT_SUFFICENT);
+		}
 	}
 }
