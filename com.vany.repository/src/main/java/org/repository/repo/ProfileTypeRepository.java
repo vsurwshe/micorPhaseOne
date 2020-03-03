@@ -1,4 +1,4 @@
-package org.profile.repository;
+package org.repository.repo;
 
 
 

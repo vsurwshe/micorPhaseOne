@@ -3,8 +3,8 @@ package org.auth.service;
 import java.util.ArrayList;
 
 import org.auth.exception.UserServiceException;
-import org.auth.repository.UserRepository;
 import org.domain.model.UserDet;
+import org.repository.repo.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

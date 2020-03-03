@@ -3,10 +3,10 @@ package org.profile.controller;
 import java.util.List;
 
 import org.domain.model.ProfileTypeModel;
-import org.profile.repository.ProfileTypeRepository;
 import org.profile.service.ErrorServiceMessage;
 import org.profile.service.LogService;
 import org.profile.service.ResponseEntityResult;
+import org.repository.repo.ProfileTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;

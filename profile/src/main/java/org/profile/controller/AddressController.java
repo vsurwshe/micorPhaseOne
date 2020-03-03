@@ -5,11 +5,11 @@ import java.util.Optional;
 
 import org.domain.model.Address;
 import org.profile.exception.UserServiceException;
-import org.profile.repository.AddressRepository;
-import org.profile.repository.ProfileRespositery;
 import org.profile.service.ErrorServiceMessage;
 import org.profile.service.LogService;
 import org.profile.service.ResponseEntityResult;
+import org.repository.repo.AddressRepository;
+import org.repository.repo.ProfileRespositery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
