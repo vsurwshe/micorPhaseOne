@@ -95,7 +95,7 @@
 			<artifactId>domain</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.vany</groupId>
+			<groupId>com.vany.repository</groupId>
 			<artifactId>repository</artifactId>
 		</dependency>
 	</dependencies>
@@ -117,7 +117,7 @@
 				<version>0.0.1-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>com.vany</groupId>
+				<groupId>com.vany.repository</groupId>
 				<artifactId>repository</artifactId>
 				<version>0.0.1-SNAPSHOT</version>
 			</dependency>

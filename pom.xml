@@ -45,10 +45,6 @@
   </dependencies>
   <modules>
   	<module>domain</module>
-  	
-  	
-  	
-  	
   	<module>profile</module>
   	<module>auth</module>
     <module>repository</module>
