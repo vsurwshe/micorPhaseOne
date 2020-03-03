@@ -164,9 +164,11 @@ public class UserDet {
 
 	@Override
 	public String toString() {
-		return "UserDet [createdAt=" + createdAt + ", isEnabled=" + isEnabled + ", name=" + userName + ", profile="
-				+ profile + ", updatedAt=" + updatedAt + ", userBalance=" + userBalance + ", userEmail=" + userEmail
-				+ ", userPassword=" + userPassword + ", user_id=" + user_id + "]";
+		return "UserDet [user_id=" + user_id + ", userName=" + userName + ", userEmail=" + userEmail + ", userPassword="
+				+ userPassword + ", isEnabled=" + isEnabled + ", userBalance=" + userBalance + ", createdAt="
+				+ createdAt + ", updatedAt=" + updatedAt + ", profile=" + profile + ", payments=" + payments + "]";
 	}
+
+	
 
 }
