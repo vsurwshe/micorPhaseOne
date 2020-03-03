@@ -51,6 +51,6 @@
   	
   	<module>profile</module>
   	<module>auth</module>
-    <module>com.vany.repository</module>
+    <module>repository</module>
   </modules>
 </project>
