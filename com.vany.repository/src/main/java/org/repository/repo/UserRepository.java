@@ -1,4 +1,4 @@
-package org.profile.repository;
+package org.repository.repo;
 
 import org.domain.model.UserDet;
 import org.springframework.data.jpa.repository.JpaRepository;

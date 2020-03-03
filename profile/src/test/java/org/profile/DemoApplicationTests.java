@@ -1,10 +1,10 @@
-package com.vany.token;
+package org.profile;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class AuthApplicationsTests {
+class DemoApplicationTests {
 
 	@Test
 	void contextLoads() {

@@ -1,4 +1,4 @@
-package org.auth.repository;
+package org.repository.repo;
 
 
 

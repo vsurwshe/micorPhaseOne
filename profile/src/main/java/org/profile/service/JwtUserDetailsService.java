@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import org.domain.model.UserDet;
 import org.profile.exception.UserServiceException;
-import org.profile.repository.UserRepository;
+import org.repository.repo.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
