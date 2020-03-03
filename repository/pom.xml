@@ -7,10 +7,12 @@
     <artifactId>micro-service-project</artifactId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
-  <groupId>com.vany</groupId>
+  
+  <groupId>com.vany.repository</groupId>
   <artifactId>repository</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  <name>com.vany.repository</name>
+
+
   <url>http://maven.apache.org</url>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
