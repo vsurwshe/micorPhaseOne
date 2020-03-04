@@ -5,7 +5,7 @@ import java.io.Serializable;
 import org.springframework.stereotype.Component;
 
 
-@Component
+
 public class JwtRequest implements Serializable{
 
 	private static final long serialVersionUID = 1L;
@@ -43,9 +43,4 @@ public class JwtRequest implements Serializable{
 	public void setUserPassword(String userPassword) {
 		this.userPassword = userPassword;
 	}
-	
-	
-	
-	
-	
 }

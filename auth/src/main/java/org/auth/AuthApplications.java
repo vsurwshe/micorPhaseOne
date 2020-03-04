@@ -12,7 +12,10 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @SpringBootApplication
 @EnableJpaAuditing
 @EntityScan("org.domain.entity")
-@ComponentScan("org.domain.component")
+@ComponentScan({
+	"org.domain.component",
+	"org.auth"
+})
 @EnableJpaRepositories("org.repository.repo")
 public class AuthApplications {
 

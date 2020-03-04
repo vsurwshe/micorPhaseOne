@@ -125,7 +125,7 @@ public class ProfileController {
 		Optional<Profile> profile = null;
 		try {
 			profile = profileRepo.findById(profileId);
-			if (profile.equals(null)) {
+			if (profile != null) {
 				return ResponseEntityResult.badRequest(ErrorServiceMessage.NO_REC_PROFILE + profileId);
 			}
 		} catch (Exception e) {
