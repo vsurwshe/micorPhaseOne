@@ -1,10 +1,6 @@
-package org.vany.repository;
+package org.domain;
 
-/**
- * Hello world!
- *
- */
-public class App 
+public class Domain 
 {
     public static void main( String[] args )
     {

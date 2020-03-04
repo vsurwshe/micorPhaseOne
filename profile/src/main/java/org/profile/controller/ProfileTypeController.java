@@ -2,7 +2,7 @@ package org.profile.controller;
 
 import java.util.List;
 
-import org.domain.model.ProfileTypeModel;
+import org.domain.entity.ProfileTypeModel;
 import org.profile.service.ErrorServiceMessage;
 import org.profile.service.LogService;
 import org.profile.service.ResponseEntityResult;

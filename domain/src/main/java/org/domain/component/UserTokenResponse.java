@@ -1,4 +1,4 @@
-package org.domain.model;
+package org.domain.component;
 
 public class UserTokenResponse {
 

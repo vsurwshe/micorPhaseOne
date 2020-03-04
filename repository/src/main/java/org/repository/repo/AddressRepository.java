@@ -2,12 +2,13 @@ package org.repository.repo;
 
 import java.util.List;
 
-import org.domain.model.Address;
+import org.domain.entity.Address;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
 
-
+@Repository
 public interface AddressRepository extends JpaRepository<Address, Integer> {
 
 	// This method return list of Address by profile id

@@ -3,8 +3,8 @@ package org.profile.controller;
 
 import java.util.Optional;
 
-import org.domain.model.Address;
-import org.exception.UserServiceException;
+import org.domain.entity.Address;
+import org.exception.exec.UserServiceException;
 import org.profile.service.ErrorServiceMessage;
 import org.profile.service.LogService;
 import org.profile.service.ResponseEntityResult;

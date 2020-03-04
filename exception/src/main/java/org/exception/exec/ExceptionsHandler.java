@@ -1,8 +1,8 @@
-package org.exception;
+package org.exception.exec;
 
 import java.util.Date;
 
-import org.domain.model.ErrorMessage;
+import org.domain.component.ErrorMessage;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

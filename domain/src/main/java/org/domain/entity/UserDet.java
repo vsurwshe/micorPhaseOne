@@ -1,4 +1,4 @@
-package org.domain.model;
+package org.domain.entity;
 
 import java.util.Date;
 import java.util.HashSet;

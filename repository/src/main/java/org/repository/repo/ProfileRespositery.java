@@ -1,11 +1,13 @@
 package org.repository.repo;
 
-import org.domain.model.Profile;
-import org.domain.model.UserDet;
+import org.domain.entity.Profile;
+import org.domain.entity.UserDet;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface ProfileRespositery extends JpaRepository<Profile, Integer> {
 
 	@Query(value = "select case when count(*)>0 then true else false end from profile where profile_id=:profileId", nativeQuery = true)
