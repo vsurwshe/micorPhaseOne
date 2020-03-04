@@ -1,4 +1,4 @@
-package org.repository;
+package org.exception;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -7,7 +7,7 @@ import junit.framework.TestSuite;
 /**
  * Unit test for simple App.
  */
-public class RepoTest 
+public class ExceptionTest 
     extends TestCase
 {
     /**
@@ -15,7 +15,7 @@ public class RepoTest
      *
      * @param testName name of the test case
      */
-    public RepoTest( String testName )
+    public ExceptionTest( String testName )
     {
         super( testName );
     }
@@ -25,7 +25,7 @@ public class RepoTest
      */
     public static Test suite()
     {
-        return new TestSuite( RepoTest.class );
+        return new TestSuite( ExceptionTest.class );
     }
 
     /**

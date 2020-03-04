@@ -1,7 +1,10 @@
-package org.domain.model;
+package org.domain.component;
 
 import java.util.Date;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class ErrorMessage {
 	
 	private Date timestamp;

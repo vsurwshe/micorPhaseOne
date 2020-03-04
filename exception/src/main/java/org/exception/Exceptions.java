@@ -1,10 +1,10 @@
-package org.vany.repository;
+package org.exception;
 
 /**
  * Hello world!
  *
  */
-public class App 
+public class Exceptions 
 {
     public static void main( String[] args )
     {

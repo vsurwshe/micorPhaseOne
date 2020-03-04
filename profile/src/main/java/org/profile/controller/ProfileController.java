@@ -1,12 +1,12 @@
 package org.profile.controller;
 
-import org.domain.model.Address;
-import org.domain.model.Payments;
-import org.domain.model.Profile;
-import org.domain.model.UserDet;
+import org.domain.entity.Address;
+import org.domain.entity.Payments;
+import org.domain.entity.Profile;
+import org.domain.entity.UserDet;
 import org.domain.model.enu.ProfileFeature;
 import org.domain.model.enu.ProfileType;
-import org.exception.UserServiceException;
+import org.exception.exec.UserServiceException;
 import org.profile.service.ErrorServiceMessage;
 import org.profile.service.LogService;
 import org.profile.service.ResponseEntityResult;

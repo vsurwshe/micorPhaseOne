@@ -4,9 +4,9 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-import org.domain.model.Payments;
+import org.domain.entity.Payments;
 import org.domain.model.enu.PaymentVerified;
-import org.exception.UserServiceException;
+import org.exception.exec.UserServiceException;
 import org.profile.service.ErrorServiceMessage;
 import org.profile.service.LogService;
 import org.profile.service.ResponseEntityResult;

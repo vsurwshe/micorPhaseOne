@@ -2,11 +2,13 @@ package org.repository.repo;
 
 import java.util.List;
 
-import org.domain.model.Payments;
+import org.domain.entity.Payments;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface PaymentsRepository extends JpaRepository<Payments, Integer> {
 
 	boolean existsBypayId(Integer paymentId);

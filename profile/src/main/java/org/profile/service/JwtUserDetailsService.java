@@ -2,8 +2,8 @@ package org.profile.service;
 
 import java.util.ArrayList;
 
-import org.domain.model.UserDet;
-import org.exception.UserServiceException;
+import org.domain.entity.UserDet;
+import org.exception.exec.UserServiceException;
 import org.repository.repo.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;

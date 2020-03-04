@@ -7,7 +7,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.exception.UserServiceException;
+import org.exception.exec.UserServiceException;
 import org.profile.service.ErrorServiceMessage;
 import org.profile.service.JwtUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
