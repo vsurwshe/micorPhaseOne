@@ -6,7 +6,7 @@ import org.domain.model.Profile;
 import org.domain.model.UserDet;
 import org.domain.model.enu.ProfileFeature;
 import org.domain.model.enu.ProfileType;
-import org.profile.exception.UserServiceException;
+import org.exception.UserServiceException;
 import org.profile.service.ErrorServiceMessage;
 import org.profile.service.LogService;
 import org.profile.service.ResponseEntityResult;

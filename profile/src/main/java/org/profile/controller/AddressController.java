@@ -4,7 +4,7 @@ package org.profile.controller;
 import java.util.Optional;
 
 import org.domain.model.Address;
-import org.profile.exception.UserServiceException;
+import org.exception.UserServiceException;
 import org.profile.service.ErrorServiceMessage;
 import org.profile.service.LogService;
 import org.profile.service.ResponseEntityResult;
