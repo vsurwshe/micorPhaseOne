@@ -24,10 +24,19 @@
       <version>3.8.1</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+			<groupId>com.vany.domain</groupId>
+			<artifactId>domain</artifactId>
+		</dependency>
    
   </dependencies>
   <dependencyManagement>
   	<dependencies>
+    <dependency>
+				<groupId>com.vany.domain</groupId>
+				<artifactId>domain</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+			</dependency>
   	</dependencies>
   </dependencyManagement>
 </project>

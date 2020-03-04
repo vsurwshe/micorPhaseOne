@@ -3,6 +3,7 @@ package org.auth.controller;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import org.exception.UserServiceException;
 import org.auth.securityconfig.JwtRequestFilter;
 import org.auth.securityconfig.JwtTokenUtil;
 import org.auth.service.ErrorMessageService;
