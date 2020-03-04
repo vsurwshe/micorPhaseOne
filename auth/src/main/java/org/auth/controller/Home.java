@@ -1,7 +1,6 @@
 package org.auth.controller;
 
 import org.apache.log4j.Logger;
-import org.auth.exception.UserServiceException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
