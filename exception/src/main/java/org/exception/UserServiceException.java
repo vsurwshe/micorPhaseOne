@@ -1,4 +1,4 @@
-package org.auth.exception;
+package org.exception;
 
 public class UserServiceException extends RuntimeException {
 
