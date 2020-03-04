@@ -48,5 +48,6 @@
   	<module>profile</module>
   	<module>auth</module>
     <module>repository</module>
+    <module>exception</module>
   </modules>
 </project>

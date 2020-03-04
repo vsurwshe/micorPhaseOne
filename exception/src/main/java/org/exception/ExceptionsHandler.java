@@ -1,4 +1,4 @@
-package org.auth.exception;
+package org.exception;
 
 import java.util.Date;
 
