@@ -10,7 +10,6 @@
 	</parent>
 	<groupId>com.vany.zuul</groupId>
 	<artifactId>zuil</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
 	<name>zuul</name>
 	<description>Demo project for hibernate</description>
 

@@ -10,12 +10,6 @@ FROM maven:3.6.0-jdk-11-slim AS build
 COPY src /home/src
 COPY pom.xml /home/
 
-COPY eureka/src /home/eureka/src
-COPY eureka/pom.xml /home/eureka
-
-COPY zuul/src /home/zuul/src
-COPY zuul/pom.xml /home/zuul
-
 COPY auth/src /home/auth/src
 COPY auth/pom.xml /home/auth
 # RUN mvn -f /home/app2/pom.xml package
@@ -31,6 +25,13 @@ COPY repository/pom.xml /home/repository
 
 COPY exception/src /home/exception/src
 COPY exception/pom.xml /home/exception
+
+
+COPY eureka/src /home/eureka/src
+COPY eureka/pom.xml /home/eureka
+
+COPY zuul/src /home/zuul/src
+COPY zuul/pom.xml /home/zuul
 
 # Run the Parent pom.xml for building the package
  RUN mvn -f /home/pom.xml package
