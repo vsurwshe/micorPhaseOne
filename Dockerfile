@@ -10,6 +10,12 @@ FROM maven:3.6.0-jdk-11-slim AS build
 COPY src /home/src
 COPY pom.xml /home/
 
+COPY eureka/src /home/eureka/src
+COPY eureka/pom.xml /home/eureka
+
+COPY zuul/src /home/zuul/src
+COPY zuul/pom.xml /home/zuul
+
 COPY auth/src /home/auth/src
 COPY auth/pom.xml /home/auth
 # RUN mvn -f /home/app2/pom.xml package
@@ -23,6 +29,9 @@ COPY profile/pom.xml /home/profile
 COPY repository/src /home/repository/src
 COPY repository/pom.xml /home/repository
 
+COPY exception/src /home/exception/src
+COPY exception/pom.xml /home/exception
+
 # Run the Parent pom.xml for building the package
  RUN mvn -f /home/pom.xml package
 
@@ -33,8 +42,8 @@ COPY repository/pom.xml /home/repository
 
 FROM anapsix/alpine-java
 # Builded jar files renamed and put into another library
-# COPY --from=build /home/server/target/EurekaServer-0.0.1-SNAPSHOT.jar /opt/lib/server.jar
-# COPY --from=build /home/gateway/target/zuulApiGateway-0.0.1-SNAPSHOT.jar /opt/lib/gateway.jar
+COPY --from=build /home/eureka/target/eureka-0.0.1-SNAPSHOT.jar /opt/lib/server.jar
+COPY --from=build /home/zuul/target/zuil-0.0.1-SNAPSHOT.jar /opt/lib/gateway.jar
 COPY --from=build /home/auth/target/auth-0.0.1-SNAPSHOT.jar /opt/lib/auth.jar
 COPY --from=build /home/profile/target/profile-0.0.1-SNAPSHOT.jar /opt/lib/profileAuth.jar
 # COPY --from=build /home/app3/target/ResourceAPI-0.0.1-SNAPSHOT.jar /opt/lib/resource.jar

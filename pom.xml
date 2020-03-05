@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.2.1.RELEASE</version>
+		<version>2.1.9.RELEASE</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	
@@ -49,5 +49,9 @@
   	<module>auth</module>
     <module>repository</module>
     <module>exception</module>
+
+
+    <module>eureka</module>
+    <module>zuul</module>
   </modules>
 </project>

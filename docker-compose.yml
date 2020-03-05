@@ -2,8 +2,8 @@ version: '3.0'
 
 services:
   token: 
-    container_name: vany-token
-    image: vany-token
+    container_name: vany-micro-phase
+    image: vany-micro-phase
     build: 
       context: .
       dockerfile: Dockerfile
