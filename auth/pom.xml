@@ -3,13 +3,13 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	
+
 	<parent>
 		<groupId>com.vany</groupId>
 		<artifactId>micro-service-project</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-	
+
 	<groupId>com.vany.auth</groupId>
 	<artifactId>auth</artifactId>
 	<name>AuthAPI</name>
@@ -21,6 +21,7 @@
 		<log4j.version>1.2.17</log4j.version>
 		<!-- jjwt version define -->
 		<jjwt.version>0.9.1</jjwt.version>
+		<spring-cloud.version>Greenwich.SR2</spring-cloud.version>
 	</properties>
 
 	<dependencies>
@@ -29,7 +30,7 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
-		
+
 		<!-- Mysql DataBase Connections Setting -->
 		<dependency>
 			<groupId>mysql</groupId>
@@ -57,22 +58,21 @@
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
-			<version>2.2.1.RELEASE</version>
+			<version>2.1.2.RELEASE</version>
 		</dependency>
-	<!-- Log4j -->
-	<dependency>
-		<groupId>log4j</groupId>
-		<artifactId>log4j</artifactId>
-		<version>${log4j.version}</version>
-	</dependency>
-	
+		<!-- Log4j -->
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>${log4j.version}</version>
+		</dependency>
+
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-api</artifactId>
 			<version>5.0.0-M5</version>
 			<scope>test</scope>
 		</dependency>
-
 
 		<!-- This Spring Boot Test Setting -->
 		<dependency>
@@ -91,8 +91,8 @@
 			<artifactId>domain</artifactId>
 		</dependency>
 		<dependency>
-			 <groupId>com.vany.exception</groupId>
-  			<artifactId>exception</artifactId>
+			<groupId>com.vany.exception</groupId>
+			<artifactId>exception</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.vany.repository</groupId>
@@ -123,9 +123,10 @@
 			</dependency>
 			<dependency>
 				<groupId>com.vany.exception</groupId>
-  				<artifactId>exception</artifactId>
-  				<version>0.0.1-SNAPSHOT</version>
+				<artifactId>exception</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
 			</dependency>
 		</dependencies>
+		
 	</dependencyManagement>
 </project>
