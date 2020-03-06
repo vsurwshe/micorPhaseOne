@@ -104,12 +104,20 @@ public class ProfileController {
 		return this.getUserByProfileId(profileId);
 	}
 
+	// This method get user details by profile id
+		@GetMapping(value = "/payment/getAll")
+		private ResponseEntity<?> findAllPayments() {
+			return this.getAllPayments();
+		}
+
+	
+
 	// ----------- Custom profile find
 	// This method get all profiles
 	public ResponseEntity<?> getAllProfiles() {
-		List<Profile> profiles = null;
+		Set<Profile> profiles = null;
 		try {
-			profiles = profileRepo.findAll();
+			profiles = this.getUser().getProfile();
 			if (profiles.isEmpty()) {
 				return ResponseEntityResult.badRequest(ErrorServiceMessage.NO_REC_PROFILE);
 			}
@@ -288,6 +296,21 @@ public class ProfileController {
 			throw new UserServiceException(e.getMessage());
 		}
 		return profileFeatuer;
+	}
+	
+
+	private ResponseEntity<?> getAllPayments() {
+		List<Payments> payments = null;
+		try {
+			payments = paymentRepo.findAll();
+			if (payments.isEmpty()) {
+				return ResponseEntityResult.badRequest(ErrorServiceMessage.NO_REC_PAYMENT);
+			}
+		} catch (Exception e) {
+			LogService.setLogger(e.getMessage());
+			return ResponseEntityResult.badRequest(e.getMessage());
+		}
+		return ResponseEntityResult.successResponseEntity(payments);
 	}
 
 	// This method checking User have sufficent balance to create a BASIC/PRENIMUM

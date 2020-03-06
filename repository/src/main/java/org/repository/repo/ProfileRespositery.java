@@ -1,5 +1,7 @@
 package org.repository.repo;
 
+import java.util.List;
+
 import org.domain.entity.Profile;
 import org.domain.entity.UserDet;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -21,4 +23,6 @@ public interface ProfileRespositery extends JpaRepository<Profile, Integer> {
 
 	// This method return user details by profile id
 	UserDet findUserByProfileId(Integer profileId);
+	
+	List<Profile> findByUser(UserDet user);
 }
