@@ -29,6 +29,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import springfox.documentation.annotations.ApiIgnore;
+
 import java.util.*;
 
 import javax.validation.Valid;
@@ -106,6 +108,7 @@ public class ProfileController {
 
 	// This method get user details by profile id
 		@GetMapping(value = "/payment/getAll")
+		@ApiIgnore
 		private ResponseEntity<?> findAllPayments() {
 			return this.getAllPayments();
 		}
