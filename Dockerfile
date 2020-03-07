@@ -33,6 +33,10 @@ COPY eureka/pom.xml /home/eureka
 COPY zuul/src /home/zuul/src
 COPY zuul/pom.xml /home/zuul
 
+COPY service/src /home/service/src
+COPY service/pom.xml /home/service
+
+
 # Run the Parent pom.xml for building the package
  RUN mvn -f /home/pom.xml package
 

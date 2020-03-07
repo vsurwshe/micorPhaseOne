@@ -4,8 +4,6 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-
-	<groupId>com.vany.profile</groupId>
 	<artifactId>profile</artifactId>
 	<name>ProfileAPI</name>
 	<description>Demo project for Spring Boot</description>
@@ -23,7 +21,7 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
-		
+
 		<!-- Mysql DataBase Connections Setting -->
 		<dependency>
 			<groupId>mysql</groupId>
@@ -72,13 +70,6 @@
 			<version>2.1.2.RELEASE</version>
 		</dependency>
 
-		<!-- Log4j -->
-		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
-			<version>${log4j.version}</version>
-		</dependency>
-
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-api</artifactId>
@@ -111,6 +102,11 @@
 			<groupId>com.vany.repository</groupId>
 			<artifactId>repository</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>com.vany.service</groupId>
+			<artifactId>service</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -142,6 +138,11 @@
 			<dependency>
 				<groupId>com.vany.repository</groupId>
 				<artifactId>repository</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>com.vany.service</groupId>
+				<artifactId>service</artifactId>
 				<version>0.0.1-SNAPSHOT</version>
 			</dependency>
 		</dependencies>

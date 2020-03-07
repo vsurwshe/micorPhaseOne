@@ -53,5 +53,6 @@
 
     <module>eureka</module>
     <module>zuul</module>
+    <module>service</module>
   </modules>
 </project>

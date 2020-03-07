@@ -4,13 +4,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.auth.securityconfig.JwtTokenUtil;
-import org.auth.service.ErrorMessageService;
 import org.auth.service.JwtUserDetailsService;
-import org.auth.service.LogService;
 import org.domain.component.JwtRequest;
 import org.domain.component.UserTokenResponse;
 import org.domain.entity.UserDet;
 import org.exception.exec.UserServiceException;
+import org.service.apiService.LogService;
+import org.service.apiService.ErrorServiceMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -62,11 +62,11 @@ public class UserController {
 		try {
 			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
 		} catch (DisabledException e) {
-			LogService.setLogger(ErrorMessageService.USER_LOCKED+" "+e.getMessage());
-			throw new UserServiceException(ErrorMessageService.USER_LOCKED + e.getMessage());
+			LogService.setLogger(ErrorServiceMessage.USER_LOCKED+" "+e.getMessage());
+			throw new UserServiceException(ErrorServiceMessage.USER_LOCKED + e.getMessage());
 		} catch (BadCredentialsException e) {
-			LogService.setLogger(ErrorMessageService.INVALID_CREDTIONAL+" "+e.getMessage());
-			throw new Exception(ErrorMessageService.INVALID_CREDTIONAL + e.getMessage());
+			LogService.setLogger(ErrorServiceMessage.INVALID_CREDTIONAL+" "+e.getMessage());
+			throw new Exception(ErrorServiceMessage.INVALID_CREDTIONAL + e.getMessage());
 		}
 	}
 
@@ -98,7 +98,7 @@ public class UserController {
 			userTokenResponse.setUserRefreshToken(userRefreshToken);
 		} catch (Exception e) {
 			LogService.setLogger(e.getMessage());
-			throw new Exception(ErrorMessageService.NOT_VALID_USER+" "+e.getMessage());
+			throw new Exception(ErrorServiceMessage.NOT_VALID_USER+" "+e.getMessage());
 		}
 		return userTokenResponse;
 	}
