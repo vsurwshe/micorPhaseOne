@@ -17,7 +17,7 @@ public class SwaggerConfig {
 	public Docket customDocket() {
 		return new Docket(DocumentationType.SWAGGER_2)
 				.select()
-				.apis(RequestHandlerSelectors.basePackage("com.vany.controller"))
+				.apis(RequestHandlerSelectors.basePackage("org.profile.controller"))
 				.build()
 				.apiInfo(apiInfo());
 		
