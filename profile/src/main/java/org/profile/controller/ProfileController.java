@@ -54,8 +54,6 @@ public class ProfileController {
 
 	@Autowired
 	public ProfileTypeRepository profileTypeRepo;
-	
-	
 
 	// This method return the all User Profiles
 	@GetMapping(value = "/getAll")
@@ -107,13 +105,11 @@ public class ProfileController {
 	}
 
 	// This method get user details by profile id
-		@GetMapping(value = "/payment/getAll")
-		@ApiIgnore
-		private ResponseEntity<?> findAllPayments() {
-			return this.getAllPayments();
-		}
-
-	
+	@GetMapping(value = "/payment/getAll")
+	@ApiIgnore
+	private ResponseEntity<?> findAllPayments() {
+		return this.getAllPayments();
+	}
 
 	// ----------- Custom profile find
 	// This method get all profiles
@@ -122,8 +118,11 @@ public class ProfileController {
 		try {
 			profiles = this.getUser().getProfile();
 			if (profiles.isEmpty()) {
-				return ResponseEntityResult.badRequest(ErrorServiceMessage.NO_REC_PROFILE);
+				throw new UserServiceException(ErrorServiceMessage.NO_REC_PROFILE);
 			}
+		} catch (UserServiceException e) {
+			LogService.setLogger(e.getMessage());
+			return ResponseEntityResult.notFound(e.getMessage());
 		} catch (Exception e) {
 			LogService.setLogger(e.getMessage());
 			return ResponseEntityResult.badRequest(e.getMessage());
@@ -137,8 +136,11 @@ public class ProfileController {
 		try {
 			profile = profileRepo.findById(profileId);
 			if (profile != null) {
-				return ResponseEntityResult.badRequest(ErrorServiceMessage.NO_REC_PROFILE + profileId);
+				throw new UserServiceException(ErrorServiceMessage.NO_REC_PROFILE + profileId);
 			}
+		} catch (UserServiceException e) {
+			LogService.setLogger(e.getMessage());
+			return ResponseEntityResult.notFound(e.getMessage());
 		} catch (Exception e) {
 			LogService.setLogger(e.getMessage());
 			return ResponseEntityResult.badRequest(e.getMessage());
@@ -156,8 +158,11 @@ public class ProfileController {
 			profile.setVersion(0);
 			userProfile = profileRepo.save(profile);
 			if (userProfile.equals(null)) {
-				return ResponseEntityResult.badRequest(ErrorServiceMessage.PROFILE_NOT_UPDATE + profile.getProfileId());
+				throw new UserServiceException(ErrorServiceMessage.PROFILE_NOT_UPDATE + profile.getProfileId());
 			}
+		} catch (UserServiceException e) {
+			LogService.setLogger(e.getMessage());
+			return ResponseEntityResult.notFound(e.getMessage());
 		} catch (Exception e) {
 			LogService.setLogger(e.getMessage());
 			return ResponseEntityResult.badRequest(e.getMessage());
@@ -170,25 +175,32 @@ public class ProfileController {
 		Profile userProfile = null;
 		try {
 			Profile tempProfile = profileRepo.findByprofileId(profileId);
+			// this conditions checking profile is available or not in database
 			if (tempProfile != null) {
+				// this condition checking sent profile and database profile version are equal
+				// or not
 				if (profile.getVersion().equals(tempProfile.getVersion())) {
 					tempProfile.setAddress(profile.getAddress());
 					tempProfile.setFeatures(profile.getFeatures());
 					tempProfile.setProfileName(profile.getProfileName());
 					tempProfile.setType(profile.getType());
 					tempProfile.setVersion(profile.getVersion() + 1);
-					profileRepo.saveAndFlush(tempProfile);
+					userProfile = profileRepo.saveAndFlush(tempProfile);
+					// this conditions checking the record updated successfully or not
+					if (userProfile == null) {
+						throw new UserServiceException(ErrorServiceMessage.PROFILE_NOT_UPDATE);
+					}
 				} else {
-					LogService.setLogger(profile.getVersion() + ErrorServiceMessage.PROFILE_UPDATE_WORNG_VERSION
-							+ tempProfile.getVersion());
-					return ResponseEntityResult.badRequest(profile.getVersion()
+					throw new UserServiceException(profile.getVersion()
 							+ ErrorServiceMessage.PROFILE_UPDATE_WORNG_VERSION + tempProfile.getVersion());
 				}
 			} else {
-				LogService.setLogger(ErrorServiceMessage.NO_REC_PROFILE + profileId);
-				return ResponseEntityResult.badRequest(ErrorServiceMessage.NO_REC_PROFILE + profileId);
+				throw new UserServiceException(ErrorServiceMessage.NO_REC_PROFILE + profileId);
 			}
 
+		} catch (UserServiceException e) {
+			LogService.setLogger(e.getMessage());
+			return ResponseEntityResult.notFound(e.getMessage());
 		} catch (Exception e) {
 			LogService.setLogger(e.getMessage());
 			return ResponseEntityResult.badRequest(e.getMessage());
@@ -202,8 +214,11 @@ public class ProfileController {
 		try {
 			payments = paymentRepo.findPaymentsByProfileId(profileId);
 			if (payments.isEmpty()) {
-				return ResponseEntityResult.badRequest(ErrorServiceMessage.NO_REC_PROFILE + profileId);
+				throw new UserServiceException(ErrorServiceMessage.NO_REC_PROFILE + profileId);
 			}
+		} catch (UserServiceException e) {
+			LogService.setLogger(e.getMessage());
+			return ResponseEntityResult.notFound(e.getMessage());
 		} catch (Exception e) {
 			LogService.setLogger(e.getMessage());
 			return ResponseEntityResult.badRequest(e.getMessage());
@@ -220,10 +235,12 @@ public class ProfileController {
 				profileRepo.deleteById(profileId);
 				deleteMessage = ErrorServiceMessage.PROFILE_DELETE_SUCCESS;
 			} else {
-				return ResponseEntityResult.badRequest(ErrorServiceMessage.NO_REC_PROFILE + profileId);
+				throw new UserServiceException(ErrorServiceMessage.NO_REC_PROFILE + profileId);
 			}
+		} catch (UserServiceException e) {
+			LogService.setLogger(e.getMessage());
+			return ResponseEntityResult.notFound(e.getMessage());
 		} catch (Exception e) {
-			System.out.println(e);
 			LogService.setLogger(e.getMessage());
 			return ResponseEntityResult.badRequest(e.getMessage());
 		}
@@ -236,8 +253,11 @@ public class ProfileController {
 		try {
 			address = addressRepo.findAddressByProfileId(profileId);
 			if (address.isEmpty()) {
-				return ResponseEntityResult.badRequest(ErrorServiceMessage.PROFILE_NOT_FOUND_ADDRESS + profileId);
+				throw new UserServiceException(ErrorServiceMessage.PROFILE_NOT_FOUND_ADDRESS + profileId);
 			}
+		} catch (UserServiceException e) {
+			LogService.setLogger(e.getMessage());
+			return ResponseEntityResult.internalServerError(e.getMessage());
 		} catch (Exception e) {
 			LogService.setLogger(e.getMessage());
 			return ResponseEntityResult.badRequest(e.getMessage());
@@ -251,8 +271,11 @@ public class ProfileController {
 		try {
 			user = profileRepo.findUserByProfileId(profileId);
 			if (user.equals(null)) {
-				return ResponseEntityResult.badRequest(ErrorServiceMessage.PROFILE_NOT_FOUND_USER + profileId);
+				throw new UserServiceException(ErrorServiceMessage.PROFILE_NOT_FOUND_USER + profileId);
 			}
+		} catch (UserServiceException e) {
+			LogService.setLogger(e.getMessage());
+			return ResponseEntityResult.notFound(e.getMessage());
 		} catch (Exception e) {
 			LogService.setLogger(e.getMessage());
 			return ResponseEntityResult.badRequest(e.getMessage());
@@ -260,27 +283,7 @@ public class ProfileController {
 		return ResponseEntityResult.successResponseEntity(user);
 	}
 
-	// This Functiosn get Username form Token And Return the User Details
-	public UserDet getUser() {
-		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		String username;
-		if (principal instanceof UserDetails) {
-			username = ((UserDetails) principal).getUsername();
-		} else {
-			username = principal.toString();
-		}
-		UserDet daoUser = userRepository.findByUserEmail(username);
-		return daoUser;
-	}
-
-	// This method checking profile is there not
-	public void checkProfileIsOrNot(Integer profileId) {
-		if (!profileRepo.existsById(profileId)) {
-			throw new UserServiceException(ErrorServiceMessage.NO_REC_PROFILE + profileId);
-		}
-	}
-
-	// this method setting a profile featuers
+	// this method setting a profile features
 	private EnumSet<ProfileFeature> setPrfileFeatuers(Profile profile) {
 		EnumSet<ProfileFeature> profileFeatuer = null;
 		try {
@@ -300,15 +303,17 @@ public class ProfileController {
 		}
 		return profileFeatuer;
 	}
-	
 
 	private ResponseEntity<?> getAllPayments() {
 		List<Payments> payments = null;
 		try {
 			payments = paymentRepo.findAll();
 			if (payments.isEmpty()) {
-				return ResponseEntityResult.badRequest(ErrorServiceMessage.NO_REC_PAYMENT);
+				throw new UserServiceException(ErrorServiceMessage.NO_REC_PAYMENT);
 			}
+		} catch (UserServiceException e) {
+			LogService.setLogger(e.getMessage());
+			return ResponseEntityResult.notFound(e.getMessage());
 		} catch (Exception e) {
 			LogService.setLogger(e.getMessage());
 			return ResponseEntityResult.badRequest(e.getMessage());
@@ -316,7 +321,27 @@ public class ProfileController {
 		return ResponseEntityResult.successResponseEntity(payments);
 	}
 
-	// This method checking User have sufficent balance to create a BASIC/PRENIMUM
+	// This Functions get User name form Token And Return the User Details
+	public UserDet getUser() {
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		String username;
+		if (principal instanceof UserDetails) {
+			username = ((UserDetails) principal).getUsername();
+		} else {
+			username = principal.toString();
+		}
+		UserDet daoUser = userRepository.findByUserEmail(username);
+		return daoUser;
+	}
+
+	// This method checking profile is there not
+	public void checkProfileIsOrNot(Integer profileId) {
+		if (!profileRepo.existsById(profileId)) {
+			throw new UserServiceException(ErrorServiceMessage.NO_REC_PROFILE + profileId);
+		}
+	}
+
+	// This method checking User have sufficient balance to create a BASIC/PRENIMUM
 	// profiles
 	private void checkBalanceProfile(Profile profile) {
 		Double userBalance = profile.getUser().getUserBalance();
