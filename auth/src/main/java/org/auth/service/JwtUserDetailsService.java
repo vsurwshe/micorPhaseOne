@@ -22,7 +22,7 @@ public class JwtUserDetailsService implements UserDetailsService {
 	private PasswordEncoder bcryptEncoder;
 
 	@Override
-	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+	public UserDetails loadUserByUsername(String email)  {
 		UserDet user = userRepository.findByUserEmail(email);
 		if (user == null) {
 			throw new UserServiceException("User Not Found by email " + email);
@@ -31,7 +31,7 @@ public class JwtUserDetailsService implements UserDetailsService {
 				new ArrayList<>());
 	}
 
-	public UserDetails loadRefreshUserByUsername(String email) throws UsernameNotFoundException {
+	public UserDetails loadRefreshUserByUsername(String email)  {
 		UserDet user = userRepository.findByUserEmail(email);
 		if (user == null) {
 			throw new UserServiceException("User Not Found by email " + email);
