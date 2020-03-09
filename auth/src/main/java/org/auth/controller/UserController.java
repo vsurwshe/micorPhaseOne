@@ -97,7 +97,7 @@ public class UserController {
 
 	// this method take refresh token and provide to user fresh token with new
 	// refresh token
-	public ResponseEntity<?> getUserRefreshToken(HttpServletRequest userReuest) throws Exception {
+	public ResponseEntity<?> getUserRefreshToken(HttpServletRequest userReuest){
 		UserTokenResponse userResult = null;
 		try {
 			// this line get refresh token form user request named as refresh
@@ -119,7 +119,7 @@ public class UserController {
 		return ResponseEntityResult.successResponseEntity(userResult);
 	}
 
-	private void authenticate(String username, String password) throws Exception {
+	private void authenticate(String username, String password) {
 		try {
 			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
 		} catch (DisabledException e) {
@@ -127,12 +127,12 @@ public class UserController {
 			throw new UserServiceException(ErrorServiceMessage.USER_LOCKED + e.getMessage());
 		} catch (BadCredentialsException e) {
 			LogService.setLogger(ErrorServiceMessage.INVALID_CREDTIONAL + " " + e.getMessage());
-			throw new Exception(ErrorServiceMessage.INVALID_CREDTIONAL + e.getMessage());
+			throw new UserServiceException(ErrorServiceMessage.INVALID_CREDTIONAL + e.getMessage());
 		}
 	}
 
 	// ---------- Private Methods
-	private UserTokenResponse setUserTokenResponse(Long tokenTime, UserDetails userDetails) throws Exception {
+	private UserTokenResponse setUserTokenResponse(Long tokenTime, UserDetails userDetails){
 		UserTokenResponse userTokenResponse = null;
 		try {
 			// after getting user token, we try to generate token for getting new user
@@ -146,7 +146,7 @@ public class UserController {
 			userTokenResponse.setUserRefreshToken(userRefreshToken);
 		} catch (Exception e) {
 			LogService.setLogger(e.getMessage());
-			throw new Exception(ErrorServiceMessage.NOT_VALID_USER + " " + e.getMessage());
+			throw new UserServiceException(ErrorServiceMessage.NOT_VALID_USER + " " + e.getMessage());
 		}
 		return userTokenResponse;
 	}
