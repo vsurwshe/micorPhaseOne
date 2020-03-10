@@ -5,10 +5,12 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.domain.entity.Payments;
+import org.domain.entity.UserDet;
 import org.domain.model.enu.PaymentVerified;
 import org.exception.exec.UserServiceException;
 import org.repository.repo.PaymentsRepository;
 import org.repository.repo.ProfileRespositery;
+import org.repository.repo.UserRepository;
 import org.service.apiService.ErrorServiceMessage;
 import org.service.apiService.LogService;
 import org.service.apiService.ResponseEntityResult;
@@ -34,6 +36,9 @@ public class PaymentsController {
 
 	@Autowired
 	public ProfileRespositery profileRepo;
+	
+	@Autowired
+	public UserRepository userRepo;
 
 	// This method get payment by payment id
 	@GetMapping(value = "/payment/{paymentId}")
@@ -103,6 +108,7 @@ public class PaymentsController {
 		try {
 			this.checkProfileIsOrNot(profileId);
 			// userPayment.setProfile(profileRepo.findByprofileId(profileId));
+			userPayment.setUser(this.getUserByProfile(profileId));
 			userPayment.setVerify(PaymentVerified.No);
 			userPayment.setVersion(0);
 			userPay = paymentsRepo.saveAndFlush(userPayment);
@@ -111,6 +117,15 @@ public class PaymentsController {
 			return ResponseEntityResult.badRequest(e.getMessage());
 		}
 		return ResponseEntityResult.successResponseEntity(userPay);
+	}
+
+	private UserDet getUserByProfile(Integer profileId) {
+		UserDet userResult=null;
+		userResult=profileRepo.findByprofileId(profileId).getUser();
+		if(userResult == null) {
+			throw new UserServiceException(ErrorServiceMessage.NO_REC_PROFILE+profileId);
+		}
+		return userResult;
 	}
 
 	// This method update the payments details

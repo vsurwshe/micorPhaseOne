@@ -13,5 +13,7 @@ public interface UserRepository extends JpaRepository<UserDet, Integer> {
 	public UserDet findByUserEmail(String userEmail);
 	
 	@Query(nativeQuery = true, value = "SELECT * FROM `user` WHERE `user_id` =?1")
-	public UserDet findByprofileId(Integer userId);
+	public UserDet findByuserId(Integer userId);
+	
+	
 }

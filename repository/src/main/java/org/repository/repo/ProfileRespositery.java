@@ -18,7 +18,7 @@ public interface ProfileRespositery extends JpaRepository<Profile, Integer> {
 	boolean existsById(Integer profileId);
 
 	// This Method Return the Profile Details by id
-	@Query(nativeQuery = true, value = "SELECT `profile_id`,`profile_name`,`user`,`features`,`type`,`created_at`,`updated_at` FROM `profile` WHERE `profile_id`=?1")
+	@Query(nativeQuery = true, value = "SELECT `profile_id`,`profile_name`,`user`,`features`,`type`,`created_at`,`updated_at`,`version` FROM `profile` WHERE `profile_id`=?1")
 	Profile findByprofileId(Integer profileId);
 
 	// This method return user details by profile id
