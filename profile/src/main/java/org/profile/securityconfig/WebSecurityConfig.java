@@ -1,5 +1,9 @@
 package org.profile.securityconfig;
 
+import java.util.Collections;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -51,7 +55,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				// store user's state.
 				exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and().sessionManagement()
 				.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-
+		
+		httpSecurity.cors().configurationSource(new CorsConfigurationSource(){
+			@Override
+			public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
+				   CorsConfiguration config = new CorsConfiguration();
+		            config.setAllowedHeaders(Collections.singletonList("*"));
+		            config.setAllowedMethods(Collections.singletonList("*"));
+		            config.addAllowedOrigin("*");
+		            config.setAllowCredentials(true);
+		            return config;
+			}
+	      });
+		
 		// Add a filter to validate the tokens with every request
 		httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 	}
@@ -63,9 +79,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		config.addAllowedOrigin("*");
 		config.addAllowedHeader("*");
 		config.addAllowedMethod("*");
+//		  config.setAllowedHeaders(Collections.singletonList("*"));
+//          config.setAllowedMethods(Collections.singletonList("*"));
+//          config.addAllowedOrigin("*");
+//          config.setAllowCredentials(true);
 
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-		source.registerCorsConfiguration("/**", config);
+		source.registerCorsConfiguration("**/**", config);
 		return source;
 	}
 

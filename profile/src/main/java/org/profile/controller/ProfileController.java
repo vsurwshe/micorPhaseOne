@@ -36,8 +36,8 @@ import java.util.*;
 import javax.validation.Valid;
 
 @RestController
-@CrossOrigin(origins = "*")
 @RequestMapping(value = "/profile")
+@CrossOrigin(origins = "*")
 public class ProfileController {
 
 	@Autowired
