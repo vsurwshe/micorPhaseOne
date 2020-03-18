@@ -28,7 +28,7 @@
 			<groupId>com.vany.domain</groupId>
 			<artifactId>domain</artifactId>
 		</dependency>
-   
+
   </dependencies>
   <dependencyManagement>
   	<dependencies>
