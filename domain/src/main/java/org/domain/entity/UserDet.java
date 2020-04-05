@@ -57,7 +57,6 @@ public class UserDet {
 	private boolean isEnabled;
 
 	@Column(name = "user_balance")
-	@NotNull
 	private Double userBalance;
 
 	@Column(nullable = false, updatable = false)
