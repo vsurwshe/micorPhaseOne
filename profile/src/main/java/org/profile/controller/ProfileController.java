@@ -6,6 +6,7 @@ import org.domain.entity.Profile;
 import org.domain.entity.UserDet;
 import org.domain.model.enu.ProfileFeature;
 import org.domain.model.enu.ProfileType;
+import org.exception.exec.CustomeException;
 import org.exception.exec.UserServiceException;
 import org.repository.repo.AddressRepository;
 import org.repository.repo.PaymentsRepository;
@@ -55,6 +56,12 @@ public class ProfileController {
 	@Autowired
 	public ProfileTypeRepository profileTypeRepo;
 
+	@GetMapping(value = "/getUserDetails")
+	private ResponseEntity<?> findUserDeatils(){
+	 UserDet userResult= this.getUser();
+	 return ResponseEntityResult.successResponseEntity(userResult);
+	}
+	
 	// This method return the all User Profiles
 	@GetMapping(value = "/getAll")
 	private ResponseEntity<?> findAllProfiles() {
@@ -149,7 +156,7 @@ public class ProfileController {
 	}
 
 	// this method save profile
-	public ResponseEntity<?> saveProfile(Profile profile) {
+	public ResponseEntity<?> saveProfile(Profile profile){
 		Profile userProfile = null;
 		try {
 			profile.setUser(this.getUser());
@@ -160,7 +167,7 @@ public class ProfileController {
 			if (userProfile.equals(null)) {
 				throw new UserServiceException(ErrorServiceMessage.PROFILE_NOT_UPDATE + profile.getProfileId());
 			}
-		} catch (UserServiceException e) {
+		}catch (UserServiceException e) {
 			LogService.setLogger(e.getMessage());
 			return ResponseEntityResult.notFound(e.getMessage());
 		} catch (Exception e) {
@@ -209,12 +216,12 @@ public class ProfileController {
 	}
 
 	// This method get all payments by profile id
-	public ResponseEntity<?> getPaymentsByProfileId(Integer profileId) {
+	public ResponseEntity<?> getPaymentsByProfileId(Integer userId) {
 		List<Payments> payments = null;
 		try {
-			payments = paymentRepo.findPaymentsByProfileId(profileId);
+			payments = paymentRepo.findPaymentsByUserId(userId);
 			if (payments.isEmpty()) {
-				throw new UserServiceException(ErrorServiceMessage.NO_REC_PROFILE + profileId);
+				throw new UserServiceException(ErrorServiceMessage.NO_REC_PROFILE + userId);
 			}
 		} catch (UserServiceException e) {
 			LogService.setLogger(e.getMessage());
@@ -343,11 +350,15 @@ public class ProfileController {
 
 	// This method checking User have sufficient balance to create a BASIC/PRENIMUM
 	// profiles
-	private void checkBalanceProfile(Profile profile) {
-		Double userBalance = profile.getUser().getUserBalance();
-		Double profileCost = profileTypeRepo.findByType(profile.getType());
-		if (userBalance <= profileCost) {
-			throw new UserServiceException(ErrorServiceMessage.PROFILE_USER_BALANCE_NOT_SUFFICENT);
+	private void checkBalanceProfile(Profile profile) throws CustomeException {
+		try {
+			Double userBalance = profile.getUser().getUserBalance();
+			Double profileCost = profileTypeRepo.findByType(profile.getType());
+			if (userBalance <= profileCost) {
+				throw new CustomeException(ErrorServiceMessage.PROFILE_USER_BALANCE_NOT_SUFFICENT);
+			}
+		} catch (Exception e) {
+			throw e;
 		}
 	}
 }

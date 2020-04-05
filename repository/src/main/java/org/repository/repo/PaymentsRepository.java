@@ -14,12 +14,12 @@ public interface PaymentsRepository extends JpaRepository<Payments, Integer> {
 	boolean existsBypayId(Integer paymentId);
 
 	// This method find Payments by payment id
-	@Query(value = "select * from payments  where profile_id=:profileId and pay_id=:paymentId", nativeQuery = true)
-	Payments findBypayId(@Param("paymentId") Integer paymentId, @Param("profileId") Integer profileId);
+	@Query(value = "select * from payments  where pay_id=:paymentId and user_id=:userId", nativeQuery = true)
+	Payments findBypayId(@Param("paymentId") Integer paymentId, @Param("userId") Integer userId);
 
 	// This method return list of payments by profile id
-	@Query(value = "select * from payments  where profile_id=:profileId", nativeQuery = true)
-	List<Payments> findPaymentsByProfileId(@Param("profileId") Integer profileId);
+	@Query(value = "select * from payments  where user_id=:userId", nativeQuery = true)
+	List<Payments> findPaymentsByUserId(@Param("userId") Integer userId);
 
 	// This method find Payments by trnsaction date and return list
 	List<Payments> findBytarnsDate(String userDate);

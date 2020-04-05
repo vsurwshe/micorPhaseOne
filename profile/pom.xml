@@ -47,11 +47,11 @@
 			<version>2.9.2</version>
 		</dependency>
 
-		<!-- Liquebase Configrations -->
+		<!-- Liquebase Configrations 
 		<dependency>
 			<groupId>org.liquibase</groupId>
 			<artifactId>liquibase-core</artifactId>
-		</dependency>
+		</dependency>-->
 
 		<!-- Secutirty and JWT Related Libarys -->
 		<dependency>
