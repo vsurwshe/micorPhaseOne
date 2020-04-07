@@ -1,5 +1,7 @@
 package org.repository.repo;
 
+import java.util.List;
+
 import org.domain.entity.UserDet;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -15,5 +17,7 @@ public interface UserRepository extends JpaRepository<UserDet, Integer> {
 	@Query(nativeQuery = true, value = "SELECT * FROM `user` WHERE `user_id` =?1")
 	public UserDet findByuserId(Integer userId);
 	
+	@Query(nativeQuery = true, value = "SELECT * FROM `user`")
+	public List<UserDet> findByAllUser();
 	
 }
