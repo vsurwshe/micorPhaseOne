@@ -15,8 +15,13 @@ public interface PaymentsRepository extends JpaRepository<Payments, Integer> {
 
 	// This method find Payments by payment id
 	@Query(value = "select * from payments  where pay_id=:paymentId and user_id=:userId", nativeQuery = true)
-	Payments findBypayId(@Param("paymentId") Integer paymentId, @Param("userId") Integer userId);
+	Payments findByPaymentIdAndUserId(@Param("paymentId") Integer paymentId, @Param("userId") Integer userId);
 
+	// This method find Payments by payment id
+		@Query(value = "select * from payments  where pay_id=:paymentId", nativeQuery = true)
+		Payments findByPaymentId(@Param("paymentId") Integer paymentId);
+
+	
 	// This method return list of payments by profile id
 	@Query(value = "select * from payments  where user_id=:userId", nativeQuery = true)
 	List<Payments> findPaymentsByUserId(@Param("userId") Integer userId);

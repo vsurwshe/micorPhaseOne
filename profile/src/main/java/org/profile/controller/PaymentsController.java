@@ -5,6 +5,7 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.domain.entity.Payments;
+import org.domain.entity.UserDet;
 import org.domain.model.enu.PaymentVerified;
 import org.exception.exec.CustomeException;
 import org.exception.exec.UserServiceException;
@@ -28,7 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @CrossOrigin(origins = "*")
-@RequestMapping(value = "/{userId}")
+//@RequestMapping(value = "/{userId}")
 public class PaymentsController {
 
 	@Autowired
@@ -41,14 +42,14 @@ public class PaymentsController {
 	public UserRepository userRepo;
 
 	// This method get payment by payment id
-	@GetMapping(value = "/payment/{paymentId}")
+	@GetMapping(value = "/{userId}/payment/{paymentId}")
 	public ResponseEntity<?> findPaymentsById(@PathVariable(value = "userId") Integer userId,
 			@PathVariable(value = "paymentId") Integer paymentId) {
 		return this.getPaymentById(userId, paymentId);
 	}
 
 	// This method get payment by transtion date
-	@GetMapping(value = "/payment/transctionDate/{transDate}")
+	@GetMapping(value = "/{userId}/payment/transctionDate/{transDate}")
 	public ResponseEntity<?> findPaymentsByTranscationDate(@PathVariable(value = "userId") Integer userId,
 			@PathVariable(value = "transDate") String transctionDate) {
 		return this.getPaymentByTransctionDate(userId, transctionDate);
@@ -56,27 +57,26 @@ public class PaymentsController {
 
 	// This method get verify value by payment id
 	@GetMapping(value = "/payment/{paymentId}/verify")
-	public ResponseEntity<?> findVerifyValueByPaymentId(@PathVariable(value = "userId") Integer userId,
-			@PathVariable(value = "paymentId") Integer paymentId) {
-		return this.getVerifyValueByPaymentId(userId, paymentId);
+	public ResponseEntity<?> findVerifyValueByPaymentId(@PathVariable(value = "paymentId") Integer paymentId) {
+		return this.setVerifyValueByPaymentId(paymentId);
 	}
 
 	// This method saving payment
-	@PostMapping(value = "/payment/save")
+	@PostMapping(value = "/{userId}/payment/save")
 	public ResponseEntity<?> savePayments(@PathVariable(value = "userId") Integer userId,
 			@Valid @RequestBody Payments payment) {
 		return this.saveUserPayment(userId, payment);
 	}
 
 	// This method update the payments details
-	@PutMapping(value = "/payment/{paymentId}/update")
+	@PutMapping(value = "/{userId}/payment/{paymentId}/update")
 	public ResponseEntity<?> updatePayments(@PathVariable(value = "userId") Integer userId,@PathVariable(value = "paymentId") Integer paymentId,
 			@Valid @RequestBody Payments payments) {
 		return this.updatePaymnetsDetails(userId, paymentId, payments);
 	}
 
 	// This method delete the payments details by payment id
-	@DeleteMapping(value = "/payment/{paymentId}/delete")
+	@DeleteMapping(value = "/{userId}/payment/{paymentId}/delete")
 	public ResponseEntity<?> deletePayments(@PathVariable(value = "userId") Integer userId,
 			@PathVariable(value = "paymentId") Integer paymentId) {
 		return this.deletePaymnetsDetails(userId, paymentId);
@@ -88,7 +88,7 @@ public class PaymentsController {
 		Payments pay = null;
 		try {
 		    this.checkPaymentIsOrNot(paymentId);
-			pay = paymentsRepo.findBypayId(paymentId, userId);
+			pay = paymentsRepo.findByPaymentIdAndUserId(paymentId, userId);
 			if (pay.equals(null)) {
 				throw new CustomeException(userId + ErrorServiceMessage.NO_REC_PROFILE_WITH_PAYMENT+ paymentId);
 			}
@@ -123,7 +123,7 @@ public class PaymentsController {
 		Payments userPay = null;
 		try {
 			this.checkPaymentIsOrNot(paymentId);
-			Payments tempPayments = paymentsRepo.findBypayId(paymentId,userId);
+			Payments tempPayments = paymentsRepo.findByPaymentIdAndUserId(paymentId,userId);
 			// this condition checking version by send user and current object
 			if (tempPayments.getVersion().equals(payments.getVersion())) {
 				tempPayments.setAmount(payments.getAmount());
@@ -150,7 +150,7 @@ public class PaymentsController {
 		String userDeleteMessage = null;
 		try {
 			this.checkPaymentIsOrNot(paymentId);
-			Payments tempPayments = paymentsRepo.findBypayId(paymentId,userId);
+			Payments tempPayments = paymentsRepo.findByPaymentIdAndUserId(paymentId,userId);
 			if(tempPayments.equals(null)){
 				throw new UserServiceException(userId+" this profile id related with this pyment id no record found "+paymentId );
 			}
@@ -177,16 +177,32 @@ public class PaymentsController {
 	}
 
 	// This method return verify value form payment id
-	private ResponseEntity<?> getVerifyValueByPaymentId(Integer userId, Integer paymentId) {
-		PaymentVerified verifyValue = null;
+	private ResponseEntity<?> setVerifyValueByPaymentId(Integer paymentId) {
+		UserDet resultUserDet = null;
 		try {
 			this.checkPaymentIsOrNot(paymentId);
-			verifyValue = paymentsRepo.findBypayId(paymentId, userId).getVerify();
-		} catch (Exception e) {
+			PaymentVerified verifyValue = paymentsRepo.findByPaymentId(paymentId).getVerify();
+			if(verifyValue != PaymentVerified.YES) {
+				UserDet userTemp= paymentsRepo.findByPaymentId(paymentId).getUser();
+				Payments paymentTemp=paymentsRepo.findByPaymentId(paymentId);
+				double userBalance= userTemp.getUserBalance();
+				double paymentAmount=Double.parseDouble(paymentTemp.getAmount());
+				double mainBalance=userBalance+paymentAmount;
+				userTemp.setUserBalance(mainBalance);
+				paymentTemp.setVerify(PaymentVerified.YES);
+				paymentsRepo.saveAndFlush(paymentTemp);
+				resultUserDet = userRepo.saveAndFlush(userTemp);
+			}else {
+				throw new UserServiceException("You Allredy Verified this Payment "+paymentId);
+			}
+		} catch (UserServiceException e) {
+			LogService.setLogger(e.getMessage());
+			return ResponseEntityResult.internalServerError(e.getMessage());
+		}catch (Exception e) {
 			LogService.setLogger(e.getMessage());
 			return ResponseEntityResult.badRequest(e.getMessage());
 		}
-		return ResponseEntityResult.successResponseEntity(verifyValue);
+		return ResponseEntityResult.successResponseEntity(resultUserDet);
 	}
 
 	public void checkPaymentIsOrNot(Integer paymentId) {

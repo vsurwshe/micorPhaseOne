@@ -1,5 +1,7 @@
 package org.auth.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
@@ -9,6 +11,7 @@ import org.domain.component.JwtRequest;
 import org.domain.component.UserTokenResponse;
 import org.domain.entity.UserDet;
 import org.exception.exec.UserServiceException;
+import org.repository.repo.UserRepository;
 import org.service.apiService.LogService;
 import org.service.apiService.ResponseEntityResult;
 import org.service.apiService.ErrorServiceMessage;
@@ -20,6 +23,7 @@ import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,6 +44,9 @@ public class UserController {
 	// We use for the User Related Services
 	@Autowired
 	private JwtUserDetailsService jwtUserDetailsService;
+	
+	@Autowired
+	private UserRepository userRepo;
 
 	// This getting User Token Form database
 	@PostMapping(value = "/token")
@@ -58,6 +65,14 @@ public class UserController {
 	public ResponseEntity<?> findRefreshToken(HttpServletRequest userRequest) {
 		return this.findRefreshToken(userRequest);
 	}
+	
+	// This method get all User
+	@GetMapping(value = "/getAll")
+	public ResponseEntity<?> findAllUSer(){
+		return this.getAllUser();
+	}
+
+	
 
 	// this method give the response with user token take user name and password
 	public ResponseEntity<?> getUserToken(@Valid @RequestBody JwtRequest jwtRequest) {
@@ -149,5 +164,18 @@ public class UserController {
 			throw new UserServiceException(ErrorServiceMessage.NOT_VALID_USER + " " + e.getMessage());
 		}
 		return userTokenResponse;
+	}
+	
+	private ResponseEntity<?> getAllUser() {
+		List<UserDet> userResult=null;
+		try {
+			userResult= userRepo.findByAllUser();
+			if(userResult == null) {
+			 throw new UserServiceException(ErrorServiceMessage.NOT_VALID_USER);
+			}
+		} catch (Exception e) {
+			return ResponseEntityResult.internalServerError(e.getMessage());
+		}
+		return ResponseEntityResult.successResponseEntity(userResult);
 	}
 }
