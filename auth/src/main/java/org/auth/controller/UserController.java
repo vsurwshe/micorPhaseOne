@@ -63,7 +63,7 @@ public class UserController {
 	// This method get the refresh token form database
 	@PostMapping(value = "/refreshToken")
 	public ResponseEntity<?> findRefreshToken(HttpServletRequest userRequest) {
-		return this.findRefreshToken(userRequest);
+		return this.getUserRefreshToken(userRequest);
 	}
 	
 	// This method get all User
@@ -159,6 +159,7 @@ public class UserController {
 			userTokenResponse.setTokenExprieTime(tokenTime);
 			userTokenResponse.setUserToken(userToken);
 			userTokenResponse.setUserRefreshToken(userRefreshToken);
+			userTokenResponse.setUserDetails(userRepo.findByUserEmail(userDetails.getUsername()));
 		} catch (Exception e) {
 			LogService.setLogger(e.getMessage());
 			throw new UserServiceException(ErrorServiceMessage.NOT_VALID_USER + " " + e.getMessage());
