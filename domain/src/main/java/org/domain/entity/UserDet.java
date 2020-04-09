@@ -36,7 +36,7 @@ public class UserDet {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer user_id;
+	private Integer userId;
 
 	@NotNull
 	@Column(name = "user_name")
@@ -81,12 +81,12 @@ public class UserDet {
 	@JsonIgnore
 	private Set<Payments> payments = new HashSet<Payments>();
 
-	public Integer getUser_id() {
-		return user_id;
+	public Integer getUserId() {
+		return userId;
 	}
 
-	public void setUser_id(Integer user_id) {
-		this.user_id = user_id;
+	public void setUserId(Integer userId) {
+		this.userId = userId;
 	}
 
 	public String getUserName() {
@@ -113,6 +113,22 @@ public class UserDet {
 		this.userPassword = userPassword;
 	}
 
+	public boolean isEnabled() {
+		return isEnabled;
+	}
+
+	public void setEnabled(boolean isEnabled) {
+		this.isEnabled = isEnabled;
+	}
+
+	public Double getUserBalance() {
+		return userBalance;
+	}
+
+	public void setUserBalance(Double userBalance) {
+		this.userBalance = userBalance;
+	}
+
 	public Date getCreatedAt() {
 		return createdAt;
 	}
@@ -137,37 +153,11 @@ public class UserDet {
 		this.profile = profile;
 	}
 
-	public boolean isEnabled() {
-		return isEnabled;
-	}
-
-	public void setEnabled(boolean isEnabled) {
-		this.isEnabled = isEnabled;
-	}
-
-	public Double getUserBalance() {
-		return userBalance;
-	}
-
-	public void setUserBalance(Double userBalance) {
-		this.userBalance = userBalance;
-	}
-
-	public Set<Payments> getPayments() {
-		return payments;
-	}
-
-	public void setPayments(Set<Payments> payments) {
-		this.payments = payments;
-	}
-
 	@Override
 	public String toString() {
-		return "UserDet [user_id=" + user_id + ", userName=" + userName + ", userEmail=" + userEmail + ", userPassword="
+		return "UserDet [user_id=" + userId + ", userName=" + userName + ", userEmail=" + userEmail + ", userPassword="
 				+ userPassword + ", isEnabled=" + isEnabled + ", userBalance=" + userBalance + ", createdAt="
 				+ createdAt + ", updatedAt=" + updatedAt + ", profile=" + profile + ", payments=" + payments + "]";
 	}
-
-	
 
 }
