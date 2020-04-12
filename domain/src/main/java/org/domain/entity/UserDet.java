@@ -59,6 +59,10 @@ public class UserDet {
 	@Column(name = "user_balance")
 	private Double userBalance;
 
+	@Column(name = "user_veirfy_code")
+	@JsonIgnore
+	private Long userVeirfyCode;
+	
 	@Column(nullable = false, updatable = false)
 	@Temporal(TemporalType.TIMESTAMP)
 	@CreatedDate
@@ -153,11 +157,21 @@ public class UserDet {
 		this.profile = profile;
 	}
 
-	@Override
-	public String toString() {
-		return "UserDet [user_id=" + userId + ", userName=" + userName + ", userEmail=" + userEmail + ", userPassword="
-				+ userPassword + ", isEnabled=" + isEnabled + ", userBalance=" + userBalance + ", createdAt="
-				+ createdAt + ", updatedAt=" + updatedAt + ", profile=" + profile + ", payments=" + payments + "]";
+	public Long getUserVeirfyCode() {
+		return userVeirfyCode;
 	}
 
+	public void setUserVeirfyCode(Long userVeirfyCode) {
+		this.userVeirfyCode = userVeirfyCode;
+	}
+
+	public Set<Payments> getPayments() {
+		return payments;
+	}
+
+	public void setPayments(Set<Payments> payments) {
+		this.payments = payments;
+	}
+	
+	
 }

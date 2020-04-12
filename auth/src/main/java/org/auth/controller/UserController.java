@@ -7,6 +7,7 @@ import javax.validation.Valid;
 
 import org.auth.securityconfig.JwtTokenUtil;
 import org.auth.service.JwtUserDetailsService;
+import org.domain.component.EmailModule;
 import org.domain.component.JwtRequest;
 import org.domain.component.UserTokenResponse;
 import org.domain.entity.UserDet;
@@ -14,6 +15,8 @@ import org.exception.exec.UserServiceException;
 import org.repository.repo.UserRepository;
 import org.service.apiService.LogService;
 import org.service.apiService.ResponseEntityResult;
+import org.service.apiService.EmailBody;
+import org.service.apiService.EmailService;
 import org.service.apiService.ErrorServiceMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +27,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -44,7 +48,7 @@ public class UserController {
 	// We use for the User Related Services
 	@Autowired
 	private JwtUserDetailsService jwtUserDetailsService;
-	
+
 	@Autowired
 	private UserRepository userRepo;
 
@@ -65,14 +69,19 @@ public class UserController {
 	public ResponseEntity<?> findRefreshToken(HttpServletRequest userRequest) {
 		return this.getUserRefreshToken(userRequest);
 	}
-	
+
 	// This method get all User
 	@GetMapping(value = "/getAll")
-	public ResponseEntity<?> findAllUSer(){
+	public ResponseEntity<?> findAllUSer() {
 		return this.getAllUser();
 	}
 
-	
+	// This method get all User
+	@GetMapping(value = "/{userId}/verify/{verificationsCode}")
+	public ResponseEntity<?> findVerifyUser(@PathVariable("userId") Integer userId,
+			@PathVariable("verificationsCode") long verificationsCode) {
+		return this.setVerifyUser(userId, verificationsCode);
+	}
 
 	// this method give the response with user token take user name and password
 	public ResponseEntity<?> getUserToken(@Valid @RequestBody JwtRequest jwtRequest) {
@@ -100,6 +109,10 @@ public class UserController {
 		UserDet userResult = null;
 		try {
 			userResult = jwtUserDetailsService.save(user);
+			EmailModule tempEmailModule = new EmailModule(userResult.getUserEmail(), "Successfully Registerd User",
+					EmailBody.setEmailBody(userResult.getUserEmail(), user.getUserPassword(),
+							userResult.getUserVeirfyCode().toString()));
+			new EmailService().sendEmail(tempEmailModule);
 		} catch (UserServiceException e) {
 			LogService.setLogger(e.getMessage());
 			return ResponseEntityResult.notFound(e.getMessage());
@@ -112,7 +125,7 @@ public class UserController {
 
 	// this method take refresh token and provide to user fresh token with new
 	// refresh token
-	public ResponseEntity<?> getUserRefreshToken(HttpServletRequest userReuest){
+	public ResponseEntity<?> getUserRefreshToken(HttpServletRequest userReuest) {
 		UserTokenResponse userResult = null;
 		try {
 			// this line get refresh token form user request named as refresh
@@ -147,7 +160,7 @@ public class UserController {
 	}
 
 	// ---------- Private Methods
-	private UserTokenResponse setUserTokenResponse(Long tokenTime, UserDetails userDetails){
+	private UserTokenResponse setUserTokenResponse(Long tokenTime, UserDetails userDetails) {
 		UserTokenResponse userTokenResponse = null;
 		try {
 			// after getting user token, we try to generate token for getting new user
@@ -166,15 +179,37 @@ public class UserController {
 		}
 		return userTokenResponse;
 	}
-	
+
 	private ResponseEntity<?> getAllUser() {
-		List<UserDet> userResult=null;
+		List<UserDet> userResult = null;
 		try {
-			userResult= userRepo.findByAllUser();
-			if(userResult == null) {
-			 throw new UserServiceException(ErrorServiceMessage.NOT_VALID_USER);
+			userResult = userRepo.findByAllUser();
+			if (userResult == null) {
+				throw new UserServiceException(ErrorServiceMessage.NOT_VALID_USER);
 			}
 		} catch (Exception e) {
+			return ResponseEntityResult.internalServerError(e.getMessage());
+		}
+		return ResponseEntityResult.successResponseEntity(userResult);
+	}
+
+	private ResponseEntity<?> setVerifyUser(Integer userId, long verificationsCode) {
+		UserDet userResult = null;
+		try {
+			UserDet tempUserDetails = userRepo.findByuserId(userId);
+			if (!tempUserDetails.isEnabled()) {
+				if (verificationsCode == tempUserDetails.getUserVeirfyCode()) {
+					tempUserDetails.setEnabled(true);
+					userResult = userRepo.saveAndFlush(tempUserDetails);
+				} else {
+					throw new UserServiceException(verificationsCode
+							+ " This code is not correct verifiction code, please provide correct verification code");
+				}
+			} else {
+				throw new UserServiceException(
+						"Sorry this user " + tempUserDetails.getUserEmail() + " Already Verifyed");
+			}
+		} catch (UserServiceException e) {
 			return ResponseEntityResult.internalServerError(e.getMessage());
 		}
 		return ResponseEntityResult.successResponseEntity(userResult);
