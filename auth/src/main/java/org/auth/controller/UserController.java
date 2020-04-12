@@ -87,7 +87,7 @@ public class UserController {
 	public ResponseEntity<?> getUserToken(@Valid @RequestBody JwtRequest jwtRequest) {
 		UserTokenResponse userResult = null;
 		try {
-			// Check user passed credtional are correct or not
+			// Check user passed user name and password are correct or not
 			authenticate(jwtRequest.getUserEmail(), jwtRequest.getUserPassword());
 			// after successfully authenticated we get user details
 			final UserDetails userDetails = jwtUserDetailsService.loadUserByUsername(jwtRequest.getUserEmail());
@@ -104,21 +104,25 @@ public class UserController {
 		return ResponseEntityResult.successResponseEntity(userResult);
 	}
 
-	// this method resgiter the user in database.
+	// this method register the user in database.
 	public ResponseEntity<?> registerUserDetails(@RequestBody UserDet user) {
 		UserDet userResult = null;
 		try {
 			userResult = jwtUserDetailsService.save(user);
-			EmailModule tempEmailModule = new EmailModule(userResult.getUserEmail(), "Successfully Registerd User",
-					EmailBody.setEmailBody(userResult.getUserEmail(), user.getUserPassword(),
+			EmailModule tempEmailModule = new EmailModule(
+					userResult.getUserEmail(), 
+					ErrorServiceMessage.SUBJECT_EMAIL,
+					EmailBody.setEmailBody(
+							userResult.getUserEmail(), 
+							user.getUserPassword(),
 							userResult.getUserVeirfyCode().toString()));
 			new EmailService().sendEmail(tempEmailModule);
 		} catch (UserServiceException e) {
 			LogService.setLogger(e.getMessage());
-			return ResponseEntityResult.notFound(e.getMessage());
+			return ResponseEntityResult.internalServerError(e.getMessage());
 		} catch (Exception e) {
 			LogService.setLogger(e.getMessage());
-			return ResponseEntityResult.badRequest(e.getMessage());
+			return ResponseEntityResult.notFound(e.getMessage());
 		}
 		return ResponseEntityResult.successResponseEntity(userResult);
 	}
@@ -202,12 +206,10 @@ public class UserController {
 					tempUserDetails.setEnabled(true);
 					userResult = userRepo.saveAndFlush(tempUserDetails);
 				} else {
-					throw new UserServiceException(verificationsCode
-							+ " This code is not correct verifiction code, please provide correct verification code");
+					throw new UserServiceException(verificationsCode + ErrorServiceMessage.VERIFY_CODE_WORNG);
 				}
 			} else {
-				throw new UserServiceException(
-						"Sorry this user " + tempUserDetails.getUserEmail() + " Already Verifyed");
+				throw new UserServiceException(tempUserDetails.getUserEmail() + ErrorServiceMessage.VERIFY_USER_WORNG);
 			}
 		} catch (UserServiceException e) {
 			return ResponseEntityResult.internalServerError(e.getMessage());
