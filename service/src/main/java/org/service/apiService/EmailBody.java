@@ -170,7 +170,7 @@ public class EmailBody {
 				        "<table class='email-content' width='100%' cellpadding='0' cellspacing='0'>"+
 				          "<tr>"+
 				            "<td class='email-masthead'>"+
-				              "<a class='email-masthead_name'>Welcome to V & Y Soft. Tech. Pvt. Ltd. Organizations</a>"+
+				              "<a class='email-masthead_name'>Welcome to V & Y Soft. Tech. Pvt. Ltd.</a>"+
 				            "</td>"+
 				          "</tr>"+
 				          "<tr>"+
@@ -178,25 +178,25 @@ public class EmailBody {
 				              "<table class='email-body_inner' align='center' width='570' cellpadding='0' cellspacing='0'>"+
 				                "<tr>"+
 				                  "<td class='content-cell'>"+
-				                    "<h1>Verify your Account</h1>"+
-				                    "<p>Thanks for signing up for <b>Cloud Hotel Management Desktop App</b> We're excited to have you as an early user.</p>"+
+				                    "<h1>Verify your account</h1>"+
+				                    "<p>Thanks for signing up with,<b>Cloud based Hotel Management Desktop App.</b>We're so excited to have you as an early user. verify your account using following verifications code.</p>"+
 				                    "<table class='body-actio' align='center' width='100%' cellpadding='0' cellspacing='0'>"+
 				                      "<tr>"+
 				                        "<td align='center'>"+
 				                          "<div>"+
-				                            "Your Verification Code : <b>"+Code+"</b>"+
+				                            "<h4>Your verification code : <b>"+Code+"</b> </h4>"+
 				                          "</div>"+
 				                        "</td>"+
 				                      "</tr>"+
 				                    "</table>"+
-				                    "<p>"+
+				                    "<p> You will be loging using following details:<br/>"+
 				                        "Username: "+Username+ "<br/>"+
 				                        "Password: "+Password+"</p>"+
 				                    "<p>Thanks,<br>The Development Team</p>"+
 				                    "<table class='body-sub'>"+
 				                      "<tr>"+
 				                        "<td>"+
-				                          "<p class='sub'>If you’re having any trouble or issue, you can contact us below contact."+
+				                          "<p class='sub'>If you have any trouble or issue in using our app, so you can contact us below contact or send email on below email id."+
 				                          "</p>"+
 				                          "<p class='sub'>"+
 				                              "Phone no :+91-8149648134 / +91-8007046661<br/>"+
@@ -217,7 +217,7 @@ public class EmailBody {
 				                  "<td class='content-cell'>"+
 				                    "<p class='sub center'>"+
 				                      "V & Y Soft. Tech. Pvt. Ltd.<br />"+
-				                      "Nanaded- Hydernbad Highway,Dhengov,Nanded,MH-431603."+
+				                      "Nanaded-Hyderabad Highway,Dhanegaon,Nanded,MH-431603."+
 				                    "</p>"+
 				                  "</td>"+
 				                "</tr>"+
