@@ -1,7 +1,5 @@
 package org.repository.repo;
 
-
-
 import org.domain.entity.ProfileTypeModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

@@ -1,4 +1,5 @@
 package org.auth.securityconfig;
+
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import java.util.Date;
@@ -6,11 +7,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Clock;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.impl.DefaultClock;
-
 import java.io.Serializable;
 
 @Component
@@ -20,14 +18,13 @@ public class JwtTokenUtil implements Serializable {
 	
 	   private String secret="Vishva";
 	   public static final long JWT_TOKEN_VALIDITY = 5 * 60 * 60;
-	   private Clock clock = DefaultClock.INSTANCE;
 	
-		//retrieve username from jwt token
+		//retrieve user name from JWT token
 		public String getUsernameFromToken(String token) {
 			return getClaimFromToken(token, Claims::getSubject);
 		}
 
-		//retrieve expiration date from jwt token
+		//retrieve expiration date from JWT token
 		public Date getExpirationDateFromToken(String token) {
 			return getClaimFromToken(token, Claims::getExpiration);
 		}
@@ -36,7 +33,7 @@ public class JwtTokenUtil implements Serializable {
 			final Claims claims = getAllClaimsFromToken(token);
 			return claimsResolver.apply(claims);
 		}
-	    //for retrieveing any information from token we will need the secret key
+	    //for retrieving any information from token we will need the secret key
 		private Claims getAllClaimsFromToken(String token) {
 			return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
 		}
