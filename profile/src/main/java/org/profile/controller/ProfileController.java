@@ -6,7 +6,6 @@ import org.domain.entity.Profile;
 import org.domain.entity.UserDet;
 import org.domain.model.enu.ProfileFeature;
 import org.domain.model.enu.ProfileType;
-import org.exception.exec.CustomeException;
 import org.exception.exec.UserServiceException;
 import org.repository.repo.AddressRepository;
 import org.repository.repo.PaymentsRepository;
@@ -82,8 +81,7 @@ public class ProfileController {
 
 	// This method update profile
 	@PutMapping(value = "/{profileId}/updateProfile")
-	private ResponseEntity<?> updateProfileDetails(@Valid @RequestBody Profile profile,
-			@PathVariable(value = "profileId") Integer profileId) {
+	private ResponseEntity<?> updateProfileDetails(@Valid @RequestBody Profile profile, @PathVariable(value = "profileId") Integer profileId) {
 		return this.updateProfile(profile, profileId);
 	}
 
@@ -294,16 +292,17 @@ public class ProfileController {
 	private EnumSet<ProfileFeature> setPrfileFeatuers(Profile profile) {
 		EnumSet<ProfileFeature> profileFeatuer = null;
 		try {
-			if (profile.getType().equals(ProfileType.BASIC) || profile.getType().equals(ProfileType.PERINEUM)) {
+			if (profile.getType().equals(ProfileType.BASIC) || profile.getType().equals(ProfileType.PRENINUM)) {
 				this.checkBalanceProfile(profile);
 				if (profile.getType().equals(ProfileType.BASIC)) {
 					profileFeatuer = EnumSet.of(ProfileFeature.READ, ProfileFeature.WRITE, ProfileFeature.UPDATE);
 				} else {
-					profileFeatuer = EnumSet.of(ProfileFeature.READ, ProfileFeature.WRITE, ProfileFeature.UPDATE,
-							ProfileFeature.DELETE);
+					profileFeatuer = EnumSet.of(ProfileFeature.READ, ProfileFeature.WRITE, ProfileFeature.UPDATE, ProfileFeature.DELETE);
 				}
+			}else {
+				profileFeatuer = EnumSet.of(ProfileFeature.READ);
 			}
-			profileFeatuer = EnumSet.of(ProfileFeature.READ);
+			
 		} catch (Exception e) {
 			LogService.setLogger(e.getMessage());
 			throw new UserServiceException(e.getMessage());
@@ -350,15 +349,11 @@ public class ProfileController {
 
 	// This method checking User have sufficient balance to create a BASIC/PRENIMUM
 	// profiles
-	private void checkBalanceProfile(Profile profile) throws CustomeException {
-		try {
+	private void checkBalanceProfile(Profile profile) {
 			Double userBalance = profile.getUser().getUserBalance();
-			Double profileCost = profileTypeRepo.findByType(profile.getType());
+			Double profileCost = profileTypeRepo.findByType(profile.getType().toString());
 			if (userBalance <= profileCost) {
-				throw new CustomeException(ErrorServiceMessage.PROFILE_USER_BALANCE_NOT_SUFFICENT);
+				throw new UserServiceException(ErrorServiceMessage.PROFILE_USER_BALANCE_NOT_SUFFICENT);
 			}
-		} catch (Exception e) {
-			throw e;
-		}
 	}
 }

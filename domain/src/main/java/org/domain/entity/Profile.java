@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Set;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -21,13 +20,11 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
-
 import org.domain.model.enu.ProfileFeature;
 import org.domain.model.enu.ProfileType;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -39,6 +36,7 @@ import com.fasterxml.jackson.annotation.JsonProperty.Access;
 @JsonIgnoreProperties(value = { "createdAt", "updatedAt" }, allowGetters = true)
 public class Profile implements Serializable {
 
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -52,7 +50,7 @@ public class Profile implements Serializable {
 	@Column(name = "type")
 	private ProfileType  type;
 
-	@Column(name="features")
+	@Column(name="features",length = 65535)
 	private EnumSet<ProfileFeature> features;
 
 	@Column(name="version")
@@ -152,6 +150,4 @@ public class Profile implements Serializable {
 	public void setUser(UserDet user) {
 		this.user = user;
 	}
-
-	
 }

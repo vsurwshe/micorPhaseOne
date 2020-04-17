@@ -5,9 +5,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class ErrorServiceMessage {
 	// This is central error message handling
+   //----- User 	
 	public static final String NOT_PASS_CORRECT_TOKEN = " You are passing token is not correct for these authentications. ";
 	public static final String NOT_VALID_USER = "This user, not an authorized user. This resource can access only authorized users ";
 	public static final String TOKEN_EXPIRED = " Sorry but your token time is expired";
+	public static final String VERIFY_CODE_WORNG=" This code is not correct verifiction code, please provide correct verification code";
+	public static final String VERIFY_USER_WORNG=" this user Already Verifyed";
+	public static final String SUBJECT_EMAIL=" Successfully registerd user with cloud app";
 
 	// --- Profile
 	public static final String NO_REC_PROFILE = "No profile record found with id ";
