@@ -294,7 +294,7 @@ public class ProfileController {
 	private EnumSet<ProfileFeature> setPrfileFeatuers(Profile profile) {
 		EnumSet<ProfileFeature> profileFeatuer = null;
 		try {
-			if (profile.getType().equals(ProfileType.BASIC) || profile.getType().equals(ProfileType.PERINEUM)) {
+			if (profile.getType().equals(ProfileType.BASIC) || profile.getType().equals(ProfileType.PRENINUM)) {
 				this.checkBalanceProfile(profile);
 				if (profile.getType().equals(ProfileType.BASIC)) {
 					profileFeatuer = EnumSet.of(ProfileFeature.READ, ProfileFeature.WRITE, ProfileFeature.UPDATE);
@@ -302,8 +302,10 @@ public class ProfileController {
 					profileFeatuer = EnumSet.of(ProfileFeature.READ, ProfileFeature.WRITE, ProfileFeature.UPDATE,
 							ProfileFeature.DELETE);
 				}
+			}else {
+				profileFeatuer = EnumSet.of(ProfileFeature.READ);
 			}
-			profileFeatuer = EnumSet.of(ProfileFeature.READ);
+			
 		} catch (Exception e) {
 			LogService.setLogger(e.getMessage());
 			throw new UserServiceException(e.getMessage());
@@ -350,15 +352,11 @@ public class ProfileController {
 
 	// This method checking User have sufficient balance to create a BASIC/PRENIMUM
 	// profiles
-	private void checkBalanceProfile(Profile profile) throws CustomeException {
-		try {
+	private void checkBalanceProfile(Profile profile) {
 			Double userBalance = profile.getUser().getUserBalance();
-			Double profileCost = profileTypeRepo.findByType(profile.getType());
+			Double profileCost = profileTypeRepo.findByType(profile.getType().toString());
 			if (userBalance <= profileCost) {
-				throw new CustomeException(ErrorServiceMessage.PROFILE_USER_BALANCE_NOT_SUFFICENT);
+				throw new UserServiceException(ErrorServiceMessage.PROFILE_USER_BALANCE_NOT_SUFFICENT);
 			}
-		} catch (Exception e) {
-			throw e;
-		}
 	}
 }

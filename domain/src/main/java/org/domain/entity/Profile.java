@@ -9,7 +9,8 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
+import javax.persistence.EntityListeners;import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -39,6 +40,7 @@ import com.fasterxml.jackson.annotation.JsonProperty.Access;
 @JsonIgnoreProperties(value = { "createdAt", "updatedAt" }, allowGetters = true)
 public class Profile implements Serializable {
 
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -52,7 +54,7 @@ public class Profile implements Serializable {
 	@Column(name = "type")
 	private ProfileType  type;
 
-	@Column(name="features")
+	@Column(name="features",length = 65535)
 	private EnumSet<ProfileFeature> features;
 
 	@Column(name="version")
