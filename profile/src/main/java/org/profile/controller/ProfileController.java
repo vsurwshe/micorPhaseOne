@@ -6,7 +6,6 @@ import org.domain.entity.Profile;
 import org.domain.entity.UserDet;
 import org.domain.model.enu.ProfileFeature;
 import org.domain.model.enu.ProfileType;
-import org.exception.exec.CustomeException;
 import org.exception.exec.UserServiceException;
 import org.repository.repo.AddressRepository;
 import org.repository.repo.PaymentsRepository;
@@ -82,8 +81,7 @@ public class ProfileController {
 
 	// This method update profile
 	@PutMapping(value = "/{profileId}/updateProfile")
-	private ResponseEntity<?> updateProfileDetails(@Valid @RequestBody Profile profile,
-			@PathVariable(value = "profileId") Integer profileId) {
+	private ResponseEntity<?> updateProfileDetails(@Valid @RequestBody Profile profile, @PathVariable(value = "profileId") Integer profileId) {
 		return this.updateProfile(profile, profileId);
 	}
 
@@ -299,8 +297,7 @@ public class ProfileController {
 				if (profile.getType().equals(ProfileType.BASIC)) {
 					profileFeatuer = EnumSet.of(ProfileFeature.READ, ProfileFeature.WRITE, ProfileFeature.UPDATE);
 				} else {
-					profileFeatuer = EnumSet.of(ProfileFeature.READ, ProfileFeature.WRITE, ProfileFeature.UPDATE,
-							ProfileFeature.DELETE);
+					profileFeatuer = EnumSet.of(ProfileFeature.READ, ProfileFeature.WRITE, ProfileFeature.UPDATE, ProfileFeature.DELETE);
 				}
 			}else {
 				profileFeatuer = EnumSet.of(ProfileFeature.READ);
