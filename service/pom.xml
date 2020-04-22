@@ -9,7 +9,6 @@
   </parent>
   <groupId>com.vany.service</groupId>
   <artifactId>service</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
   <name>service</name>
   <url>http://maven.apache.org</url>
   <properties>
