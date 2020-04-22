@@ -16,17 +16,19 @@
 		<java.version>1.8</java.version>
 		<spring-cloud.version>Greenwich.SR2</spring-cloud.version>
 	</properties>
-
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
 		</dependency>
-
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
@@ -49,8 +51,15 @@
 			<version>5.0.0-M5</version><!--$NO-MVN-MAN-VER$-->
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.vany.domain</groupId>
+			<artifactId>domain</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.vany.repository</groupId>
+			<artifactId>repository</artifactId>
+		</dependency>
 	</dependencies>
-
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
@@ -60,9 +69,18 @@
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
+			<dependency>
+				<groupId>com.vany.domain</groupId>
+				<artifactId>domain</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>com.vany.repository</groupId>
+				<artifactId>repository</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
-
 	<build>
 		<plugins>
 			<plugin>
@@ -71,5 +89,4 @@
 			</plugin>
 		</plugins>
 	</build>
-
 </project>

@@ -1,4 +1,4 @@
-package org.vany.invoice.controller;
+package org.invoice.controller;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
