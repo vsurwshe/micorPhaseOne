@@ -11,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -42,7 +43,7 @@ public class Payments {
 	private String transctionsId;
 
 	@Column(name = "amount")
-	private String amount;
+	private Double amount;
 
 	@Column(name = "tarns_date")
 	private String tarnsDate;
@@ -58,6 +59,11 @@ public class Payments {
 	@JoinColumn(name = "user_id", nullable = false)
 	@JsonIgnore
 	private UserDet user;
+
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "invoice_id", nullable = true)
+	@JsonIgnore
+	private Invoice invoice;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "created_at", nullable = false, updatable = false)
@@ -95,11 +101,11 @@ public class Payments {
 		this.transctionsId = transctionsId;
 	}
 
-	public String getAmount() {
+	public Double getAmount() {
 		return amount;
 	}
 
-	public void setAmount(String amount) {
+	public void setAmount(Double amount) {
 		this.amount = amount;
 	}
 
@@ -151,5 +157,12 @@ public class Payments {
 		this.user = user;
 	}
 
-	
+	public Invoice getInvoice() {
+		return invoice;
+	}
+
+	public void setInvoice(Invoice invoice) {
+		this.invoice = invoice;
+	}
+
 }

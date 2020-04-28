@@ -186,7 +186,7 @@ public class PaymentsController {
 				UserDet userTemp= paymentsRepo.findByPaymentId(paymentId).getUser();
 				Payments paymentTemp=paymentsRepo.findByPaymentId(paymentId);
 				double userBalance= userTemp.getUserBalance();
-				double paymentAmount=Double.parseDouble(paymentTemp.getAmount());
+				double paymentAmount=paymentTemp.getAmount();
 				double mainBalance=userBalance+paymentAmount;
 				userTemp.setUserBalance(mainBalance);
 				paymentTemp.setVerify(PaymentVerified.YES);

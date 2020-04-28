@@ -38,4 +38,7 @@ public class ErrorServiceMessage {
 	public static final String USER_LOCKED = "Sorry but you provided user cerrdtional are locked by system ";
 	public static final String INVALID_CREDTIONAL = "Sorry but you provided user cerrdtional are not valid, please provide valid credtional ";
 
+	//------- Invoice
+	public static final String NO_FILTER_PAYMENT_RECORDS_FOUND="Sorry no payment records found";
+	
 }

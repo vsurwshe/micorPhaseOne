@@ -28,5 +28,8 @@ public interface PaymentsRepository extends JpaRepository<Payments, Integer> {
 
 	// This method find Payments by trnsaction date and return list
 	List<Payments> findBytarnsDate(String userDate);
+	
+	@Query(nativeQuery= true, value="SELECT DISTINCT(tarns_date) FROM payments")
+	List<String> findBytarnsDate();
 
 }

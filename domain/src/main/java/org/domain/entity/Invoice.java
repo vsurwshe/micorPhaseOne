@@ -2,7 +2,9 @@ package org.domain.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -13,6 +15,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -29,11 +32,12 @@ public class Invoice implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "invoice_Id")
 	private long invoiceId;
 
 	@NotNull
 	@Column(name = "invoice_date")
-	private Date invoiceDate;
+	private String invoiceDate;
 
 	@NotNull
 	@Column(name = "invoice_total_amount")
@@ -43,9 +47,12 @@ public class Invoice implements Serializable {
 	@Column(name = "invoice_sub_total_amount")
 	private Double invoiceSubTotalAmount;
 
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "invoice")
+	private Payments payments;
+
 	// One invoice have many invoice items
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "invoice")
-	private List<InvoiceItem> invoiceItem;
+	private Set<InvoiceItem> invoiceItem= new HashSet<InvoiceItem>();
 
 	public long getInvoiceId() {
 		return invoiceId;
@@ -55,11 +62,11 @@ public class Invoice implements Serializable {
 		this.invoiceId = invoiceId;
 	}
 
-	public Date getInvoiceDate() {
+	public String getInvoiceDate() {
 		return invoiceDate;
 	}
 
-	public void setInvoiceDate(Date invoiceDate) {
+	public void setInvoiceDate(String invoiceDate) {
 		this.invoiceDate = invoiceDate;
 	}
 
@@ -79,11 +86,21 @@ public class Invoice implements Serializable {
 		this.invoiceSubTotalAmount = invoiceSubTotalAmount;
 	}
 
-	public List<InvoiceItem> getInvoiceItem() {
+	public Set<InvoiceItem> getInvoiceItem() {
 		return invoiceItem;
 	}
 
-	public void setInvoiceItem(List<InvoiceItem> invoiceItem) {
+	public void setInvoiceItem(Set<InvoiceItem> invoiceItem) {
 		this.invoiceItem = invoiceItem;
 	}
+
+	public Payments getPayments() {
+		return payments;
+	}
+
+	public void setPayments(Payments payments) {
+		this.payments = payments;
+	}
+	
+	
 }
