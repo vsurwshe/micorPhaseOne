@@ -1,11 +1,14 @@
 package org.invoice.controller;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.domain.entity.Invoice;
 import org.domain.entity.InvoiceItem;
 import org.domain.entity.Payments;
 import org.exception.exec.UserServiceException;
+import org.hibernate.mapping.Set;
 import org.repository.repo.InvoiceItemRepository;
 import org.repository.repo.InvoiceRepository;
 import org.repository.repo.PaymentsRepository;
@@ -48,7 +51,7 @@ public class PaymentInvoice {
 	//------------------ This is customs method Area	
 
 	private ResponseEntity<?> genrateAllInvoice(String invoiceDate) {
-		List<Long> tempInvoiceIds = null;
+		List<Long> tempInvoiceIds = new ArrayList<>();
 		try {
 			List<Payments> filterPayment= paymentRepo.findBytarnsDate(invoiceDate);
 			if(!filterPayment.isEmpty()) {
@@ -57,6 +60,8 @@ public class PaymentInvoice {
 					if( payments.getInvoice() == null) 
 					{
 						Invoice tempInvoice = this.invoiceRepo.saveAndFlush(this.setInvoice(payments));
+						payments.setInvoice(tempInvoice);
+						paymentRepo.saveAndFlush(payments);
 						tempInvoiceIds.add(tempInvoice.getInvoiceId());
 					}else {
 						continue;
@@ -79,17 +84,19 @@ public class PaymentInvoice {
 		tempInvoice.setInvoiceDate(payments.getTarnsDate());
 		tempInvoice.setInvoiceSubTotalAmount(payments.getAmount());
 		tempInvoice.setInvoiceTotalAmount(payments.getAmount());
-//		tempInvoice.setInvoiceItem(this.setInvoiceItemList(payments));
+		tempInvoice.setInvoiceItem(this.setInvoiceItemList(payments, tempInvoice));
+		tempInvoice.setPayments(payments);
 		return tempInvoice;
 	}
 
-	private InvoiceItem setInvoiceItemList(Payments payments) {
+	private List<InvoiceItem> setInvoiceItemList(Payments payments,Invoice invoice) {
 		InvoiceItem tempInvoiceItem=new InvoiceItem();
 		tempInvoiceItem.setItemName(payments.getMode().toString());
 		tempInvoiceItem.setItemPrice(payments.getAmount());
 		tempInvoiceItem.setItemQty(1);
 		tempInvoiceItem.setItemTotalPrice(payments.getAmount());
-		return invoiceItemRepo.saveAndFlush(tempInvoiceItem);
+		tempInvoiceItem.setInvoice(invoice);
+		return Arrays.asList(tempInvoiceItem) ;
 	}
 	
 	private ResponseEntity<?> getTransDates() {

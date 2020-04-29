@@ -27,9 +27,10 @@ public interface PaymentsRepository extends JpaRepository<Payments, Integer> {
 	List<Payments> findPaymentsByUserId(@Param("userId") Integer userId);
 
 	// This method find Payments by trnsaction date and return list
-	List<Payments> findBytarnsDate(String userDate);
+	@Query(nativeQuery=true, value="SELECT * FROM `payments` where `invoice_id` IS NULL AND `tarns_date` <=?1")
+	List<Payments> findBytarnsDate(@Param("userDate")String userDate);
 	
-	@Query(nativeQuery= true, value="SELECT DISTINCT(tarns_date) FROM payments")
+	@Query(nativeQuery= true, value="SELECT DISTINCT(tarns_date) FROM payments where `invoice_id` IS NULL")
 	List<String> findBytarnsDate();
 
 }

@@ -1,5 +1,6 @@
 package org.domain.entity;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -38,9 +39,27 @@ public class InvoiceItem {
 	private Double ItemTotalPrice;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "invoice_id", nullable = false)
+	@JoinColumn(name = "invoice_id")
 	@JsonIgnore
 	private Invoice invoice;
+	
+	@Override
+	public boolean equals(Object o) {
+		if (this== o) {
+			return true;
+		}
+		if(!(o instanceof InvoiceItem))
+			return false;
+		return ItemId!=null && ItemId.equals(((InvoiceItem)o).getItemId()); 
+	}
+	
+	public Integer getItemId() {
+		return ItemId;
+	}
+
+	public void setItemId(Integer itemId) {
+		ItemId = itemId;
+	}
 
 	public String getItemName() {
 		return ItemName;

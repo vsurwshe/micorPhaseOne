@@ -1,6 +1,7 @@
 package org.domain.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -51,8 +52,8 @@ public class Invoice implements Serializable {
 	private Payments payments;
 
 	// One invoice have many invoice items
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "invoice")
-	private Set<InvoiceItem> invoiceItem= new HashSet<InvoiceItem>();
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "invoice",orphanRemoval = true)
+	private List<InvoiceItem> invoiceItem= new ArrayList<InvoiceItem>();
 
 	public long getInvoiceId() {
 		return invoiceId;
@@ -86,12 +87,12 @@ public class Invoice implements Serializable {
 		this.invoiceSubTotalAmount = invoiceSubTotalAmount;
 	}
 
-	public Set<InvoiceItem> getInvoiceItem() {
+	public List<InvoiceItem> getInvoiceItem() {
 		return invoiceItem;
 	}
 
-	public void setInvoiceItem(Set<InvoiceItem> invoiceItem) {
-		this.invoiceItem = invoiceItem;
+	public void setInvoiceItem(List<InvoiceItem> list) {
+		this.invoiceItem = list;
 	}
 
 	public Payments getPayments() {
