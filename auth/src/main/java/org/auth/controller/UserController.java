@@ -12,7 +12,7 @@ import org.domain.component.JwtRequest;
 import org.domain.component.UserTokenResponse;
 import org.domain.entity.UserDet;
 import org.exception.exec.UserServiceException;
-import org.repository.repo.UserRepository;
+import org.repository.user.UserRepository;
 import org.service.apiService.LogService;
 import org.service.apiService.ResponseEntityResult;
 import org.service.apiService.EmailBody;

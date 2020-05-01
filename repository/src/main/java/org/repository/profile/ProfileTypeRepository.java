@@ -1,4 +1,4 @@
-package org.repository.repo;
+package org.repository.profile;
 
 import org.domain.entity.ProfileTypeModel;
 import org.springframework.data.jpa.repository.JpaRepository;

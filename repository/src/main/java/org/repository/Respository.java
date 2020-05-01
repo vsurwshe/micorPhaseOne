@@ -1,4 +1,4 @@
-package org.vany.repository;
+package org.repository;
 
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 

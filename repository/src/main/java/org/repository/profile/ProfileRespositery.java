@@ -1,4 +1,4 @@
-package org.repository.repo;
+package org.repository.profile;
 
 import java.util.List;
 

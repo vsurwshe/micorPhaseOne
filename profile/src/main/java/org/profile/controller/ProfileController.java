@@ -7,11 +7,11 @@ import org.domain.entity.UserDet;
 import org.domain.model.enu.ProfileFeature;
 import org.domain.model.enu.ProfileType;
 import org.exception.exec.UserServiceException;
-import org.repository.repo.AddressRepository;
-import org.repository.repo.PaymentsRepository;
-import org.repository.repo.ProfileRespositery;
-import org.repository.repo.ProfileTypeRepository;
-import org.repository.repo.UserRepository;
+import org.repository.address.AddressRepository;
+import org.repository.payment.PaymentsRepository;
+import org.repository.profile.ProfileRespositery;
+import org.repository.profile.ProfileTypeRepository;
+import org.repository.user.UserRepository;
 import org.service.apiService.ErrorServiceMessage;
 import org.service.apiService.LogService;
 import org.service.apiService.ResponseEntityResult;
@@ -50,7 +50,7 @@ public class ProfileController {
 	public AddressRepository addressRepo;
 
 	@Autowired
-	private UserRepository userRepository;
+	private UserRepository userRepo;
 
 	@Autowired
 	public ProfileTypeRepository profileTypeRepo;
@@ -336,7 +336,7 @@ public class ProfileController {
 		} else {
 			username = principal.toString();
 		}
-		UserDet daoUser = userRepository.findByUserEmail(username);
+		UserDet daoUser = userRepo.findByUserEmail(username);
 		return daoUser;
 	}
 

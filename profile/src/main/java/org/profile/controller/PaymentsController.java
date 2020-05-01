@@ -9,9 +9,9 @@ import org.domain.entity.UserDet;
 import org.domain.model.enu.PaymentVerified;
 import org.exception.exec.CustomeException;
 import org.exception.exec.UserServiceException;
-import org.repository.repo.PaymentsRepository;
-import org.repository.repo.ProfileRespositery;
-import org.repository.repo.UserRepository;
+import org.repository.payment.PaymentsRepository;
+import org.repository.profile.ProfileRespositery;
+import org.repository.user.UserRepository;
 import org.service.apiService.ErrorServiceMessage;
 import org.service.apiService.LogService;
 import org.service.apiService.ResponseEntityResult;
@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController

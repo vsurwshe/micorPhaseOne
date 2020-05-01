@@ -3,7 +3,7 @@ package org.profile.controller;
 import java.util.List;
 
 import org.domain.entity.ProfileTypeModel;
-import org.repository.repo.ProfileTypeRepository;
+import org.repository.profile.ProfileTypeRepository;
 import org.service.apiService.ErrorServiceMessage;
 import org.service.apiService.LogService;
 import org.service.apiService.ResponseEntityResult;
@@ -28,7 +28,7 @@ public class ProfileTypeController {
         return this.findAllProfiles();
     }
 
-    //------------ Custom Method Declartions
+    //------------ Custom Method Declarations
 
     private ResponseEntity<?> findAllProfiles() {
         List<ProfileTypeModel> profileType=null;

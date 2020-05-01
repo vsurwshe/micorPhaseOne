@@ -48,18 +48,33 @@ public class Profile implements Serializable {
 
 	@NotNull
 	@Column(name = "type")
-	private ProfileType  type;
+	private ProfileType type;
 
-	@Column(name="features",length = 65535)
+	@Column(name = "features", length = 65535)
 	private EnumSet<ProfileFeature> features;
 
-	@Column(name="version")
+	@Column(name = "version")
 	private Integer version;
 
 	// One user have many Profile
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "profile")
 	@JsonIgnore
 	private Set<Address> address = new HashSet<Address>();
+
+	// One profile have many customer
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "profile")
+	@JsonIgnore
+	private Set<Customer> customer = new HashSet<Customer>();
+
+	// One profile have many food
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "profile")
+	@JsonIgnore
+	private Set<Food> food = new HashSet<Food>();
+
+	// One profile have many food
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "profile")
+	@JsonIgnore
+	private Set<HotelTabel> hoteTable = new HashSet<HotelTabel>();
 
 	// Many payments have one user
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -72,7 +87,7 @@ public class Profile implements Serializable {
 	@CreatedDate
 	@JsonProperty(access = Access.WRITE_ONLY)
 	private Date createdAt;
-	
+
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "updated_at", nullable = false)
 	@LastModifiedDate
@@ -149,5 +164,29 @@ public class Profile implements Serializable {
 
 	public void setUser(UserDet user) {
 		this.user = user;
+	}
+
+	public Set<Customer> getCustomer() {
+		return customer;
+	}
+
+	public void setCustomer(Set<Customer> customer) {
+		this.customer = customer;
+	}
+
+	public Set<Food> getFood() {
+		return food;
+	}
+
+	public void setFood(Set<Food> food) {
+		this.food = food;
+	}
+
+	public Set<HotelTabel> getHoteTable() {
+		return hoteTable;
+	}
+
+	public void setHoteTable(Set<HotelTabel> hoteTable) {
+		this.hoteTable = hoteTable;
 	}
 }

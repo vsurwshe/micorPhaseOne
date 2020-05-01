@@ -8,10 +8,8 @@ import org.domain.entity.Invoice;
 import org.domain.entity.InvoiceItem;
 import org.domain.entity.Payments;
 import org.exception.exec.UserServiceException;
-import org.hibernate.mapping.Set;
-import org.repository.repo.InvoiceItemRepository;
-import org.repository.repo.InvoiceRepository;
-import org.repository.repo.PaymentsRepository;
+import org.repository.invoice.InvoiceRepository;
+import org.repository.payment.PaymentsRepository;
 import org.service.apiService.ErrorServiceMessage;
 import org.service.apiService.LogService;
 import org.service.apiService.ResponseEntityResult;
@@ -34,13 +32,15 @@ public class PaymentInvoice {
 	@Autowired
 	private InvoiceRepository invoiceRepo;
 	
-	@Autowired
-	private InvoiceItemRepository invoiceItemRepo;
-	
 	//---------------- Rest Controller Methods	
 	@GetMapping(value="/getDates")
     public ResponseEntity<?> findDates() {
         return this.getTransDates();
+    }
+	
+	@GetMapping(value="/getAll")
+    public ResponseEntity<?> findAllInvoice() {
+        return this.getAllInvoices();
     }
 
 	@PostMapping(value = "/genrate/{date}")
@@ -56,7 +56,6 @@ public class PaymentInvoice {
 			List<Payments> filterPayment= paymentRepo.findBytarnsDate(invoiceDate);
 			if(!filterPayment.isEmpty()) {
 				for (Payments payments : filterPayment) {
-//					Integer payId=payments.getInvoice().getPayments().getPayId();
 					if( payments.getInvoice() == null) 
 					{
 						Invoice tempInvoice = this.invoiceRepo.saveAndFlush(this.setInvoice(payments));
@@ -78,7 +77,6 @@ public class PaymentInvoice {
 		return ResponseEntityResult.successResponseEntity(tempInvoiceIds);
 	}
 
-	@SuppressWarnings("unchecked")
 	private Invoice setInvoice(Payments payments) {
 		Invoice tempInvoice=new Invoice();
 		tempInvoice.setInvoiceDate(payments.getTarnsDate());
@@ -112,4 +110,19 @@ public class PaymentInvoice {
 		}
 		return ResponseEntityResult.successResponseEntity(transDates);
 	}
+	
+	private ResponseEntity<?> getAllInvoices() {
+		List<Invoice> invoiceResult=null;
+		try {
+			 invoiceResult=invoiceRepo.findAll();
+			 if(invoiceResult.isEmpty()) {
+				 throw new UserServiceException("Sorry there is no Invoice Item");
+			 }
+		} catch (UserServiceException e) {
+			LogService.setLogger(e.getMessage());
+			return ResponseEntityResult.notFound(e.getMessage());
+		}
+		return ResponseEntityResult.successResponseEntity(invoiceResult);
+	}
+
 }

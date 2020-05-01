@@ -45,8 +45,9 @@
     <module>zuul</module>
   	<module>profile</module>
   	<module>auth</module>
-  	
-  	
   	<module>invoice</module>
+  	<module>food</module>
+  	<module>customer</module>
+  	<module>hotel-tabel</module>
   </modules>
 </project>

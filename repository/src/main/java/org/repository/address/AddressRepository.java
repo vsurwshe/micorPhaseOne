@@ -1,4 +1,4 @@
-package org.repository.repo;
+package org.repository.address;
 
 import java.util.List;
 

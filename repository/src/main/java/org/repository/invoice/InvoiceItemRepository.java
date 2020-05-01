@@ -1,4 +1,4 @@
-package org.repository.repo;
+package org.repository.invoice;
 
 import org.domain.entity.InvoiceItem;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -28,12 +28,39 @@
     	<groupId>com.vany.domain</groupId>
     	<artifactId>domain</artifactId>
     </dependency>
+    <dependency>
+    	<groupId>com.vany.food</groupId>
+    	<artifactId>food</artifactId>
+    </dependency>
+    <dependency>
+    	<groupId>com.vany.hotel-tabel</groupId>
+    	<artifactId>hotel-tabel</artifactId>
+    </dependency>
+    <dependency>
+    	<groupId>com.vany.customer</groupId>
+    	<artifactId>customer</artifactId>
+    </dependency>
   </dependencies>
   <dependencyManagement>
   	<dependencies>
   		<dependency>
   			<groupId>com.vany.domain</groupId>
   			<artifactId>domain</artifactId>
+  			<version>0.0.1-SNAPSHOT</version>
+  		</dependency>
+  		<dependency>
+  			<groupId>com.vany.food</groupId>
+  			<artifactId>food</artifactId>
+  			<version>0.0.1-SNAPSHOT</version>
+  		</dependency>
+  		<dependency>
+  			<groupId>com.vany.hotel-tabel</groupId>
+  			<artifactId>hotel-tabel</artifactId>
+  			<version>0.0.1-SNAPSHOT</version>
+  		</dependency>
+  		<dependency>
+  			<groupId>com.vany.customer</groupId>
+  			<artifactId>customer</artifactId>
   			<version>0.0.1-SNAPSHOT</version>
   		</dependency>
   	</dependencies>

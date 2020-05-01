@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import org.domain.entity.UserDet;
 import org.exception.exec.UserServiceException;
-import org.repository.repo.UserRepository;
+import org.repository.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -16,14 +16,14 @@ import org.springframework.stereotype.Service;
 public class JwtUserDetailsService implements UserDetailsService {
 
 	@Autowired
-	private UserRepository userRepository;
+	private UserRepository userRepo;
 
 	@Autowired
 	private PasswordEncoder bcryptEncoder;
 
 	@Override
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-		UserDet user = userRepository.findByUserEmail(email);
+		UserDet user = userRepo.findByUserEmail(email);
 		if (user == null) {
 			throw new UserServiceException("User Not Found by email " + email);
 		}
@@ -32,7 +32,7 @@ public class JwtUserDetailsService implements UserDetailsService {
 	}
 
 	public UserDetails loadRefreshUserByUsername(String email) throws UsernameNotFoundException {
-		UserDet user = userRepository.findByUserEmail(email);
+		UserDet user = userRepo.findByUserEmail(email);
 		if (user == null) {
 			throw new UserServiceException("User Not Found by email " + email);
 		}
@@ -45,7 +45,7 @@ public class JwtUserDetailsService implements UserDetailsService {
 		newUser.setUserName(user.getUserName());
 		newUser.setUserEmail(user.getUserEmail());
 		newUser.setUserPassword(bcryptEncoder.encode(user.getUserPassword()));
-		return userRepository.save(newUser);
+		return userRepo.save(newUser);
 	}
 
 }

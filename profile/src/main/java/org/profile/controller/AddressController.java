@@ -5,8 +5,8 @@ import java.util.Optional;
 
 import org.domain.entity.Address;
 import org.exception.exec.UserServiceException;
-import org.repository.repo.AddressRepository;
-import org.repository.repo.ProfileRespositery;
+import org.repository.address.AddressRepository;
+import org.repository.profile.ProfileRespositery;
 import org.service.apiService.ErrorServiceMessage;
 import org.service.apiService.LogService;
 import org.service.apiService.ResponseEntityResult;
