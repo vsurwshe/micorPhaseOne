@@ -2,7 +2,7 @@ package org.profile.service;
 
 import java.util.ArrayList;
 
-import org.domain.entity.UserDet;
+import org.domain.entity.user.UserDet;
 import org.exception.exec.UserServiceException;
 import org.repository.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,5 +47,4 @@ public class JwtUserDetailsService implements UserDetailsService {
 		newUser.setUserPassword(bcryptEncoder.encode(user.getUserPassword()));
 		return userRepo.save(newUser);
 	}
-
 }

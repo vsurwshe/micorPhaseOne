@@ -1,4 +1,4 @@
-package org.domain.entity;
+package org.domain.entity.user;
 
 import java.util.Date;
 import java.util.HashSet;
@@ -19,6 +19,8 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 
+import org.domain.entity.payments.Payments;
+import org.domain.entity.profile.Profile;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;

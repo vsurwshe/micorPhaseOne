@@ -3,7 +3,7 @@ package org.profile.controller;
 
 import java.util.Optional;
 
-import org.domain.entity.Address;
+import org.domain.entity.address.Address;
 import org.exception.exec.UserServiceException;
 import org.repository.address.AddressRepository;
 import org.repository.profile.ProfileRespositery;

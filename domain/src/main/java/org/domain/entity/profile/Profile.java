@@ -1,4 +1,4 @@
-package org.domain.entity;
+package org.domain.entity.profile;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -20,6 +20,12 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
+
+import org.domain.entity.address.Address;
+import org.domain.entity.customer.Customer;
+import org.domain.entity.food.Food;
+import org.domain.entity.hoteltabel.HotelTabel;
+import org.domain.entity.user.UserDet;
 import org.domain.model.enu.ProfileFeature;
 import org.domain.model.enu.ProfileType;
 import org.springframework.data.annotation.CreatedDate;

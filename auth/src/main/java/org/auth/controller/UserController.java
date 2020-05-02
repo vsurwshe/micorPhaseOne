@@ -10,7 +10,7 @@ import org.auth.service.JwtUserDetailsService;
 import org.domain.component.EmailModule;
 import org.domain.component.JwtRequest;
 import org.domain.component.UserTokenResponse;
-import org.domain.entity.UserDet;
+import org.domain.entity.user.UserDet;
 import org.exception.exec.UserServiceException;
 import org.repository.user.UserRepository;
 import org.service.apiService.LogService;

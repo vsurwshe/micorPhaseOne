@@ -1,6 +1,6 @@
 package org.domain.component;
 
-import org.domain.entity.UserDet;
+import org.domain.entity.user.UserDet;
 
 public class UserTokenResponse {
 
@@ -8,8 +8,6 @@ public class UserTokenResponse {
 	private String userToken;
 	private String userRefreshToken;
 	private Long tokenExprieTime;
-
-	
 
 	public UserTokenResponse(UserDet userDetails, String userToken, String userRefreshToken, Long tokenExprieTime) {
 		super();
@@ -60,7 +58,4 @@ public class UserTokenResponse {
 		return "UserTokenResponse [userDetails=" + userDetails + ", userToken=" + userToken + ", userRefreshToken="
 				+ userRefreshToken + ", tokenExprieTime=" + tokenExprieTime + "]";
 	}
-	
-	
-
 }

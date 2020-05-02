@@ -1,4 +1,4 @@
-package org.domain.entity;
+package org.domain.entity.token;
 import java.util.Date;
 import java.util.UUID;
 
@@ -13,6 +13,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
+import org.domain.entity.user.UserDet;
 
 @Entity
 @Table(name = "ConfirmationToken")

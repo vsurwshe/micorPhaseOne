@@ -2,7 +2,8 @@ package org.auth.service;
 
 import java.util.ArrayList;
 import java.util.Random;
-import org.domain.entity.UserDet;
+
+import org.domain.entity.user.UserDet;
 import org.exception.exec.UserServiceException;
 import org.repository.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

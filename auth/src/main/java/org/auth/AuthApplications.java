@@ -17,7 +17,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 	"org.domain.component",
 	"org.auth"
 })
-@EnableJpaRepositories("org.repository.repo")
+@EnableJpaRepositories("org.repository")
 @EnableEurekaClient
 public class AuthApplications {
 

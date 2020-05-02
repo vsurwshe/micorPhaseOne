@@ -2,8 +2,8 @@ package org.repository.profile;
 
 import java.util.List;
 
-import org.domain.entity.Profile;
-import org.domain.entity.UserDet;
+import org.domain.entity.profile.Profile;
+import org.domain.entity.user.UserDet;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

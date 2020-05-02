@@ -1,4 +1,4 @@
-package org.domain.entity;
+package org.domain.entity.hoteltabel;
 
 import java.util.Date;
 
@@ -15,6 +15,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.domain.entity.profile.Profile;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -23,24 +24,23 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
-@Table(name = "food")
+@Table(name = "hotel_tabel")
 @EntityListeners(AuditingEntityListener.class)
 @JsonIgnoreProperties(value = { "createdAt", "updatedAt" }, allowGetters = true)
-public class Food {
-
+public class HotelTabel {
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "food_id")
-	private Integer FoodId;
+	private Integer HotelTabelId;
 	
-	@Column(name ="food_name")
-	private String FoodName;
+	@Column(name="hotel_name")
+	private String HotelName;
 	
-	@Column(name = "food_price")
-	private Double FoodPrice;
+	@Column(name = "hotel_tabel_szie" )
+	private Integer HotelTabelSize;
 	
-	@Column(name = "food_category")
-	private String FoodCategory;
+	@Column(name = "hotel_locations")
+	private String HotelLocations;
 	
 	@Column(name = "version")
 	private Double version;
@@ -63,36 +63,36 @@ public class Food {
 	@JsonIgnore
 	private Date updatedAt;
 
-	public Integer getFoodId() {
-		return FoodId;
+	public Integer getHotelTabelId() {
+		return HotelTabelId;
 	}
 
-	public void setFoodId(Integer foodId) {
-		FoodId = foodId;
+	public void setHotelTabelId(Integer hotelTabelId) {
+		HotelTabelId = hotelTabelId;
 	}
 
-	public String getFoodName() {
-		return FoodName;
+	public String getHotelName() {
+		return HotelName;
 	}
 
-	public void setFoodName(String foodName) {
-		FoodName = foodName;
+	public void setHotelName(String hotelName) {
+		HotelName = hotelName;
 	}
 
-	public Double getFoodPrice() {
-		return FoodPrice;
+	public Integer getHotelTabelSize() {
+		return HotelTabelSize;
 	}
 
-	public void setFoodPrice(Double foodPrice) {
-		FoodPrice = foodPrice;
+	public void setHotelTabelSize(Integer hotelTabelSize) {
+		HotelTabelSize = hotelTabelSize;
 	}
 
-	public String getFoodCategory() {
-		return FoodCategory;
+	public String getHotelLocations() {
+		return HotelLocations;
 	}
 
-	public void setFoodCategory(String foodCategory) {
-		FoodCategory = foodCategory;
+	public void setHotelLocations(String hotelLocations) {
+		HotelLocations = hotelLocations;
 	}
 
 	public Double getVersion() {

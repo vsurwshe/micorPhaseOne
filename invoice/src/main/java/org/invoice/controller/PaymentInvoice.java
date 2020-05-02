@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.domain.entity.Invoice;
-import org.domain.entity.InvoiceItem;
-import org.domain.entity.Payments;
+import org.domain.entity.invoice.Invoice;
+import org.domain.entity.invoice.InvoiceItem;
+import org.domain.entity.payments.Payments;
 import org.exception.exec.UserServiceException;
 import org.repository.invoice.InvoiceRepository;
 import org.repository.payment.PaymentsRepository;

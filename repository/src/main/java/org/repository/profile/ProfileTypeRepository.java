@@ -1,6 +1,6 @@
 package org.repository.profile;
 
-import org.domain.entity.ProfileTypeModel;
+import org.domain.entity.profile.ProfileTypeModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

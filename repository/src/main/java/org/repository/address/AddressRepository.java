@@ -2,7 +2,7 @@ package org.repository.address;
 
 import java.util.List;
 
-import org.domain.entity.Address;
+import org.domain.entity.address.Address;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

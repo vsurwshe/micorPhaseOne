@@ -15,9 +15,12 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EntityScan("org.domain.entity")
 @ComponentScan({
 	"org.domain.component",
+	"org.customer",
+	"org.food",
+	"org.hoteltabel",
 	"org.profile"
 })
-@EnableJpaRepositories("org.repository.repo")
+@EnableJpaRepositories("org.repository")
 @EnableEurekaClient
 public class ProfileApplication {
 

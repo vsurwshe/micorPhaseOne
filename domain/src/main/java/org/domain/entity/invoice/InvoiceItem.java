@@ -1,4 +1,4 @@
-package org.domain.entity;
+package org.domain.entity.invoice;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;

@@ -2,7 +2,7 @@ package org.repository.conformations;
 
 
 
-import org.domain.entity.ConfirmationToken;
+import org.domain.entity.token.ConfirmationToken;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

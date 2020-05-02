@@ -2,6 +2,7 @@ package org.profile.swaggerconfig;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
@@ -20,9 +21,38 @@ public class SwaggerConfig {
 				.apis(RequestHandlerSelectors.basePackage("org.profile.controller"))
 				.build()
 				.apiInfo(apiInfo());
-		
 	}
 
+	@Bean
+	public Docket customerDocket() {
+		return new Docket(DocumentationType.SWAGGER_2)
+				.groupName("CustomerAPI")
+				.select()
+				.apis(RequestHandlerSelectors.basePackage("org.customer.controller"))
+				.build()
+				.apiInfo(apiInfo());
+	}
+
+	@Bean
+	public Docket foodDocket() {
+		return new Docket(DocumentationType.SWAGGER_2)
+				.groupName("FoodsAPI")
+				.select()
+				.apis(RequestHandlerSelectors.basePackage("org.food.controller"))
+				.build()
+				.apiInfo(apiInfo());
+	}
+	
+	@Bean
+	public Docket hotelTabelDocket() {
+		return new Docket(DocumentationType.SWAGGER_2)
+				.groupName("HotelTabelAPI")
+				.select()
+				.apis(RequestHandlerSelectors.basePackage("org.hoteltabel.controller"))
+				.build()
+				.apiInfo(apiInfo());
+	}
+	
 	@SuppressWarnings("deprecation")
 	private ApiInfo apiInfo() {
 		 return new ApiInfo("V & Y SOFT. TECH. PVT. LTD.", 

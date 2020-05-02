@@ -7,4 +7,19 @@
   </parent>
   <groupId>com.vany.customer</groupId>
   <artifactId>customer</artifactId>
+  <dependencies>
+  	<dependency>
+  		<groupId>com.vany.repository</groupId>
+  		<artifactId>repository</artifactId>
+  	</dependency>
+  </dependencies>
+  <dependencyManagement>
+  	<dependencies>
+  		<dependency>
+  			<groupId>com.vany.repository</groupId>
+  			<artifactId>repository</artifactId>
+  			<version>0.0.1-SNAPSHOT</version>
+  		</dependency>
+  	</dependencies>
+  </dependencyManagement>
 </project>

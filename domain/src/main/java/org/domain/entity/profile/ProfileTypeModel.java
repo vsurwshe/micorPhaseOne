@@ -1,4 +1,4 @@
-package org.domain.entity;
+package org.domain.entity.profile;
 
 
 import java.util.Date;

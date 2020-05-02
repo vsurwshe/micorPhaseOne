@@ -1,4 +1,4 @@
-package org.domain.entity;
+package org.domain.entity.payments;
 
 import java.util.Date;
 
@@ -16,6 +16,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.domain.entity.invoice.Invoice;
+import org.domain.entity.user.UserDet;
 import org.domain.model.enu.PaymentMode;
 import org.domain.model.enu.PaymentVerified;
 import org.springframework.data.annotation.CreatedDate;
