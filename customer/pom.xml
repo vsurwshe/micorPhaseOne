@@ -12,12 +12,30 @@
   		<groupId>com.vany.repository</groupId>
   		<artifactId>repository</artifactId>
   	</dependency>
+  	<dependency>
+  		<groupId>com.vany.service</groupId>
+  		<artifactId>service</artifactId>
+  	</dependency>
+  	<dependency>
+  		<groupId>com.vany.exception</groupId>
+  		<artifactId>exception</artifactId>
+  	</dependency>
   </dependencies>
   <dependencyManagement>
   	<dependencies>
   		<dependency>
   			<groupId>com.vany.repository</groupId>
   			<artifactId>repository</artifactId>
+  			<version>0.0.1-SNAPSHOT</version>
+  		</dependency>
+  		<dependency>
+  			<groupId>com.vany.service</groupId>
+  			<artifactId>service</artifactId>
+  			<version>0.0.1-SNAPSHOT</version>
+  		</dependency>
+  		<dependency>
+  			<groupId>com.vany.exception</groupId>
+  			<artifactId>exception</artifactId>
   			<version>0.0.1-SNAPSHOT</version>
   		</dependency>
   	</dependencies>

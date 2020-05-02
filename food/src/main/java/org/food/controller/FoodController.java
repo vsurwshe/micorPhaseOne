@@ -1,8 +1,17 @@
 package org.food.controller;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.domain.entity.food.Food;
+import org.exception.exec.UserServiceException;
+import org.repository.food.FoodsRepository;
+import org.repository.profile.ProfileRespositery;
+import org.service.apiService.ErrorServiceMessage;
+import org.service.apiService.LogService;
+import org.service.apiService.ResponseEntityResult;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,10 +28,22 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/profile/{profileID}")
 public class FoodController {
 
+	//---------------- Global Variable declarations
+	@Autowired
+	private FoodsRepository foodRepo;
+	
+	@Autowired
+	private ProfileRespositery profileRepo;
+	
 	// ---------------- API Method Declarations
 	@GetMapping(value = "/food/getAll")
 	private ResponseEntity<?> findAllFood(@PathVariable("profileID") Integer profileID) {
 		return this.getAllFood(profileID);
+	}
+	
+	@GetMapping(value = "/food/getFood/{foodID}")
+	private ResponseEntity<?> findFoodById(@PathVariable("profileID") Integer profileID,@PathVariable("foodID") Integer foodID) {
+		return this.getFoodById(profileID,foodID);
 	}
 
 	@PostMapping(value = "/food/save")
@@ -44,22 +65,107 @@ public class FoodController {
 
 	// ---------------- Custom Method Declarations
 	private ResponseEntity<?> getAllFood(Integer profileID) {
-		// TODO Auto-generated method stub
-		return null;
+		List<Food> foodResult=null;
+		try {
+			this.checkProfileIsOrNot(profileID);
+			foodResult=foodRepo.findAll();
+			if(foodResult.isEmpty()) {
+				throw new UserServiceException(ErrorServiceMessage.NO_FOOD_RECORDS_FOUND);
+			}
+		} catch (UserServiceException e) {
+			LogService.setLogger(e.getMessage());
+			return ResponseEntityResult.internalServerError(e.getMessage());
+		}
+		return ResponseEntityResult.successResponseEntity(foodResult);
+	}
+
+	private ResponseEntity<?> getFoodById(Integer profileID, Integer foodID) {
+		Food foodResult=null;
+		try {
+			this.checkProfileIsOrNot(profileID);
+			foodResult=foodRepo.findByFoodId(foodID);
+			if(foodResult==null) {
+				throw new UserServiceException(ErrorServiceMessage.NO_FOOD_RECORDS_FOUND);
+			}
+		} catch (UserServiceException e) {
+			LogService.setLogger(e.getMessage());
+			return ResponseEntityResult.internalServerError(e.getMessage());
+		}
+		return ResponseEntityResult.successResponseEntity(foodResult);
 	}
 
 	private ResponseEntity<?> saveFoodDetails(Integer profileID, @Valid Food saveFood) {
-		// TODO Auto-generated method stub
-		return null;
+		Food resultFood=null;
+		try {
+			this.checkProfileIsOrNot(profileID);
+			saveFood.setProfile(profileRepo.findByprofileId(profileID));
+			saveFood.setVersion(0.0);
+			resultFood=foodRepo.saveAndFlush(saveFood);
+			if(resultFood==null) {
+				throw new UserServiceException(ErrorServiceMessage.NO_FOOD_RECORDS_SAVE);
+			}
+		} catch (UserServiceException e) {
+			LogService.setLogger(e.getMessage());
+			return ResponseEntityResult.internalServerError(e.getMessage());
+		}
+		return ResponseEntityResult.successResponseEntity(resultFood);
 	}
 
 	private ResponseEntity<?> updateFoodDetails(Integer profileID, Integer foodID, @Valid Food saveFood) {
-		// TODO Auto-generated method stub
-		return null;
+		Food resultFood=null;
+		try {
+			this.checkProfileIsOrNot(profileID);
+			Food tempFood=this.getFoodById(foodID);
+			if(tempFood.getProfile().getProfileId()== profileID) {
+				if(tempFood.getVersion()==saveFood.getVersion()) {
+					tempFood.setFoodCategory(saveFood.getFoodCategory());
+					tempFood.setFoodName(saveFood.getFoodName());
+					tempFood.setFoodPrice(saveFood.getFoodPrice());
+					tempFood.setProfile(profileRepo.findByprofileId(profileID));
+					tempFood.setVersion(saveFood.getVersion()+1);
+					resultFood=foodRepo.saveAndFlush(tempFood);
+					if(resultFood== null) {
+						throw new UserServiceException(ErrorServiceMessage.NO_FOOD_RECORDS_UPDATE_UNSUCCESSFULL);
+					}
+				}else {
+					throw new UserServiceException(ErrorServiceMessage.INVALID_FOOD_VERSION+tempFood.getVersion());
+				}
+			}else {
+				throw new UserServiceException(ErrorServiceMessage.INVALID_FOOD_PROFILE_ID);
+			}
+		} catch (UserServiceException e) {
+			LogService.setLogger(e.getMessage());
+			return ResponseEntityResult.internalServerError(e.getMessage());
+		}
+		return ResponseEntityResult.successResponseEntity(resultFood);
 	}
 
 	private ResponseEntity<?> deleteFoodDetails(Integer profileID, Integer foodID) {
-		// TODO Auto-generated method stub
-		return null;
+		String result=null;
+		try {
+			this.checkProfileIsOrNot(profileID);
+			Food tempFood=this.getFoodById(foodID);
+			if(tempFood.getProfile().getProfileId()==profileID) {
+				foodRepo.delete(tempFood);
+				result=ErrorServiceMessage.FOOD_DELETE_SUCCESS_MESSAGE;
+			}else {
+				throw new UserServiceException("Please provide correct food id and profile id");
+			}
+		} catch (UserServiceException e) {
+			LogService.setLogger(e.getMessage());
+			return ResponseEntityResult.internalServerError(e.getMessage());
+		}
+		return ResponseEntityResult.successResponseEntity(result);
+	}
+	
+	//------------- Common method Declarations	
+	public void checkProfileIsOrNot(Integer profileId) {
+		if (!profileRepo.existsById(profileId)) {
+			throw new UserServiceException(ErrorServiceMessage.NO_REC_PROFILE + profileId);
+		}
+	}
+
+	public Food getFoodById(Integer foodID) {
+		return foodRepo.findByFoodId(foodID);
 	}
 }
