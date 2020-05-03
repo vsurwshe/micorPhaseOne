@@ -49,5 +49,7 @@
   	<module>food</module>
   	<module>customer</module>
   	<module>hotel-tabel</module>
+  	<module>payment</module>
+  	<module>address</module>
   </modules>
 </project>

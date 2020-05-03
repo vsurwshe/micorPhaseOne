@@ -1,4 +1,4 @@
-package org.profile.controller;
+package org.payment.controller;
 
 import java.util.List;
 

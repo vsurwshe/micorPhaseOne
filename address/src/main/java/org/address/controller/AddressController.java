@@ -1,4 +1,4 @@
-package org.profile.controller;
+package org.address.controller;
 
 
 import java.util.Optional;

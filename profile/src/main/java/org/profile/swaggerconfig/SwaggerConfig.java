@@ -17,6 +17,7 @@ public class SwaggerConfig {
 	@Bean
 	public Docket customDocket() {
 		return new Docket(DocumentationType.SWAGGER_2)
+				.groupName("ProfileAPI")
 				.select()
 				.apis(RequestHandlerSelectors.basePackage("org.profile.controller"))
 				.build()
@@ -49,6 +50,24 @@ public class SwaggerConfig {
 				.groupName("HotelTabelAPI")
 				.select()
 				.apis(RequestHandlerSelectors.basePackage("org.hoteltabel.controller"))
+				.build()
+				.apiInfo(apiInfo());
+	}
+	@Bean
+	public Docket paymentDocket() {
+		return new Docket(DocumentationType.SWAGGER_2)
+				.groupName("PaymentAPI")
+				.select()
+				.apis(RequestHandlerSelectors.basePackage("org.payment.controller"))
+				.build()
+				.apiInfo(apiInfo());
+	}
+	
+	public Docket addressDocket() {
+		return new Docket(DocumentationType.SWAGGER_2)
+				.groupName("AddressAPI")
+				.select()
+				.apis(RequestHandlerSelectors.basePackage("org.address.controller"))
 				.build()
 				.apiInfo(apiInfo());
 	}

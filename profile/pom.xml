@@ -119,6 +119,14 @@
 			<groupId>com.vany.hotel-tabel</groupId>
 			<artifactId>hotel-tabel</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>com.vany</groupId>
+			<artifactId>payment</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.vany</groupId>
+			<artifactId>address</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -170,6 +178,16 @@
 			<dependency>
 				<groupId>com.vany.customer</groupId>
 				<artifactId>customer</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>com.vany</groupId>
+				<artifactId>payment</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>com.vany</groupId>
+				<artifactId>address</artifactId>
 				<version>0.0.1-SNAPSHOT</version>
 			</dependency>
 		</dependencies>

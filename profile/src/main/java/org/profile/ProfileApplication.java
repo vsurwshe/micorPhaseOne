@@ -18,6 +18,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 	"org.customer",
 	"org.food",
 	"org.hoteltabel",
+	"org.payment",
+	"org.address",
 	"org.profile"
 })
 @EnableJpaRepositories("org.repository")
