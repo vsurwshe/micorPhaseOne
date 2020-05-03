@@ -35,8 +35,8 @@ public class Payments {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "pay_id")
-	private Integer payId;
+	@Column(name = "payment_id")
+	private Integer paymentId;
 
 	@Column(name = "mode")
 	private PaymentMode mode;
@@ -79,12 +79,12 @@ public class Payments {
 	@JsonIgnore
 	private Date updatedAt;
 
-	public Integer getPayId() {
-		return payId;
+	public Integer getPaymentId() {
+		return paymentId;
 	}
 
-	public void setPayId(Integer payId) {
-		this.payId = payId;
+	public void setPaymentId(Integer paymentId) {
+		this.paymentId = paymentId;
 	}
 
 	public PaymentMode getMode() {
@@ -135,22 +135,6 @@ public class Payments {
 		this.version = version;
 	}
 
-	public Date getCreatedAt() {
-		return createdAt;
-	}
-
-	public void setCreatedAt(Date createdAt) {
-		this.createdAt = createdAt;
-	}
-
-	public Date getUpdatedAt() {
-		return updatedAt;
-	}
-
-	public void setUpdatedAt(Date updatedAt) {
-		this.updatedAt = updatedAt;
-	}
-
 	public UserDet getUser() {
 		return user;
 	}
@@ -167,4 +151,26 @@ public class Payments {
 		this.invoice = invoice;
 	}
 
+	public Date getCreatedAt() {
+		return createdAt;
+	}
+
+	public void setCreatedAt(Date createdAt) {
+		this.createdAt = createdAt;
+	}
+
+	public Date getUpdatedAt() {
+		return updatedAt;
+	}
+
+	public void setUpdatedAt(Date updatedAt) {
+		this.updatedAt = updatedAt;
+	}
+
+	@Override
+	public String toString() {
+		return "Payments [paymentId=" + paymentId + ", mode=" + mode + ", transctionsId=" + transctionsId + ", amount="
+				+ amount + ", tarnsDate=" + tarnsDate + ", verify=" + verify + ", version=" + version + ", user=" + user
+				+ ", invoice=" + invoice + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt + "]";
+	}
 }

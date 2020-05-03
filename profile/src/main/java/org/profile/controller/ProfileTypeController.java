@@ -35,7 +35,7 @@ public class ProfileTypeController {
         try {
             profileType=  profileTypeRepo.findAll();
             if(profileType.isEmpty()){
-                return ResponseEntityResult.badRequest(ErrorServiceMessage.NO_REC_PROFILETYPE);
+                return ResponseEntityResult.badRequest(ErrorServiceMessage.NO_PROFILETYPE_RECORD);
             }         
         } catch (Exception e) {
             LogService.setLogger(e.getMessage());

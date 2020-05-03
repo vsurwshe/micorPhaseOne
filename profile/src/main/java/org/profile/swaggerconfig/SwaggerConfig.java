@@ -2,8 +2,6 @@ package org.profile.swaggerconfig;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.spi.DocumentationType;
@@ -13,7 +11,6 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @Configuration
 @EnableSwagger2
 public class SwaggerConfig {
-
 	@Bean
 	public Docket customDocket() {
 		return new Docket(DocumentationType.SWAGGER_2)
@@ -23,7 +20,6 @@ public class SwaggerConfig {
 				.build()
 				.apiInfo(apiInfo());
 	}
-
 	@Bean
 	public Docket customerDocket() {
 		return new Docket(DocumentationType.SWAGGER_2)
@@ -43,7 +39,7 @@ public class SwaggerConfig {
 				.build()
 				.apiInfo(apiInfo());
 	}
-	
+
 	@Bean
 	public Docket hotelTabelDocket() {
 		return new Docket(DocumentationType.SWAGGER_2)
@@ -63,6 +59,7 @@ public class SwaggerConfig {
 				.apiInfo(apiInfo());
 	}
 	
+	@Bean
 	public Docket addressDocket() {
 		return new Docket(DocumentationType.SWAGGER_2)
 				.groupName("AddressAPI")

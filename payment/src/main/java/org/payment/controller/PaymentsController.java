@@ -31,6 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
 //@RequestMapping(value = "/{userId}")
 public class PaymentsController {
 
+	//------------- Global Variable Declarations	
 	@Autowired
 	private PaymentsRepository paymentsRepo;
 
@@ -40,6 +41,7 @@ public class PaymentsController {
 	@Autowired
 	public UserRepository userRepo;
 
+	//----------- API Method Declarations	
 	// This method get payment by payment id
 	@GetMapping(value = "/{userId}/payment/{paymentId}")
 	public ResponseEntity<?> findPaymentsById(@PathVariable(value = "userId") Integer userId,
@@ -47,7 +49,7 @@ public class PaymentsController {
 		return this.getPaymentById(userId, paymentId);
 	}
 
-	// This method get payment by transtion date
+	// This method get payment by transaction date
 	@GetMapping(value = "/{userId}/payment/transctionDate/{transDate}")
 	public ResponseEntity<?> findPaymentsByTranscationDate(@PathVariable(value = "userId") Integer userId,
 			@PathVariable(value = "transDate") String transctionDate) {
@@ -87,9 +89,9 @@ public class PaymentsController {
 		Payments pay = null;
 		try {
 		    this.checkPaymentIsOrNot(paymentId);
-			pay = paymentsRepo.findByPaymentIdAndUserId(paymentId, userId);
+			pay = paymentsRepo.findBypaymentIdAndUserId(paymentId, userId);
 			if (pay.equals(null)) {
-				throw new CustomeException(userId + ErrorServiceMessage.NO_REC_PROFILE_WITH_PAYMENT+ paymentId);
+				throw new CustomeException(userId + ErrorServiceMessage.NO_PAYMENT_WITH_PROFILE_RECORD+ paymentId);
 			}
 
 		} catch (CustomeException e) {
@@ -122,7 +124,7 @@ public class PaymentsController {
 		Payments userPay = null;
 		try {
 			this.checkPaymentIsOrNot(paymentId);
-			Payments tempPayments = paymentsRepo.findByPaymentIdAndUserId(paymentId,userId);
+			Payments tempPayments = paymentsRepo.findBypaymentIdAndUserId(paymentId,userId);
 			// this condition checking version by send user and current object
 			if (tempPayments.getVersion().equals(payments.getVersion())) {
 				tempPayments.setAmount(payments.getAmount());
@@ -133,13 +135,12 @@ public class PaymentsController {
 				tempPayments.setVersion(tempPayments.getVersion() + 1);
 				userPay = paymentsRepo.saveAndFlush(tempPayments);
 			} else {
-
-				return ResponseEntityResult.badRequest(payments.getVersion()
-						+ ErrorServiceMessage.PROFILE_UPDATE_WORNG_VERSION + tempPayments.getVersion());
+				throw new UserServiceException(payments.getVersion()
+						+ ErrorServiceMessage.INVLIAD_PAYMENT_UPDATE_VERSION + tempPayments.getVersion());
 			}
-		} catch (Exception e) {
+		} catch (UserServiceException e) {
 			LogService.setLogger(e.getMessage());
-			return ResponseEntityResult.badRequest(e.getMessage());
+			return ResponseEntityResult.internalServerError(e.getMessage());
 		}
 		return ResponseEntityResult.successResponseEntity(userPay);
 	}
@@ -149,9 +150,9 @@ public class PaymentsController {
 		String userDeleteMessage = null;
 		try {
 			this.checkPaymentIsOrNot(paymentId);
-			Payments tempPayments = paymentsRepo.findByPaymentIdAndUserId(paymentId,userId);
+			Payments tempPayments = paymentsRepo.findBypaymentIdAndUserId(paymentId,userId);
 			if(tempPayments.equals(null)){
-				throw new UserServiceException(userId+" this profile id related with this pyment id no record found "+paymentId );
+				throw new UserServiceException(userId+ErrorServiceMessage.NO_PAYMENT_WITH_PROFILE_RECORD+paymentId );
 			}
 			paymentsRepo.delete(tempPayments);
 			userDeleteMessage = paymentId + ErrorServiceMessage.PAYMENT_DELETE_SUCCESS;
@@ -162,15 +163,18 @@ public class PaymentsController {
 		return ResponseEntityResult.successResponseEntity(userDeleteMessage);
 	}
 
-	// This method find the payments list by transcions date
+	// This method find the payments list by transaction date
 	private ResponseEntity<?> getPaymentByTransctionDate(Integer paymentId, String transctionDate) {
 		List<Payments> userPayments = null;
 		try {
 			this.checkPaymentIsOrNot(paymentId);
 			userPayments = paymentsRepo.findBytarnsDate(transctionDate);
-		} catch (Exception e) {
+		    if(userPayments.isEmpty()) {
+		    	throw new UserServiceException(ErrorServiceMessage.NO_PAYMENT_RECORD);
+		    }
+		} catch (UserServiceException e) {
 			LogService.setLogger(e.getMessage());
-			return ResponseEntityResult.badRequest(e.getMessage());
+			return ResponseEntityResult.internalServerError(e.getMessage());
 		}
 		return ResponseEntityResult.successResponseEntity(userPayments);
 	}
@@ -180,10 +184,10 @@ public class PaymentsController {
 		UserDet resultUserDet = null;
 		try {
 			this.checkPaymentIsOrNot(paymentId);
-			PaymentVerified verifyValue = paymentsRepo.findByPaymentId(paymentId).getVerify();
+			PaymentVerified verifyValue = paymentsRepo.findBypaymentId(paymentId).getVerify();
 			if(verifyValue != PaymentVerified.YES) {
-				UserDet userTemp= paymentsRepo.findByPaymentId(paymentId).getUser();
-				Payments paymentTemp=paymentsRepo.findByPaymentId(paymentId);
+				UserDet userTemp= paymentsRepo.findBypaymentId(paymentId).getUser();
+				Payments paymentTemp=paymentsRepo.findBypaymentId(paymentId);
 				double userBalance= userTemp.getUserBalance();
 				double paymentAmount=paymentTemp.getAmount();
 				double mainBalance=userBalance+paymentAmount;
@@ -192,22 +196,18 @@ public class PaymentsController {
 				paymentsRepo.saveAndFlush(paymentTemp);
 				resultUserDet = userRepo.saveAndFlush(userTemp);
 			}else {
-				throw new UserServiceException("You Allredy Verified this Payment "+paymentId);
+				throw new UserServiceException(ErrorServiceMessage.PAYMENT_ALREADY_VERIFIED+paymentId);
 			}
 		} catch (UserServiceException e) {
 			LogService.setLogger(e.getMessage());
 			return ResponseEntityResult.internalServerError(e.getMessage());
-		}catch (Exception e) {
-			LogService.setLogger(e.getMessage());
-			return ResponseEntityResult.badRequest(e.getMessage());
 		}
 		return ResponseEntityResult.successResponseEntity(resultUserDet);
 	}
 
 	public void checkPaymentIsOrNot(Integer paymentId) {
-		if (!paymentsRepo.existsBypayId(paymentId)) {
-			throw new UserServiceException(paymentId + ErrorServiceMessage.NO_REC_PAYMENT);
+		if (!paymentsRepo.existsBypaymentId(paymentId)) {
+			throw new UserServiceException(paymentId + ErrorServiceMessage.NO_PAYMENT_RECORD);
 		}
 	}
-
 }

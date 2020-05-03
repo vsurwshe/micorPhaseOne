@@ -123,7 +123,7 @@ public class ProfileController {
 		try {
 			profiles = this.getUser().getProfile();
 			if (profiles.isEmpty()) {
-				throw new UserServiceException(ErrorServiceMessage.NO_REC_PROFILE);
+				throw new UserServiceException(ErrorServiceMessage.NO_PROFILE_RECORD);
 			}
 		} catch (UserServiceException e) {
 			LogService.setLogger(e.getMessage());
@@ -141,14 +141,11 @@ public class ProfileController {
 		try {
 			profile = profileRepo.findById(profileId);
 			if (profile != null) {
-				throw new UserServiceException(ErrorServiceMessage.NO_REC_PROFILE + profileId);
+				throw new UserServiceException(ErrorServiceMessage.NO_PROFILE_RECORD + profileId);
 			}
 		} catch (UserServiceException e) {
 			LogService.setLogger(e.getMessage());
 			return ResponseEntityResult.notFound(e.getMessage());
-		} catch (Exception e) {
-			LogService.setLogger(e.getMessage());
-			return ResponseEntityResult.badRequest(e.getMessage());
 		}
 		return ResponseEntityResult.successResponseEntity(profile);
 	}
@@ -197,10 +194,10 @@ public class ProfileController {
 					}
 				} else {
 					throw new UserServiceException(profile.getVersion()
-							+ ErrorServiceMessage.PROFILE_UPDATE_WORNG_VERSION + tempProfile.getVersion());
+							+ ErrorServiceMessage.INVLIAD_PROFILE_VERSION + tempProfile.getVersion());
 				}
 			} else {
-				throw new UserServiceException(ErrorServiceMessage.NO_REC_PROFILE + profileId);
+				throw new UserServiceException(ErrorServiceMessage.NO_PROFILE_RECORD + profileId);
 			}
 
 		} catch (UserServiceException e) {
@@ -219,7 +216,7 @@ public class ProfileController {
 		try {
 			payments = paymentRepo.findPaymentsByUserId(userId);
 			if (payments.isEmpty()) {
-				throw new UserServiceException(ErrorServiceMessage.NO_REC_PROFILE + userId);
+				throw new UserServiceException(ErrorServiceMessage.NO_PROFILE_RECORD + userId);
 			}
 		} catch (UserServiceException e) {
 			LogService.setLogger(e.getMessage());
@@ -240,7 +237,7 @@ public class ProfileController {
 				profileRepo.deleteById(profileId);
 				deleteMessage = ErrorServiceMessage.PROFILE_DELETE_SUCCESS;
 			} else {
-				throw new UserServiceException(ErrorServiceMessage.NO_REC_PROFILE + profileId);
+				throw new UserServiceException(ErrorServiceMessage.NO_PROFILE_RECORD + profileId);
 			}
 		} catch (UserServiceException e) {
 			LogService.setLogger(e.getMessage());
@@ -258,7 +255,7 @@ public class ProfileController {
 		try {
 			address = addressRepo.findAddressByProfileId(profileId);
 			if (address.isEmpty()) {
-				throw new UserServiceException(ErrorServiceMessage.PROFILE_NOT_FOUND_ADDRESS + profileId);
+				throw new UserServiceException(ErrorServiceMessage.NO_PROFILE_ADDRESS_RECORD_FOUND + profileId);
 			}
 		} catch (UserServiceException e) {
 			LogService.setLogger(e.getMessage());
@@ -315,7 +312,7 @@ public class ProfileController {
 		try {
 			payments = paymentRepo.findAll();
 			if (payments.isEmpty()) {
-				throw new UserServiceException(ErrorServiceMessage.NO_REC_PAYMENT);
+				throw new UserServiceException(ErrorServiceMessage.NO_PAYMENT_RECORD);
 			}
 		} catch (UserServiceException e) {
 			LogService.setLogger(e.getMessage());
@@ -343,7 +340,7 @@ public class ProfileController {
 	// This method checking profile is there not
 	public void checkProfileIsOrNot(Integer profileId) {
 		if (!profileRepo.existsById(profileId)) {
-			throw new UserServiceException(ErrorServiceMessage.NO_REC_PROFILE + profileId);
+			throw new UserServiceException(ErrorServiceMessage.NO_PROFILE_RECORD + profileId);
 		}
 	}
 

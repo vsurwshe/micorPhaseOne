@@ -34,7 +34,8 @@ public class Address {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@ApiModelProperty(notes = "Address Id is Automated Genrated")
-	private Integer addId;
+	@Column(name = "address_id")
+	private Integer addressId;
 
 	@Column(name="address1")
 	@ApiModelProperty(notes = " Address1 String Value Optional ")
@@ -81,12 +82,12 @@ public class Address {
 	@JsonIgnore
 	private Date updatedAt;
 
-	public Integer getAddId() {
-		return addId;
+	public Integer getAddressId() {
+		return addressId;
 	}
 
-	public void setAddId(Integer addId) {
-		this.addId = addId;
+	public void setAddressId(Integer addressId) {
+		this.addressId = addressId;
 	}
 
 	public String getAddress1() {
@@ -168,5 +169,11 @@ public class Address {
 	public void setUpdatedAt(Date updatedAt) {
 		this.updatedAt = updatedAt;
 	}
-	
+
+	@Override
+	public String toString() {
+		return "Address [addressId=" + addressId + ", address1=" + address1 + ", address2=" + address2 + ", district="
+				+ district + ", state=" + state + ", country=" + country + ", phoneNo=" + phoneNo + ", version="
+				+ version + ", profile=" + profile + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt + "]";
+	}
 }

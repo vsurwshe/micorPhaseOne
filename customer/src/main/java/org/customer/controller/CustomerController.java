@@ -164,7 +164,7 @@ public class CustomerController {
 	// This method checking profile is there not
 	public void checkProfileIsOrNot(Integer profileId) {
 		if (!profileRepo.existsById(profileId)) {
-			throw new UserServiceException(ErrorServiceMessage.NO_REC_PROFILE + profileId);
+			throw new UserServiceException(ErrorServiceMessage.NO_PROFILE_RECORD + profileId);
 		}
 	}
 

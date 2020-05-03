@@ -179,7 +179,7 @@ public class UserController {
 			userTokenResponse.setUserDetails(userRepo.findByUserEmail(userDetails.getUsername()));
 		} catch (Exception e) {
 			LogService.setLogger(e.getMessage());
-			throw new UserServiceException(ErrorServiceMessage.NOT_VALID_USER + " " + e.getMessage());
+			throw new UserServiceException(ErrorServiceMessage.INVALID_USER + " " + e.getMessage());
 		}
 		return userTokenResponse;
 	}
@@ -189,7 +189,7 @@ public class UserController {
 		try {
 			userResult = userRepo.findByAllUser();
 			if (userResult == null) {
-				throw new UserServiceException(ErrorServiceMessage.NOT_VALID_USER);
+				throw new UserServiceException(ErrorServiceMessage.INVALID_USER);
 			}
 		} catch (Exception e) {
 			return ResponseEntityResult.internalServerError(e.getMessage());
@@ -206,10 +206,10 @@ public class UserController {
 					tempUserDetails.setEnabled(true);
 					userResult = userRepo.saveAndFlush(tempUserDetails);
 				} else {
-					throw new UserServiceException(verificationsCode + ErrorServiceMessage.VERIFY_CODE_WORNG);
+					throw new UserServiceException(verificationsCode + ErrorServiceMessage.VERIFY_CODE_WORNG_MESSAGE);
 				}
 			} else {
-				throw new UserServiceException(tempUserDetails.getUserEmail() + ErrorServiceMessage.VERIFY_USER_WORNG);
+				throw new UserServiceException(tempUserDetails.getUserEmail() + ErrorServiceMessage.VERIFY_USER_WORNG_MESSAGE);
 			}
 		} catch (UserServiceException e) {
 			return ResponseEntityResult.internalServerError(e.getMessage());
