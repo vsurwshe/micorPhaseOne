@@ -127,6 +127,10 @@
 			<groupId>com.vany</groupId>
 			<artifactId>address</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>com.vany</groupId>
+			<artifactId>foodInvoice</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -188,6 +192,11 @@
 			<dependency>
 				<groupId>com.vany</groupId>
 				<artifactId>address</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>com.vany</groupId>
+				<artifactId>foodInvoice</artifactId>
 				<version>0.0.1-SNAPSHOT</version>
 			</dependency>
 		</dependencies>

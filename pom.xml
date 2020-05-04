@@ -51,5 +51,6 @@
   	<module>hotel-tabel</module>
   	<module>payment</module>
   	<module>address</module>
+  	<module>foodInvoice</module>
   </modules>
 </project>

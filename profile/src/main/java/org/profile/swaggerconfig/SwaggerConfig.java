@@ -69,6 +69,16 @@ public class SwaggerConfig {
 				.apiInfo(apiInfo());
 	}
 	
+	@Bean
+	public Docket foodInvoiceDocket() {
+		return new Docket(DocumentationType.SWAGGER_2)
+				.groupName("FoodInvoiceAPI")
+				.select()
+				.apis(RequestHandlerSelectors.basePackage("org.foodinvoice.controller"))
+				.build()
+				.apiInfo(apiInfo());
+	}
+	
 	@SuppressWarnings("deprecation")
 	private ApiInfo apiInfo() {
 		 return new ApiInfo("V & Y SOFT. TECH. PVT. LTD.", 

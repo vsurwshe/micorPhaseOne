@@ -44,15 +44,13 @@ public class PaymentsController {
 	//----------- API Method Declarations	
 	// This method get payment by payment id
 	@GetMapping(value = "/{userId}/payment/{paymentId}")
-	public ResponseEntity<?> findPaymentsById(@PathVariable(value = "userId") Integer userId,
-			@PathVariable(value = "paymentId") Integer paymentId) {
+	public ResponseEntity<?> findPaymentsById(@PathVariable(value = "userId") Integer userId, @PathVariable(value = "paymentId") Integer paymentId) {
 		return this.getPaymentById(userId, paymentId);
 	}
 
 	// This method get payment by transaction date
 	@GetMapping(value = "/{userId}/payment/transctionDate/{transDate}")
-	public ResponseEntity<?> findPaymentsByTranscationDate(@PathVariable(value = "userId") Integer userId,
-			@PathVariable(value = "transDate") String transctionDate) {
+	public ResponseEntity<?> findPaymentsByTranscationDate(@PathVariable(value = "userId") Integer userId, @PathVariable(value = "transDate") String transctionDate) {
 		return this.getPaymentByTransctionDate(userId, transctionDate);
 	}
 

@@ -64,5 +64,18 @@ public class ErrorServiceMessage {
 	public static final String INVALID_HOTEL_TABLE_AND_PROFILE_IDS="Please provide correct profile id and hotel tabel id";
 	public static final String INVALID_HOTEL_TABEL_VERSION= "Please correct version of hotel table provicd, excepted version ";
 	public static final String HOTEL_TABEL_DElETE_MESSAGE="your hotel table data deleted successfully !";
+	
+	//------- Food Invoice
+	public static final String NO_FOOD_INVOICE_RECORD="Sorry there is no food invoice records";
+	public static final String INVALID_FOOD_INVOICE_WITH_PROFILE_IDS="Please provide the correct profile id with food invoice id";
+	public static final String NO_FOOD_INVOICE_SAVED="Sorry your food invoice is not saved successfully";
+	public static final String NO_FOOD_INVOICE_UPDATED="Sorry your food invoice is not updated successfully";
+	public static final String INVALID_FOOD_INVOICE_VERSION="Please provide the correct version,excpeted version is ";
+	public static final String FOOD_INVOICE_DELETE_MESSAGE="Your food invoice deleted successfully!";
+	
 }
+
+
+
+
 

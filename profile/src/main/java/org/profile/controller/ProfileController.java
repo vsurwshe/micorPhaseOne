@@ -6,6 +6,7 @@ import org.domain.entity.profile.Profile;
 import org.domain.entity.user.UserDet;
 import org.domain.model.enu.ProfileFeature;
 import org.domain.model.enu.ProfileType;
+import org.domain.result.model.PaymentResult;
 import org.exception.exec.UserServiceException;
 import org.repository.address.AddressRepository;
 import org.repository.payment.PaymentsRepository;
@@ -40,6 +41,7 @@ import javax.validation.Valid;
 @CrossOrigin(origins = "*")
 public class ProfileController {
 
+	//---------- Global Variable declarations	
 	@Autowired
 	public ProfileRespositery profileRepo;
 
@@ -55,6 +57,7 @@ public class ProfileController {
 	@Autowired
 	public ProfileTypeRepository profileTypeRepo;
 
+	//----------- API Method declarations	
 	@GetMapping(value = "/getUserDetails")
 	private ResponseEntity<?> findUserDeatils(){
 	 UserDet userResult= this.getUser();
@@ -116,7 +119,7 @@ public class ProfileController {
 		return this.getAllPayments();
 	}
 
-	// ----------- Custom profile find
+	// ----------- Custom Method decorations
 	// This method get all profiles
 	public ResponseEntity<?> getAllProfiles() {
 		Set<Profile> profiles = null;
@@ -308,11 +311,15 @@ public class ProfileController {
 	}
 
 	private ResponseEntity<?> getAllPayments() {
-		List<Payments> payments = null;
+		List<PaymentResult> payments = null;
 		try {
-			payments = paymentRepo.findAll();
-			if (payments.isEmpty()) {
+			if (paymentRepo.findAll().isEmpty()) {
 				throw new UserServiceException(ErrorServiceMessage.NO_PAYMENT_RECORD);
+			}else {
+				payments = new ArrayList<PaymentResult>();
+				for (Payments payment : paymentRepo.findAll()) {
+					payments.add(new PaymentResult(payment.getPaymentId(), payment.getMode(), payment.getTransctionsId(),payment.getAmount(),payment.getTarnsDate(),payment.getVerify(),payment.getVersion(), payment.getUser().getUserId()));
+				}
 			}
 		} catch (UserServiceException e) {
 			LogService.setLogger(e.getMessage());
