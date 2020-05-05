@@ -21,6 +21,7 @@ import javax.validation.constraints.NotNull;
 
 import org.domain.entity.payments.Payments;
 import org.domain.entity.profile.Profile;
+import org.domain.entity.profileinvoice.ProfileInvoice;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -86,6 +87,10 @@ public class UserDet {
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user")
 	@JsonIgnore
 	private Set<Payments> payments = new HashSet<Payments>();
+	
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user")
+	@JsonIgnore
+	private Set<ProfileInvoice> profileInvoice = new HashSet<ProfileInvoice>();
 
 	public Integer getUserId() {
 		return userId;

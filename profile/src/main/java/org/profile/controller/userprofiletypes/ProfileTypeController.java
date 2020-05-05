@@ -1,4 +1,4 @@
-package org.profile.controller;
+package org.profile.controller.userprofiletypes;
 
 import java.util.List;
 

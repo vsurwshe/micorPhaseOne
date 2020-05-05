@@ -1,4 +1,4 @@
-package org.profile.controller;
+package org.profile.controller.userprofile;
 
 import org.domain.entity.address.Address;
 import org.domain.entity.payments.Payments;
