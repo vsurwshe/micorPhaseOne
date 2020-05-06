@@ -15,7 +15,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @ComponentScan({
 	"org.invoice"
 })
-@EnableJpaRepositories("org.repository.repo")
+@EnableJpaRepositories("org.repository")
 public class InvoiceApplication {
 
 	public static void main(String[] args) {
