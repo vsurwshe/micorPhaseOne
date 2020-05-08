@@ -40,6 +40,13 @@ public class CustomerController {
 	public ResponseEntity<?> findAllCustomer(@PathVariable("profileID") Integer profileID) {
 		return this.getAllCustomer(profileID);
 	}
+	
+	@GetMapping(value = "/customer/gets")
+	public ResponseEntity<?> findCustomerByProfile(@PathVariable("profileID") Integer profileID) {
+		return this.getCustomerByProfile(profileID);
+	}
+
+	
 
 	@GetMapping(value = "/customer/getAll/{customerID}")
 	public ResponseEntity<?> findCustomerByID(@PathVariable("profileID") Integer profileID,
@@ -66,6 +73,21 @@ public class CustomerController {
 	}
 
 	// ----------------- Custom Method Implemented Sections
+	private ResponseEntity<?> getCustomerByProfile(Integer profileID) {
+		List<Customer> resultCustomers=null;
+		try {
+			this.checkProfileIsOrNot(profileID);
+			resultCustomers=customerRepo.findByProfileId(profileID);
+			if(resultCustomers.isEmpty()) {
+				throw new UserServiceException(ErrorServiceMessage.NO_CUSTOMER_RECORDS_FOUND);
+			}
+		} catch (UserServiceException e) {
+			LogService.setLogger(e.getMessage());
+			return ResponseEntityResult.internalServerError(e.getMessage());
+		}
+		return ResponseEntityResult.successResponseEntity(resultCustomers);
+	}
+	
 	private ResponseEntity<?> getAllCustomer(Integer profileID) {
 		List<Customer> listOfCustomer = null;
 		try {
@@ -120,7 +142,7 @@ public class CustomerController {
 			this.checkProfileIsOrNot(profileID);
 			Customer tempCustomer = this.getCustomerById(customerID);
 			if (tempCustomer.getProfile().getProfileId() == profileID) {
-				if (tempCustomer.getVersion() == saveCustomer.getVersion()) {
+				if (tempCustomer.getVersion().equals(saveCustomer.getVersion())) {
 					tempCustomer.setCustomerAddress(saveCustomer.getCustomerAddress());
 					tempCustomer.setCustomerEmail(saveCustomer.getCustomerEmail());
 					tempCustomer.setCustomerMobileNo(saveCustomer.getCustomerMobileNo());

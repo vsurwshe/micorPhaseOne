@@ -28,29 +28,30 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @EntityListeners(AuditingEntityListener.class)
 @JsonIgnoreProperties(value = { "createdAt", "updatedAt" }, allowGetters = true)
 public class HotelTabel {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer HotelTabelId;
-	
-	@Column(name="hotel_name")
-	private String HotelName;
-	
-	@Column(name = "hotel_tabel_szie" )
-	private Integer HotelTabelSize;
-	
-	@Column(name = "hotel_locations")
-	private String HotelLocations;
-	
+	@Column(name = "hotel_table_id")
+	private Integer HotelTableId;
+
+	@Column(name = "hotel_table_name")
+	private String HotelTableName;
+
+	@Column(name = "hotel_table_szie")
+	private Integer HotelTableSize;
+
+	@Column(name = "hotel_table_locations")
+	private String HotelTableLocations;
+
 	@Column(name = "version")
 	private Double version;
-	
+
 	// Many Address Have One User
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "profile_id", nullable = false)
 	@JsonIgnore
 	private Profile profile;
-	
+
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "created_at", nullable = false, updatable = false)
 	@CreatedDate
@@ -63,36 +64,36 @@ public class HotelTabel {
 	@JsonIgnore
 	private Date updatedAt;
 
-	public Integer getHotelTabelId() {
-		return HotelTabelId;
+	public Integer getHotelTableId() {
+		return HotelTableId;
 	}
 
-	public void setHotelTabelId(Integer hotelTabelId) {
-		HotelTabelId = hotelTabelId;
+	public void setHotelTableId(Integer hotelTableId) {
+		HotelTableId = hotelTableId;
 	}
 
-	public String getHotelName() {
-		return HotelName;
+	public String getHotelTableName() {
+		return HotelTableName;
 	}
 
-	public void setHotelName(String hotelName) {
-		HotelName = hotelName;
+	public void setHotelTableName(String hotelTableName) {
+		HotelTableName = hotelTableName;
 	}
 
-	public Integer getHotelTabelSize() {
-		return HotelTabelSize;
+	public Integer getHotelTableSize() {
+		return HotelTableSize;
 	}
 
-	public void setHotelTabelSize(Integer hotelTabelSize) {
-		HotelTabelSize = hotelTabelSize;
+	public void setHotelTableSize(Integer hotelTableSize) {
+		HotelTableSize = hotelTableSize;
 	}
 
-	public String getHotelLocations() {
-		return HotelLocations;
+	public String getHotelTableLocations() {
+		return HotelTableLocations;
 	}
 
-	public void setHotelLocations(String hotelLocations) {
-		HotelLocations = hotelLocations;
+	public void setHotelTableLocations(String hotelTableLocations) {
+		HotelTableLocations = hotelTableLocations;
 	}
 
 	public Double getVersion() {

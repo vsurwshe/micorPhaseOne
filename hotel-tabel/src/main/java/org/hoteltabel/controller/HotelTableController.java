@@ -4,10 +4,8 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-import org.domain.entity.food.Food;
 import org.domain.entity.hoteltabel.HotelTabel;
 import org.exception.exec.UserServiceException;
-import org.hibernate.context.TenantIdentifierMismatchException;
 import org.repository.hoteltable.HotelTableRepository;
 import org.repository.profile.ProfileRespositery;
 import org.service.apiService.ErrorServiceMessage;
@@ -42,6 +40,11 @@ public class HotelTableController {
 	private ResponseEntity<?> findAllHotelTabel(@PathVariable("profileID") Integer profileID) {
 		return this.getAllHotelTabel(profileID);
 	}
+	
+	@GetMapping(value = "/hotelTable/gets")
+	private ResponseEntity<?> findHotelTabelByProfileID(@PathVariable("profileID") Integer profileID) {
+		return this.getHotelTabelByProfileID(profileID);
+	}
 
 	@GetMapping(value = "/hotelTable/get/{hotelTabelID}")
 	private ResponseEntity<?> findAllHotelTabel(@PathVariable("profileID") Integer profileID,
@@ -68,6 +71,21 @@ public class HotelTableController {
 	}
 
 	// ---------------- Custom Method Declarations
+	private ResponseEntity<?> getHotelTabelByProfileID(Integer profileID) {
+		List<HotelTabel> resultTabels=null;
+		try {
+			this.checkProfileIsOrNot(profileID);
+			resultTabels=hotelTableRepo.findByProfileId(profileID);
+			if(resultTabels.isEmpty()) {
+				throw new UserServiceException(ErrorServiceMessage.NO_HOTEL_TABEL_RECORDS_FOUND);
+			}
+		} catch (UserServiceException e) {
+			LogService.setLogger(e.getMessage());
+			return ResponseEntityResult.internalServerError(e.getMessage());
+		}
+		return ResponseEntityResult.successResponseEntity(resultTabels);
+	}
+	
 	private ResponseEntity<?> getAllHotelTabel(Integer profileID) {
 		List<HotelTabel> listHotelTabels = null;
 		try {
@@ -124,10 +142,10 @@ public class HotelTableController {
 			this.checkProfileIsOrNot(profileID);
 			HotelTabel tempHotelTabel = this.getHotelTabelById(hotelTableID);
 			if (tempHotelTabel.getProfile().getProfileId() == profileID) {
-				if (tempHotelTabel.getVersion() == saveHotelTabel.getVersion()) {
-					tempHotelTabel.setHotelLocations(saveHotelTabel.getHotelLocations());
-					tempHotelTabel.setHotelName(saveHotelTabel.getHotelName());
-					tempHotelTabel.setHotelTabelSize(saveHotelTabel.getHotelTabelSize());
+				if (tempHotelTabel.getVersion().equals(saveHotelTabel.getVersion())) {
+					tempHotelTabel.setHotelTableLocations(saveHotelTabel.getHotelTableLocations());
+					tempHotelTabel.setHotelTableName(saveHotelTabel.getHotelTableName());
+					tempHotelTabel.setHotelTableSize(saveHotelTabel.getHotelTableSize());
 					tempHotelTabel.setProfile(profileRepo.findByprofileId(profileID));
 					tempHotelTabel.setVersion(tempHotelTabel.getVersion() + 1);
 					resultHotelTabel = hotelTableRepo.saveAndFlush(tempHotelTabel);

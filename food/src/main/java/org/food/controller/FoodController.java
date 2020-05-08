@@ -41,6 +41,13 @@ public class FoodController {
 		return this.getAllFood(profileID);
 	}
 	
+	@GetMapping(value = "/food/gets")
+	private ResponseEntity<?> findFoodByProfileID(@PathVariable("profileID") Integer profileID) {
+		return this.getFoodByProfileID(profileID);
+	}
+	
+	
+
 	@GetMapping(value = "/food/getFood/{foodID}")
 	private ResponseEntity<?> findFoodById(@PathVariable("profileID") Integer profileID,@PathVariable("foodID") Integer foodID) {
 		return this.getFoodById(profileID,foodID);
@@ -64,6 +71,21 @@ public class FoodController {
 	}
 
 	// ---------------- Custom Method Declarations
+	private ResponseEntity<?> getFoodByProfileID(Integer profileID) {
+		List<Food> reslutFoods=null;
+		try {
+			this.checkProfileIsOrNot(profileID);
+			reslutFoods=foodRepo.findByProfileId(profileID);
+			if(reslutFoods.isEmpty()){
+				throw new UserServiceException(ErrorServiceMessage.NO_FOOD_RECORDS_FOUND);
+			}
+		} catch (UserServiceException e) {
+			LogService.setLogger(e.getMessage());
+			return ResponseEntityResult.internalServerError(e.getMessage());
+		}
+		return ResponseEntityResult.successResponseEntity(reslutFoods);
+	}
+	
 	private ResponseEntity<?> getAllFood(Integer profileID) {
 		List<Food> foodResult=null;
 		try {
@@ -117,7 +139,7 @@ public class FoodController {
 			this.checkProfileIsOrNot(profileID);
 			Food tempFood=this.getFoodById(foodID);
 			if(tempFood.getProfile().getProfileId()== profileID) {
-				if(tempFood.getVersion()==saveFood.getVersion()) {
+				if(tempFood.getVersion().equals(saveFood.getVersion())) {
 					tempFood.setFoodCategory(saveFood.getFoodCategory());
 					tempFood.setFoodName(saveFood.getFoodName());
 					tempFood.setFoodPrice(saveFood.getFoodPrice());

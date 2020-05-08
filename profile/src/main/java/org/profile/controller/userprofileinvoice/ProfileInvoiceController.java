@@ -9,7 +9,6 @@ import org.domain.entity.profileinvoice.ProfileInvoice;
 import org.domain.entity.profileinvoice.ProfileInvoiceItem;
 import org.domain.entity.user.UserDet;
 import org.exception.exec.UserServiceException;
-import org.repository.profile.ProfileRespositery;
 import org.repository.profile.ProfileTypeRepository;
 import org.repository.profileinvoice.ProfileInvoiceRepository;
 import org.repository.user.UserRepository;
@@ -21,38 +20,47 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/{userID}/profileInvoice")
+//@RequestMapping("/{userID}/profileInvoice")
 public class ProfileInvoiceController {
-	//--------- Global Variable Declarations
-	
+	// --------- Global Variable Declarations
+
 	@Autowired
 	private UserRepository userRepo;
-	
-	@Autowired
-	private ProfileRespositery profileRepo;
-	
+
 	@Autowired
 	private ProfileTypeRepository profileTypeRepo;
-	
+
 	@Autowired
 	private ProfileInvoiceRepository profileInvoiceRepo;
-	
-	//--------- API Method Declarations
-	@GetMapping("/get/{profileInvoiceID}")
-	public ResponseEntity<?> findProfileInvoiceByID(@PathVariable("userID")Integer userID,@PathVariable("profileInvoiceID")Integer profileInvoiceID) {
-		return this.getProfileInvoiceByID(userID,profileInvoiceID);
+
+	// --------- API Method Declarations
+	@GetMapping("/{userID}/profileInvoice/get/{profileInvoiceID}")
+	public ResponseEntity<?> findProfileInvoiceByID(@PathVariable("userID") Integer userID,
+			@PathVariable("profileInvoiceID") Integer profileInvoiceID) {
+		return this.getProfileInvoiceByID(userID, profileInvoiceID);
 	}
-	
+
+	@GetMapping("/profileInvoice/getAll")
+	public ResponseEntity<?> findAllProfileInvoice() {
+		return this.getAllProfileInvoice();
+	}
+
+	@PostMapping("/{userID}/profileInvoice/genrate/{invoiceDate}")
+	public ResponseEntity<?> genrateProfileInvoice(@PathVariable("userID") Integer userID,
+			@PathVariable("invoiceDate") String invoiceDate) {
+		return this.saveProfileInvoice(userID, invoiceDate);
+	}
+	// --------- API method Declarations
+
 	private ResponseEntity<?> getProfileInvoiceByID(Integer userID, Integer profileInvoiceID) {
-		ProfileInvoice resultProfileInvoice=null;
+		ProfileInvoice resultProfileInvoice = null;
 		try {
 			this.checkUserIsValidOrNot(userID);
 			resultProfileInvoice = profileInvoiceRepo.findByProfileInvoiceId(profileInvoiceID);
-			if(resultProfileInvoice==null) {
+			if (resultProfileInvoice == null) {
 				throw new UserServiceException(ErrorServiceMessage.NO_PROFILE_INVOICE_RECORD);
 			}
 		} catch (UserServiceException e) {
@@ -62,65 +70,44 @@ public class ProfileInvoiceController {
 		return ResponseEntityResult.successResponseEntity(resultProfileInvoice);
 	}
 
-	@PostMapping("/genrate/{invoiceDate}")
-	public ResponseEntity<?> genrateProfileInvoice(@PathVariable("userID")Integer userID,@PathVariable("invoiceDate")String invoiceDate) {
-		return this.saveProfileInvoice(userID,invoiceDate);
-	}
-	
-	@GetMapping("/get/dates")
-	public ResponseEntity<?> findProfileInvoiceDates(@PathVariable("userID")Integer userID) {
-		return this.getProfileInvoiceDates(userID);
-	}
-	
-	//--------- API method Declarations	
-
-	private ResponseEntity<?> getProfileInvoiceDates(Integer userID) {
-		List<String> profileInvoiceDates=null;
-		try {
-			
-		} catch (UserServiceException e) {
-			LogService.setLogger(e.getMessage());
-			return ResponseEntityResult.internalServerError(e.getMessage());
-		}
-		return ResponseEntityResult.successResponseEntity(profileInvoiceDates);
-	}
-
 	private ResponseEntity<?> saveProfileInvoice(Integer userID, String invoiceDate) {
-		ProfileInvoice resultProfileInvoice=null;
+		ProfileInvoice resultProfileInvoice = null;
 		try {
 			this.checkUserIsValidOrNot(userID);
-			UserDet tempUserDet=userRepo.findByuserId(userID);
-			Set<Profile> tempProfileList=tempUserDet.getProfile();
-			Integer existInvoiceDate=profileInvoiceRepo.existsProfileInvoiceDate(invoiceDate, userID);
-			if(!(existInvoiceDate>0)) {
-				if(!tempProfileList.isEmpty()) {
-					resultProfileInvoice=profileInvoiceRepo.saveAndFlush(this.setProfileInvoice(invoiceDate,tempProfileList,tempUserDet));
-					if(resultProfileInvoice==null) {
+			UserDet tempUserDet = userRepo.findByuserId(userID);
+			Set<Profile> tempProfileList = tempUserDet.getProfile();
+			Integer existInvoiceDate = profileInvoiceRepo.existsProfileInvoiceDate(invoiceDate, userID);
+			if (!(existInvoiceDate > 0)) {
+				if (!tempProfileList.isEmpty()) {
+					resultProfileInvoice = profileInvoiceRepo
+							.saveAndFlush(this.setProfileInvoice(invoiceDate, tempProfileList, tempUserDet));
+					if (resultProfileInvoice == null) {
 						throw new UserServiceException(ErrorServiceMessage.NO_PROFILE_INVOICE_SAVED);
 					}
-				}else {
+				} else {
 					throw new UserServiceException(ErrorServiceMessage.NO_PROFILE_INVOICE_RECORD);
-				}	
-			}else {
+				}
+			} else {
 				throw new UserServiceException(ErrorServiceMessage.INVALID_USER_WITH_INVOICE_DATE);
 			}
-			
+
 		} catch (UserServiceException e) {
 			LogService.setLogger(e.getMessage());
 			return ResponseEntityResult.internalServerError(e.getMessage());
 		}
 		return ResponseEntityResult.successResponseEntity(resultProfileInvoice);
 	}
-	
+
 	private ProfileInvoice setProfileInvoice(String invoiceDate, Set<Profile> profileList, UserDet userDet) {
-		ProfileInvoice tempProfileInvoice=new ProfileInvoice();
+		ProfileInvoice tempProfileInvoice = new ProfileInvoice();
 		tempProfileInvoice.setProfileInvoiceDate(invoiceDate);
-		List<ProfileInvoiceItem> tempProfileInvoiceItem=new ArrayList<ProfileInvoiceItem>();
-		Double tempProfileInvoiceTotal =0.0;
+		List<ProfileInvoiceItem> tempProfileInvoiceItem = new ArrayList<ProfileInvoiceItem>();
+		Double tempProfileInvoiceTotal = 0.0;
 		for (Profile profile : profileList) {
-			Double tempCost=profileTypeRepo.findByType(profile.getType().toString());
-			tempProfileInvoiceTotal+=tempCost;
-			tempProfileInvoiceItem.add(new ProfileInvoiceItem(profile.getProfileName(),1,tempCost,tempCost, tempProfileInvoice));
+			Double tempCost = profileTypeRepo.findByType(profile.getType().toString());
+			tempProfileInvoiceTotal += tempCost;
+			tempProfileInvoiceItem
+					.add(new ProfileInvoiceItem(profile.getProfileName(), 1, tempCost, tempCost, tempProfileInvoice));
 		}
 		tempProfileInvoice.setUser(userDet);
 		tempProfileInvoice.setProfileInvoiceItem(tempProfileInvoiceItem);
@@ -129,10 +116,24 @@ public class ProfileInvoiceController {
 		return tempProfileInvoice;
 	}
 
-	//-------- Common method declarations
+	private ResponseEntity<?> getAllProfileInvoice() {
+		List<ProfileInvoice> resultProfileInvoices = null;
+		try {
+			resultProfileInvoices = profileInvoiceRepo.findAll();
+			if (resultProfileInvoices.isEmpty()) {
+				throw new UserServiceException(ErrorServiceMessage.NO_PROFILE_INVOICE_RECORD);
+			}
+		} catch (UserServiceException e) {
+			LogService.setLogger(e.getMessage());
+			return ResponseEntityResult.internalServerError(e.getMessage());
+		}
+		return ResponseEntityResult.successResponseEntity(resultProfileInvoices);
+	}
+
+	// -------- Common method declarations
 	public void checkUserIsValidOrNot(Integer userID) {
 		if (!userRepo.existsById(userID)) {
-			throw new UserServiceException(userID +ErrorServiceMessage.NO_USER_RECORD);
+			throw new UserServiceException(userID + ErrorServiceMessage.NO_USER_RECORD);
 		}
 	}
 }
