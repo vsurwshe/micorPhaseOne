@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface HotelTableRepository extends JpaRepository<HotelTabel, Integer> {
 
-	@Query(nativeQuery=true, value="SELECT * FROM `hotel_tabel` WHERE `hotel_tabel_id`=?1")
+	@Query(nativeQuery=true, value="SELECT * FROM `hotel_tabel` WHERE `hotel_table_id`=?1")
 	HotelTabel findByHotelTabelId(Integer hotelTabelID);
 	
 	@Query(nativeQuery=true, value="SELECT * FROM `hotel_tabel` WHERE `profile_id`=?1")
