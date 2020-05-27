@@ -24,5 +24,9 @@ public interface ProfileRespositery extends JpaRepository<Profile, Integer> {
 	// This method return user details by profile id
 	UserDet findUserByProfileId(Integer profileId);
 	
+	// This method return the list of profile by user
 	List<Profile> findByUser(UserDet user);
+	
+	@Query(nativeQuery=true, value="SELECT * FROM `profile` WHERE type= 0 AND user= ?1")
+	Profile findByFreeProfile(Integer userId);
 }

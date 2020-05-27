@@ -157,6 +157,11 @@ public class ProfileController {
 	public ResponseEntity<?> saveProfile(Profile profile){
 		Profile userProfile = null;
 		try {
+			if(profile.getType().equals(ProfileType.FREE)) {
+				if(this.checkFreeProfile()) {
+					throw new UserServiceException(ErrorServiceMessage.PROFILE_FREE_NOT_SAVE_AGAIN);
+				}
+			}
 			profile.setUser(this.getUser());
 			EnumSet<ProfileFeature> tempProfileFeatures = this.setPrfileFeatuers(profile);
 			profile.setFeatures(tempProfileFeatures);
@@ -359,5 +364,15 @@ public class ProfileController {
 			if (userBalance <= profileCost) {
 				throw new UserServiceException(ErrorServiceMessage.PROFILE_USER_BALANCE_NOT_SUFFICENT);
 			}
+	}
+	
+	public Boolean checkFreeProfile() {
+		Boolean result=false;
+		UserDet tempUser= this.getUser();
+		Profile tempFreeProfile= profileRepo.findByFreeProfile(tempUser.getUserId());
+		if(tempFreeProfile != null) {
+			result = true;
+		}
+		return result;
 	}
 }
