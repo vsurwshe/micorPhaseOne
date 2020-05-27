@@ -5,11 +5,14 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.domain.entity.food.Food;
+import org.domain.entity.profile.Profile;
+import org.domain.model.enu.ProfileType;
 import org.exception.exec.UserServiceException;
 import org.repository.food.FoodsRepository;
 import org.repository.profile.ProfileRespositery;
 import org.service.errorservice.ErrorServiceMessage;
 import org.service.logservice.LogService;
+import org.service.profileservice.ProfileLimitedFeatuer;
 import org.service.resultservice.ResponseEntityResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -46,8 +49,6 @@ public class FoodController {
 		return this.getFoodByProfileID(profileID);
 	}
 	
-	
-
 	@GetMapping(value = "/food/getFood/{foodID}")
 	private ResponseEntity<?> findFoodById(@PathVariable("profileID") Integer profileID,@PathVariable("foodID") Integer foodID) {
 		return this.getFoodById(profileID,foodID);
@@ -86,6 +87,8 @@ public class FoodController {
 		return ResponseEntityResult.successResponseEntity(reslutFoods);
 	}
 	
+	
+
 	private ResponseEntity<?> getAllFood(Integer profileID) {
 		List<Food> foodResult=null;
 		try {
@@ -120,11 +123,13 @@ public class FoodController {
 		Food resultFood=null;
 		try {
 			this.checkProfileIsOrNot(profileID);
-			saveFood.setProfile(profileRepo.findByprofileId(profileID));
-			saveFood.setVersion(0.0);
-			resultFood=foodRepo.saveAndFlush(saveFood);
-			if(resultFood==null) {
-				throw new UserServiceException(ErrorServiceMessage.NO_FOOD_RECORDS_SAVE);
+			if(this.getPermissionSaveFood(profileID)) {
+				saveFood.setProfile(profileRepo.findByprofileId(profileID));
+				saveFood.setVersion(0.0);
+				resultFood=foodRepo.saveAndFlush(saveFood);
+				if(resultFood==null) {
+					throw new UserServiceException(ErrorServiceMessage.NO_FOOD_RECORDS_SAVE);
+				}
 			}
 		} catch (UserServiceException e) {
 			LogService.setLogger(e.getMessage());
@@ -181,6 +186,30 @@ public class FoodController {
 	}
 	
 	//------------- Common method Declarations	
+	private boolean getPermissionSaveFood(Integer profileID) {
+		Boolean result=false;
+		Profile tempProfile= profileRepo.findByprofileId(profileID);
+		Integer totalFoodCount= foodRepo.findByProfileIdGetCount(profileID);
+		if(tempProfile.getType().equals(ProfileType.PRENINUM)) {
+			result = this.checkFoodCondtions(totalFoodCount,ProfileLimitedFeatuer.PREINUM_FOOD_COUNT);
+		}else {
+			if(tempProfile.getType().equals(ProfileType.BASIC)) {
+				result = this.checkFoodCondtions(totalFoodCount,ProfileLimitedFeatuer.BAISC_FOOD_COUNT);
+			}else {
+				result = this.checkFoodCondtions(totalFoodCount,ProfileLimitedFeatuer.FREE_FOOD_COUNT);
+			}
+		}
+		return result;
+	}
+	
+	public boolean checkFoodCondtions(Integer totalFoodCount, Integer checkCount) {
+		if(totalFoodCount <= checkCount) {
+			return true;
+		}else {
+			throw new UserServiceException(ErrorServiceMessage.FOOD_SAVE_COUNT_MESSAGE+ checkCount);
+		}
+	}
+	
 	public void checkProfileIsOrNot(Integer profileId) {
 		if (!profileRepo.existsById(profileId)) {
 			throw new UserServiceException(ErrorServiceMessage.NO_PROFILE_RECORD + profileId);

@@ -5,11 +5,14 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.domain.entity.customer.Customer;
+import org.domain.entity.profile.Profile;
+import org.domain.model.enu.ProfileType;
 import org.exception.exec.UserServiceException;
 import org.repository.customer.CustomerRepository;
 import org.repository.profile.ProfileRespositery;
 import org.service.errorservice.ErrorServiceMessage;
 import org.service.logservice.LogService;
+import org.service.profileservice.ProfileLimitedFeatuer;
 import org.service.resultservice.ResponseEntityResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -122,11 +125,13 @@ public class CustomerController {
 		Customer resultCustomer = null;
 		try {
 			this.checkProfileIsOrNot(profileID);
-			saveCustomer.setProfile(profileRepo.findByprofileId(profileID));
-			saveCustomer.setVersion(0.0);
-			resultCustomer = customerRepo.saveAndFlush(saveCustomer);
-			if (resultCustomer == null) {
-				throw new UserServiceException(ErrorServiceMessage.NO_CUSTOMER_SAVE);
+			if(this.getPermissionSaveCustomer(profileID)) {
+				saveCustomer.setProfile(profileRepo.findByprofileId(profileID));
+				saveCustomer.setVersion(0.0);
+				resultCustomer = customerRepo.saveAndFlush(saveCustomer);
+				if (resultCustomer == null) {
+					throw new UserServiceException(ErrorServiceMessage.NO_CUSTOMER_SAVE);
+				}
 			}
 		} catch (UserServiceException e) {
 			LogService.setLogger(e.getMessage());
@@ -183,6 +188,29 @@ public class CustomerController {
 	}
 
 	// -------------------- Common method declarations
+	private boolean getPermissionSaveCustomer(Integer profileID) {
+		Boolean result=false;
+		Profile tempProfile= profileRepo.findByprofileId(profileID);
+		Integer totalFoodCount= customerRepo.findByCustomerCount(profileID);
+		if(tempProfile.getType().equals(ProfileType.PRENINUM)) {
+			result = this.checkFoodCondtions(totalFoodCount,ProfileLimitedFeatuer.PREINUM_FOOD_COUNT);
+		}else {
+			if(tempProfile.getType().equals(ProfileType.BASIC)) {
+				result = this.checkFoodCondtions(totalFoodCount,ProfileLimitedFeatuer.BAISC_FOOD_COUNT);
+			}else {
+				result = this.checkFoodCondtions(totalFoodCount,ProfileLimitedFeatuer.FREE_FOOD_COUNT);
+			}
+		}
+		return result;
+	}
+	
+	public boolean checkFoodCondtions(Integer totalFoodCount, Integer checkCount) {
+		if(totalFoodCount <= checkCount) {
+			return true;
+		}else {
+			throw new UserServiceException(ErrorServiceMessage.CUSTOMER_SAVE_COUNT_MESSAGE+ checkCount);
+		}
+	}
 	// This method checking profile is there not
 	public void checkProfileIsOrNot(Integer profileId) {
 		if (!profileRepo.existsById(profileId)) {

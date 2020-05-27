@@ -48,6 +48,7 @@ public class ErrorServiceMessage {
 	public static final String INVALID_CUSTOMER_VERSION = "Sorry you provide the worng version, excpected ";
 	public static final String INVALID_CUSTOMER_ID = "Please provide correct cutsomer and profile id";
 	public static final String CUSTOMER_DELETE_MESSAGE = "Your Customer Deleted Successfully!";
+	public static final String CUSTOMER_SAVE_COUNT_MESSAGE = "Sorry you can not create the more customer, you already reach to the limit";
 
 	// ------- Food
 	public static final String NO_FOOD_RECORDS_FOUND = "There is no foods records";
@@ -56,6 +57,7 @@ public class ErrorServiceMessage {
 	public static final String INVALID_FOOD_VERSION = "Please provide correct version, expected version is ";
 	public static final String INVALID_FOOD_PROFILE_ID = "Please provide correct food id and profile id";
 	public static final String FOOD_DELETE_SUCCESS_MESSAGE = "your Food Record deleted successfully !";
+	public static final String FOOD_SAVE_COUNT_MESSAGE = "Sorry you can not create the more food, you already reach to the limit";
 
 	// ------ Hotel Tabel
 	public static final String NO_HOTEL_TABEL_RECORDS_FOUND = "There is no Hotel Tabel Records";
@@ -65,6 +67,7 @@ public class ErrorServiceMessage {
 	public static final String INVALID_HOTEL_TABLE_AND_PROFILE_IDS = "Please provide correct profile id and hotel tabel id";
 	public static final String INVALID_HOTEL_TABEL_VERSION = "Please correct version of hotel table provicd, excepted version ";
 	public static final String HOTEL_TABEL_DElETE_MESSAGE = "your hotel table data deleted successfully !";
+	public static final String HOTEL_TABEL_SAVE_COUNT_MESSAGE = "Sorry you can not create the more hotel table, you already reach to the limit";
 
 	// ------- Food Invoice
 	public static final String NO_FOOD_INVOICE_RECORD = "Sorry there is no food invoice records";

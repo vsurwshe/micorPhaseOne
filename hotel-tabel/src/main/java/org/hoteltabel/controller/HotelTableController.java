@@ -5,11 +5,14 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.domain.entity.hoteltabel.HotelTabel;
+import org.domain.entity.profile.Profile;
+import org.domain.model.enu.ProfileType;
 import org.exception.exec.UserServiceException;
 import org.repository.hoteltable.HotelTableRepository;
 import org.repository.profile.ProfileRespositery;
 import org.service.errorservice.ErrorServiceMessage;
 import org.service.logservice.LogService;
+import org.service.profileservice.ProfileLimitedFeatuer;
 import org.service.resultservice.ResponseEntityResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -122,11 +125,13 @@ public class HotelTableController {
 		HotelTabel resultHotelTable = null;
 		try {
 			this.checkProfileIsOrNot(profileID);
-			saveHotelTabel.setProfile(profileRepo.findByprofileId(profileID));
-			saveHotelTabel.setVersion(0.0);
-			resultHotelTable = hotelTableRepo.saveAndFlush(saveHotelTabel);
-			if (resultHotelTable == null) {
-				throw new UserServiceException(ErrorServiceMessage.NO_HOTEL_TABLE_RECORDS_SAVE);
+			if(this.getPermissionSaveHotelTable(profileID)) {
+				saveHotelTabel.setProfile(profileRepo.findByprofileId(profileID));
+				saveHotelTabel.setVersion(0.0);
+				resultHotelTable = hotelTableRepo.saveAndFlush(saveHotelTabel);
+				if (resultHotelTable == null) {
+					throw new UserServiceException(ErrorServiceMessage.NO_HOTEL_TABLE_RECORDS_SAVE);
+				}	
 			}
 		} catch (UserServiceException e) {
 			LogService.setLogger(e.getMessage());
@@ -184,6 +189,29 @@ public class HotelTableController {
 	}
 
 	// ------------- Common method Declarations
+	private boolean getPermissionSaveHotelTable(Integer profileID) {
+		Boolean result=false;
+		Profile tempProfile= profileRepo.findByprofileId(profileID);
+		Integer totalFoodCount= hotelTableRepo.findByHotelTableCount(profileID);
+		if(tempProfile.getType().equals(ProfileType.PRENINUM)) {
+			result = this.checkFoodCondtions(totalFoodCount,ProfileLimitedFeatuer.PREINUM_FOOD_COUNT);
+		}else {
+			if(tempProfile.getType().equals(ProfileType.BASIC)) {
+				result = this.checkFoodCondtions(totalFoodCount,ProfileLimitedFeatuer.BAISC_FOOD_COUNT);
+			}else {
+				result = this.checkFoodCondtions(totalFoodCount,ProfileLimitedFeatuer.FREE_FOOD_COUNT);
+			}
+		}
+		return result;
+	}
+	
+	public boolean checkFoodCondtions(Integer totalFoodCount, Integer checkCount) {
+		if(totalFoodCount <= checkCount) {
+			return true;
+		}else {
+			throw new UserServiceException(ErrorServiceMessage.HOTEL_TABEL_SAVE_COUNT_MESSAGE+ checkCount);
+		}
+	}
 	public void checkProfileIsOrNot(Integer profileId) {
 		if (!profileRepo.existsById(profileId)) {
 			throw new UserServiceException(ErrorServiceMessage.NO_PROFILE_RECORD + profileId);
