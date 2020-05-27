@@ -1,4 +1,4 @@
-package org.service.apiService;
+package org.service.errorservice;
 
 import org.springframework.stereotype.Service;
 

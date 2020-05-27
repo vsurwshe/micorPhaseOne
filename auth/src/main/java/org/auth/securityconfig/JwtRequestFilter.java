@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.auth.service.JwtUserDetailsService;
 import org.exception.exec.UserServiceException;
-import org.service.apiService.ErrorServiceMessage;
+import org.service.errorservice.ErrorServiceMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -33,14 +33,14 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
 
-		// 1) Geting Token Form Request
+		// 1) Getting Token Form Request
 		final String requestTokenHeader = request.getHeader("Authorization");
 
-		// Declare the local Vairiable
+		// Declare the local Variable
 		String username = null;
 		String jwtToken = null;
 
-		// Filter the JWT Token from Bearer, get username and jwt token seperate
+		// Filter the JWT Token from Bearer, get user name and JWT token seperate
 		if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")) {
 			jwtToken = requestTokenHeader.substring(7);
 			try {

@@ -1,4 +1,4 @@
-package org.service.apiService;
+package org.service.logservice;
 
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;

@@ -4,9 +4,9 @@ import java.util.List;
 
 import org.domain.entity.profile.ProfileTypeModel;
 import org.repository.profile.ProfileTypeRepository;
-import org.service.apiService.ErrorServiceMessage;
-import org.service.apiService.LogService;
-import org.service.apiService.ResponseEntityResult;
+import org.service.errorservice.ErrorServiceMessage;
+import org.service.logservice.LogService;
+import org.service.resultservice.ResponseEntityResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;

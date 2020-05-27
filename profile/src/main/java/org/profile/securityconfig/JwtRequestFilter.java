@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.exception.exec.UserServiceException;
 import org.profile.service.JwtUserDetailsService;
-import org.service.apiService.ErrorServiceMessage;
+import org.service.errorservice.ErrorServiceMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;

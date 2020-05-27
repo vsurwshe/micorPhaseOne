@@ -1,6 +1,7 @@
-package org.service.apiService;
+package org.service.email;
 
 import org.domain.component.EmailModule;
+import org.service.logservice.LogService;
 import org.springframework.stereotype.Service;
 import javax.mail.Message;
 import javax.mail.MessagingException;

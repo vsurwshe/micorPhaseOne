@@ -1,4 +1,4 @@
-package org.service.apiService;
+package org.service.resultservice;
 
 import java.util.HashMap;
 import java.util.Map;
